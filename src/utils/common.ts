@@ -26,9 +26,13 @@ export default {
                 type: type,
                 autofocus: false,
                 confirmButtonText: '确定',
-            }).then(() => {
-                resolve(true);
-            });
+            })
+                .then(() => {
+                    resolve(true);
+                })
+                .catch(() => {
+                    reject(false);
+                });
         });
     },
 };
