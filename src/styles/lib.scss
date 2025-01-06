@@ -177,7 +177,7 @@ $color_key: '#';
 }
 
 /* 常用颜色2 */
-@each $color in f5, f8, f7, e9, 80 {
+@each $color in f1, f5, f8, f7, e9, 80 {
     .cr-#{$color} {
         color: #{$color_key}#{$color}#{$color}#{$color};
     }
