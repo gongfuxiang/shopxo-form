@@ -1,24 +1,10 @@
 import defaultCommon from './index';
-interface DefaultVideo {
-    content: {
-        video: uploadList[];
-        video_img: uploadList[];
-        video_ratio: string;
-    };
-    style: {
-        common_style: object;
-    };
+interface DefaultInput {
+    title: string;
 }
 
-const defaultVideo: DefaultVideo = {
-    content: {
-        video: [],
-        video_img: [],
-        video_ratio: '16:9',
-    },
-    style: {
-        common_style: defaultCommon,
-    },
+const defaultInput: DefaultInput = {
+    title: '标题',
 };
 
-export default defaultVideo;
+export default defaultInput;

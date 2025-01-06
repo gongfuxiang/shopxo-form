@@ -2,11 +2,11 @@ import defaultInput from '@/config/const/input';
 
 // 系统设置
 interface DefaultSettings {
-    input: object;
+    single_text: object;
 }
 
 const defaultSettings: DefaultSettings = {
-    input: defaultInput,
+    single_text: defaultInput,
 };
 
 export default defaultSettings;

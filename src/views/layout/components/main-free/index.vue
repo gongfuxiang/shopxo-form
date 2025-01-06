@@ -7,7 +7,7 @@
                     <el-collapse v-model="activeNames">
                         <div v-for="(com, i) in components" :key="i" class="plr-12">
                             <el-collapse-item v-if="com.data.length > 0" :key="i" :title="com.name" :name="com.key">
-                                <VueDraggable v-model="com.data" :animation="500" ghost-class="ghost" handle=".item" :group="{ name: 'people', pull: 'clone', put: false }" class="component flex-row flex-wrap gap-10" :clone="clone_item_com_data" :sort="false" :force-fallback="true">
+                                <div class="component flex-row flex-wrap gap-10">
                                     <div v-for="item in com.data" :key="item.key" class="item" @click.stop="draggable_click(item)">
                                         <div class="tc drag-seat">释放鼠标将组件添加到此处</div>
                                         <div class="flex-row align-c gap-2 drag-hide">
@@ -15,7 +15,7 @@
                                             <div class="text-line-1">{{ item.name }}</div>
                                         </div>
                                     </div>
-                                </VueDraggable>
+                                </div>
                             </el-collapse-item>
                         </div>
                     </el-collapse>
@@ -27,24 +27,7 @@
                 <div class="pa-30">
                     <div class="drag-content flex-row br-f1 radius-xl pa-16">
                         <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" class="drag-area re flex-1" ghost-class="ghost" :on-sort="on_sort" :on-start="on_start" :on-end="on_end">
-                            <!-- <model-default v-model="diy_data" @on_choose="on_choose" @del="on_del" @copy="on_copy"></model-default> -->
-                            <div v-for="(item, index) in diy_data" :key="item.id" class="item" :class="{ active: item.show_tabs == '1' }" @click.stop="on_choose(index, item)">
-                                <div v-if="item.show_tabs == '1'" class="oprate">
-                                    <div class="icon" @click="on_del(index)">
-                                        <icon name="del" size="10"></icon>
-                                    </div>
-                                    <span class="divider"></span>
-                                    <div class="icon" @click="on_copy(index, item)">
-                                        <icon name="copy" size="10"></icon>
-                                    </div>
-                                </div>
-                                <div>
-                                    <!-- 单行文本 -->
-                                    <template v-if="item.key == 'single-text'">
-                                        <model-input :value="item.data"></model-input>
-                                    </template>
-                                </div>
-                            </div>
+                            <model-default v-model="diy_data" @on_choose="on_choose" @del="on_del" @copy="on_copy"></model-default>
                         </VueDraggable>
                     </div>
                 </div>
@@ -279,37 +262,6 @@ const set_show_tabs = (index: number) => {
             max-width: 100rem;
             background-color: #fff;
             margin: 0 auto;
-            .item {
-                position: relative;
-                padding: 1.8rem 2rem;
-                cursor: all-scroll;
-                &.active {
-                    background: #f5fbff;
-                    border-radius: 12px;
-                }
-                .oprate {
-                    position: absolute;
-                    right: 2rem;
-                    top: 0.8rem;
-                    display: flex;
-                    align-items: center;
-                    background-color: #fff;
-                    border-radius: 15px;
-                    color: $cr-primary;
-                    .icon {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        cursor: pointer;
-                        padding: 0.6rem 1.2rem;
-                    }
-                    .divider {
-                        width: 1px;
-                        height: 1.2rem;
-                        background-color: #e4e7ec;
-                    }
-                }
-            }
         }
         .drag-seat {
             display: inherit;

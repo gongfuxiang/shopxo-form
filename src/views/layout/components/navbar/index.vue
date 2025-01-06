@@ -18,7 +18,7 @@
             <div class="nav-tabs">表单发布</div>
         </div>
         <div class="nav-right">
-            <el-button plain type="primary" @click="preview_event">表单配置</el-button>
+            <el-button plain type="primary" @click="form_config_event">表单配置</el-button>
             <el-button plain type="primary" @click="preview_event">预览</el-button>
             <el-button plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">仅保存</el-button>
             <el-button type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_close_event">保存关闭</el-button>
@@ -90,7 +90,12 @@ const rules = reactive<FormRules>({
 });
 // #endregion 变量 --------------------end
 
-const emit = defineEmits(['preview', 'save', 'saveClose']);
+const emit = defineEmits(['formConfig', 'preview', 'save', 'saveClose']);
+
+// * 点击表单配置时的事件处理函数。
+const form_config_event = () => {
+    emit('formConfig');
+};
 //  * 点击预览时的事件处理函数。
 const preview_event = () => {
     emit('preview');

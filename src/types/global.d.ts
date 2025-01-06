@@ -84,33 +84,7 @@ declare global {
      * 通用样式参数
      */
     type componentsCommonCommonStyle = {
-        color_list: color_list[];
-        direction: string;
-        background_img_style: string;
-        floating_up: number;
-        module_z_index: number;
-        padding_top_safe_value: number;
-        padding: number;
-        padding_top: number;
-        padding_bottom: number;
-        padding_left: number;
-        padding_right: number;
-        margin: number;
-        margin_top: number;
-        margin_bottom: number;
-        margin_left: number;
-        margin_right: number;
-        radius: number;
-        radius_top_left: number;
-        radius_top_right: number;
-        radius_bottom_left: number;
-        radius_bottom_right: number;
-        box_shadow_color: string;
-        box_shadow_x: number;
-        box_shadow_y: number;
-        box_shadow_blur: number;
-        box_shadow_spread: number;
-        background_img: uploadList[];
+        border_color: string;
     };
     /**
      * 链接参数
