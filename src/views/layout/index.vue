@@ -42,6 +42,7 @@ const key = ref('');
 // 更新设置
 const update_setting = (data: any) => {
     diy_data_item.value = data;
+    is_show_form_model.value = false;
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);
 };

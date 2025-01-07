@@ -41,7 +41,7 @@
                                 <div>
                                     <!-- 单行文本 -->
                                     <template v-if="item.key == 'single-text'">
-                                        <model-input :value="item.data"></model-input>
+                                        <model-input :value="item.com_data"></model-input>
                                     </template>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@ const clone_item_com_data = (item: commonComponentData) => {
         name: item.name,
         id: get_math(),
         key: item.key,
-        data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
 };
 
@@ -160,7 +160,7 @@ const draggable_click = (item: componentsData) => {
         ...item,
         id: get_math(),
         show_tabs: '1',
-        data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
     diy_data.value.push(new_item);
     // 设置当前选中的是那个
@@ -230,6 +230,7 @@ const set_show_tabs = (index: number) => {
 .mains {
     flex: 1;
     display: flex;
+    height: 100%;
     .siderbar {
         width: 23.4rem;
         background-color: #fff;
