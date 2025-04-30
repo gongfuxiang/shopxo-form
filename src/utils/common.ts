@@ -1,38 +1,16 @@
-// 定义一个MessageType类型，可以根据实际情况进行修改
-type MessageType = 'info' | 'success' | 'warning' | 'error';
-type Message = 'delete' | 'save' | 'edit' | 'add';
-export default {
-    // massageBox封装
-    message_box: (msg: string, type: MessageType = 'warning') => {
-        return new Promise((resolve, reject) => {
-            ElMessageBox.confirm(msg, '温馨提示', {
-                type: type,
-                autofocus: false,
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-            })
-                .then(() => {
-                    resolve(true);
-                })
-                .catch(() => {
-                    reject(false);
-                });
-        });
-    },
-    // alert封装
-    alert: (msg: string, type: MessageType = 'warning') => {
-        return new Promise((resolve, reject) => {
-            ElMessageBox.alert(msg, '温馨提示', {
-                type: type,
-                autofocus: false,
-                confirmButtonText: '确定',
-            })
-                .then(() => {
-                    resolve(true);
-                })
-                .catch(() => {
-                    reject(false);
-                });
-        });
-    },
-};
+// 定义一组预定义的颜色数组，用于在各种场景中轻松引用这些颜色
+// 这些颜色包括从白色到黑色的不同灰度，以及一些鲜艳的颜色，格式有十六进制、RGB、RGBA、HSV、HSL等
+export const predefine_colors = ['#eb5050', '#f0a800', '#46c26f', '#a2c204', '#00aed1', '#5865f5', '#c643e0', '#f0437d', '#fa8118', '#d6c504', '#00b899', '#6ac73c', '#2f7deb', '#7e47eb', '#d941c0', '#485970', '#f9cbcb', '#fbe5b3', '#c8edd4', '#e3edb4', '#b3e7f1', '#cdd1fc', '#eec7f6', '#fbc7d8', '#fed9ba', '#f3eeb4', '#b3eae0', '#d2eec5', '#c1d8f9', '#d8c8f9', '#f4c6ec', '#c8cdd4'];
+// 数据的默认值，避免没有值的时候报错
+export const old_radius = { radius: 0, radius_top_left: 0, radius_top_right: 0, radius_bottom_left: 0, radius_bottom_right: 0 };
+
+export const old_padding = { padding: 0, padding_top: 0, padding_bottom: 0, padding_left: 0, padding_right: 0 };
+
+export const old_margin = { margin: 0, margin_top: 0, margin_bottom: 0, margin_left: 0, margin_right: 0 };
+
+export const old_border_and_box_shadow = { border_is_show: '0', border_color: '#FF3F3F', border_style: 'solid',border_size: { padding: 1, padding_top: 1, padding_right: 1, padding_bottom: 1, padding_left: 1, }, box_shadow_color: '', box_shadow_x: 0, box_shadow_y: 0, box_shadow_blur: 0, box_shadow_spread: 0 };
+// 只好设置
+export const font_weight = [
+    { name: '加粗', value: 'bold' },
+    { name: '正常', value: '400' },
+];

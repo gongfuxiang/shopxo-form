@@ -84,6 +84,7 @@ const diy_data = ref(props.diyData);
 watch(
     () => props.diyData,
     (newValue) => {
+        debugger;
         diy_data.value = newValue;
     }
 );

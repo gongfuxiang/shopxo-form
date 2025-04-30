@@ -1,26 +1,50 @@
 <template>
     <div class="settings">
         <el-scrollbar>
-            <div v-if="isShowFormModel">
-                <div class="flex-row jc-c pa-16 br-b-f8">
-                    <el-radio-group v-model="type_value" class="radio-group" size="large" is-button @change="type_change">
-                        <el-radio-button class="radio-item" value="default">常规模式</el-radio-button>
-                        <el-radio-button class="radio-item" value="free">自由模式</el-radio-button>
-                    </el-radio-group>
-                </div>
-                <div class="ptb-20 plr-12">
-                    <div v-if="type_value == 'default'" class="setting-content">
-                        <div>default</div>
+            <div v-if="isShowFormModel" class="ptb-20 plr-12">
+                <div class="flex-col gap-20">
+                    <div class="flex-col gap-5">
+                        <div class="new_title">模式</div>
+                        <el-radio-group v-model="form.type_value" @change="type_change">
+                            <el-radio value="default">标准模式</el-radio>
+                            <el-radio value="free">自由模式</el-radio>
+                        </el-radio-group>
                     </div>
-                    <div v-else class="setting-content">
-                        <div>free</div>
+                    <div class="flex-col gap-10 w h">
+                        <div class="new_title">布局设置</div>
+                        <div class="flex-row jc-sb align-c gap-10 layout-style">
+                            <div class="title">{{ form.is_layout_settings == '0' ? '未设置' : '已设置' }}</div>
+                            <icon class="layout-style-setting" name="setup" size="18" @click="open_dialog('layout')"/>
+                        </div>
+                    </div>
+                    <div class="flex-col gap-10 w h">
+                        <div class="new_title">表单样式</div>
+                        <div class="flex-row jc-sb align-c gap-10 layout-style">
+                            <div class="title">{{ form.is_style_settings == '0' ? '未设置' : '已设置' }}</div>
+                            <icon class="layout-style-setting" name="setup" size="18" @click="open_dialog('style')"/>
+                        </div>
+                    </div>
+                    <div class="flex-row align-c jc-sb w h">
+                        <div class="new_title">表单前台缓存</div>
+                        <el-switch v-model="form.is_front_end_cache" active-value="1" inactive-value="0"></el-switch>
+                    </div>
+                    <div class="flex-col gap-10 w h">
+                        <div class="new_title">操作按钮</div>
+                        <div class="flex-row gap-5 jc-sb w h">
+                            <el-input v-model="form.submit_title"></el-input>
+                            <el-switch v-model="form.is_show_submit" active-value="1" inactive-value="0"></el-switch>
+                        </div>
+                        <div class="flex-row gap-5 jc-sb w h">
+                            <el-input v-model="form.save_draft_title"></el-input>
+                            <el-switch v-model="form.is_show_save_draft" active-value="1" inactive-value="0"></el-switch>
+                        </div>
                     </div>
                 </div>
             </div>
             <div v-else class="ptb-20 plr-12">
                 <div class="setting-content">
                     <template v-if="model_value.key == 'single-text'">
-                        <model-input-setting :value="model_value.data"></model-input-setting>
+                        <model-input-setting :value="model_value.com_data"></model-input-setting>
                     </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
@@ -28,21 +52,22 @@
                 </div>
             </div>
         </el-scrollbar>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings"></layout-index>
     </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps({
-    type: {
-        type: String,
-        default: () => 'default',
+    value: {
+        type: Object,
+        default: () => {},
     },
     isShowFormModel: {
         type: Boolean,
         default: false,
     },
 });
-const type_value = ref(props.type);
+const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });
 
 const emits = defineEmits(['type']);
@@ -50,14 +75,20 @@ const emits = defineEmits(['type']);
 const type_change = (val: any) => {
     emits('type', val);
 };
+// 打开弹出框
+const dialog_visible = ref(false);
+const dialog_type = ref('layout');
+const open_dialog = (value: string) => {
+    dialog_visible.value = true;
+    dialog_type.value = value;
+};
 </script>
 
 <style scoped lang="scss">
 .settings {
-    width: 23.4rem;
+    width: 30rem;
     background-color: #fff;
     max-height: calc(100vh - 7rem);
-
     .radio-group {
         background: #f4f4f4;
         border-radius: 100rem;
@@ -72,6 +103,34 @@ const type_change = (val: any) => {
                 background: $cr-primary;
             }
         }
+    }
+    :deep(.el-input-number) {
+        width: 100%;
+    }
+}
+:deep(.el-dialog) {
+    margin-top: 0;
+    padding: 0;
+    overflow: hidden;
+    top: 7rem;
+    width: 100%;
+    height: calc(100% - 7rem);
+    .el-dialog__header {
+        padding: 2.3rem 2rem;
+        text-align: center;
+        .el-dialog__title {
+            font-size: 16px;
+        }
+        .el-dialog__headerbtn {
+            font-size: 2.4rem;
+            padding: 2rem;
+            height: auto;
+            width: auto;
+        }
+    }
+    .el-dialog__body {
+        background: #f5f5f5;
+        height: 100%;
     }
 }
 </style>

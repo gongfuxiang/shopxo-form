@@ -8,4 +8,5 @@ export function setupStore(app: App<Element>) {
     app.use(store);
 }
 export * from './modules/common';
+export * from './modules/upload';
 export { store };

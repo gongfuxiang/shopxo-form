@@ -6,6 +6,139 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44047965",
+      "name": "客服电话",
+      "font_class": "chat-tel",
+      "unicode": "e7bc",
+      "unicode_decimal": 59324
+    },
+    {
+      "icon_id": "43200286",
+      "name": "照相机",
+      "font_class": "camera",
+      "unicode": "e7bb",
+      "unicode_decimal": 59323
+    },
+    {
+      "icon_id": "43087330",
+      "name": "箭头左",
+      "font_class": "left-arrow",
+      "unicode": "e7b4",
+      "unicode_decimal": 59316
+    },
+    {
+      "icon_id": "43087331",
+      "name": "历史记录",
+      "font_class": "historical-records",
+      "unicode": "e7b9",
+      "unicode_decimal": 59321
+    },
+    {
+      "icon_id": "43087329",
+      "name": "箭头右",
+      "font_class": "right-arrow",
+      "unicode": "e7ba",
+      "unicode_decimal": 59322
+    },
+    {
+      "icon_id": "42958997",
+      "name": "编组",
+      "font_class": "grouping",
+      "unicode": "e7d6",
+      "unicode_decimal": 59350
+    },
+    {
+      "icon_id": "42773571",
+      "name": "更多四块",
+      "font_class": "more-four-pieces",
+      "unicode": "e7b8",
+      "unicode_decimal": 59320
+    },
+    {
+      "icon_id": "42773581",
+      "name": "列表挂件",
+      "font_class": "list-widget",
+      "unicode": "e7ad",
+      "unicode_decimal": 59309
+    },
+    {
+      "icon_id": "42773579",
+      "name": "结算概况",
+      "font_class": "settlement",
+      "unicode": "e7ae",
+      "unicode_decimal": 59310
+    },
+    {
+      "icon_id": "42773580",
+      "name": "用户列表",
+      "font_class": "user-group",
+      "unicode": "e7af",
+      "unicode_decimal": 59311
+    },
+    {
+      "icon_id": "42773578",
+      "name": "店铺管理",
+      "font_class": "shop-setup",
+      "unicode": "e7b0",
+      "unicode_decimal": 59312
+    },
+    {
+      "icon_id": "42773576",
+      "name": "层级3",
+      "font_class": "triangle-level-3",
+      "unicode": "e7b1",
+      "unicode_decimal": 59313
+    },
+    {
+      "icon_id": "42773577",
+      "name": "成交记录",
+      "font_class": "log-check",
+      "unicode": "e7b2",
+      "unicode_decimal": 59314
+    },
+    {
+      "icon_id": "42773575",
+      "name": "商品管理",
+      "font_class": "menu-setup",
+      "unicode": "e7b3",
+      "unicode_decimal": 59315
+    },
+    {
+      "icon_id": "42773573",
+      "name": "列表-斜角",
+      "font_class": "list-angle",
+      "unicode": "e7b5",
+      "unicode_decimal": 59317
+    },
+    {
+      "icon_id": "42773572",
+      "name": "列表设置",
+      "font_class": "list-setup",
+      "unicode": "e7b7",
+      "unicode_decimal": 59319
+    },
+    {
+      "icon_id": "42435511",
+      "name": "向下空隙箭头",
+      "font_class": "down-gap",
+      "unicode": "e7ac",
+      "unicode_decimal": 59308
+    },
+    {
+      "icon_id": "42424398",
+      "name": "小圆背景右箭头",
+      "font_class": "arrow-right-bg-radius",
+      "unicode": "e7ab",
+      "unicode_decimal": 59307
+    },
+    {
+      "icon_id": "42423537",
+      "name": "边距",
+      "font_class": "margin",
+      "unicode": "e7aa",
+      "unicode_decimal": 59306
+    },
+    {
       "icon_id": "42400752",
       "name": "分类-空心",
       "font_class": "menu-category",
@@ -35,8 +168,8 @@
     },
     {
       "icon_id": "42184242",
-      "name": "消息样式一",
-      "font_class": "xiaoxiyangshiyi",
+      "name": "客服",
+      "font_class": "chat",
       "unicode": "e7a6",
       "unicode_decimal": 59302
     },
@@ -638,7 +771,7 @@
     {
       "icon_id": "41451474",
       "name": "编辑-空心",
-      "font_class": "icon-edit-o",
+      "font_class": "edit-o",
       "unicode": "e797",
       "unicode_decimal": 59287
     },

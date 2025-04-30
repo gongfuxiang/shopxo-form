@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import { get_title_style, get_layout_style, get_frame_style, get_icon_size } from '@/utils/index';
 export const commonStore = defineStore('common', () => {
     // 链接是否需要调接口判断
     const is_common_api = ref(false);
@@ -31,6 +32,10 @@ export const commonStore = defineStore('common', () => {
             site_name: '',
         } as any, // 基础数据配置参数
     });
+    const form_layout = ref({});
+    const set_form_layout = (data: any) => {
+        form_layout.value = data;
+    };
     // 存储链接数据
     const set_common = (data: any) => {
         common.value = data;
@@ -52,17 +57,29 @@ export const commonStore = defineStore('common', () => {
     const set_header_height = (height: number) => {
         header_height.value = height;
     };
-
+    // 标题样式
+    const title_style = computed(() => get_title_style(form_layout.value));
+    // 布局样式
+    const layout_style = computed(() => get_layout_style(form_layout.value));
+    // 输入框大小控制
+    const frame_style = computed(() => get_frame_style(form_layout.value));
+    const help_icon_size = computed(() => get_icon_size(form_layout.value));
     return {
         common,
         is_common_api,
         is_immersion_model,
         is_have_tabs,
         header_height,
+        form_layout,
+        title_style,
+        layout_style,
+        frame_style,
+        help_icon_size,
         set_common,
         set_is_common_api,
         set_is_immersion_model,
         set_is_have_tabs,
         set_header_height,
+        set_form_layout,
     };
 });

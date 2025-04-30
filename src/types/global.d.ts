@@ -80,11 +80,24 @@ declare global {
         background_img_style: string;
     };
 
+    type border_style = { border_is_show: string, border_color: string, border_type: string, border_size: paddingStyle, border_radius: radiusStyle };
+    type componentsTopStyle = {
+        time_value: any;
+    };
     /**
      * 通用样式参数
      */
     type componentsCommonCommonStyle = {
-        border_color: string;
+        border_is_show: string,
+        border_color: string,
+        border_type: string,
+        border_size: paddingStyle,
+        border_radius: radiusStyle,
+        format: string,
+        is_error:  string,
+        error_text: string,
+        help_is_show: string,
+        help_explain: string,
     };
     /**
      * 链接参数

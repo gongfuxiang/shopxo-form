@@ -2,13 +2,13 @@
     <div class="layout">
         <navbar v-model="form.model" @form-config="form_config_event" />
         <div class="content flex-1 flex-row">
-            <div v-if="form_type == 'default'" class="flex-1">
+            <div v-if="form.overall_config.type_value == 'default'" class="flex-1">
                 <mains :diy-data="form.diy_data" @update-setting="update_setting"></mains>
             </div>
             <view v-else class="flex-1">
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
-            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :type="form_type" @type="form_type = $event"></settings>
+            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" @type="form.overall_config.type_value = $event"></settings>
         </div>
     </div>
 </template>
@@ -16,6 +16,9 @@
 <script setup lang="ts">
 import { cloneDeep } from 'lodash';
 import defaultSettings from './index';
+import { background_computer } from '@/utils';
+import { commonStore } from '@/store';
+const common_store = commonStore();
 interface diy_data_item {
     id: string;
     model: {
@@ -24,18 +27,87 @@ interface diy_data_item {
         is_enable: string;
         describe: string;
     };
+    overall_config: {
+        type_value: string;
+        is_layout_settings: string;
+        layout_settings: object,
+        is_style_settings: string;
+        style_settings: object, 
+        is_front_end_cache: string,
+        is_show_submit: string,
+        submit_title: string,
+        is_show_save_draft: string,
+        save_draft_title: string,
+    };
     diy_data: Array<any>;
 }
 const form = ref<diy_data_item>({
     id: '',
     model: {
         logo: '',
-        name: '112233',
+        name: '未命名表单',
         is_enable: '1',
         describe: '',
     },
+    overall_config: {
+        type_value: 'default',
+        is_layout_settings: '0',
+        layout_settings: {
+            computer: {
+                flex_direction: 'column',
+                filed_title_width: 100,
+                filed_title_justification: 'left',
+                filed_title_size_type: 'middle',
+                input_width_type: 'default',
+            },
+            mobile: {
+                flex_direction: 'column',
+                filed_title_width: 100,
+                filed_title_justification: 'left',
+                filed_title_size_type: 'middle',
+                input_width_type: 'default',
+            }
+        },
+        is_style_settings: '0',
+        style_settings: {
+            computer: {
+                background_type: 'color',
+                background_color: '#F8F8F8',
+                background_image: [],
+                heading_type: 'color',
+                heading_color: '#C1EBFF',
+                heading_image: [],
+                is_show_heading_title: '0',
+                heading_title_location: "left",
+                heading_title_size: 14,
+                heading_title_font_weight: 'normal',
+                heading_title_color: '#000000',
+                submit_color: '#2A94FF',
+            },
+            mobile: {
+                background_type: 'color',
+                background_color: '#F8F8F8',
+                background_image: [],
+                heading_type: 'color',
+                heading_color: '#C1EBFF',
+                heading_image: [],
+                is_show_heading_title: '0',
+                heading_title_location: "left",
+                heading_title_size: 14,
+                heading_title_font_weight: 'normal',
+                heading_title_color: '#000000',
+                submit_color: '#2A94FF',
+            }
+        }, 
+        is_front_end_cache: '1',
+        is_show_submit: '1',
+        submit_title: '提交',
+        is_show_save_draft: '1',
+        save_draft_title: '保存草稿',
+    },
     diy_data: [],
 });
+common_store.set_form_layout(form.value.overall_config.layout_settings);
 const diy_data_item = ref({});
 const key = ref('');
 
@@ -79,11 +151,10 @@ const default_merge = (data: any, key: string) => {
 
 // 表单配置
 const is_show_form_model = ref(false);
-const form_type = ref('default');
 // 表单配置 事件
 const form_config_event = () => {
-    console.log('表单配置');
     is_show_form_model.value = !is_show_form_model.value;
+    
 };
 </script>
 

@@ -5,7 +5,7 @@ import App from './App.vue';
 import router from './router';
 import Particles from 'vue3-particles';
 
-import common from '@/utils/common';
+import common from '@/utils/popUp';
 //default styles
 import Vue3DraggableResizable from 'vue3-draggable-resizable';
 import 'vue3-draggable-resizable/dist/Vue3DraggableResizable.css';

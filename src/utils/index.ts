@@ -1,7 +1,18 @@
 import CommonAPI from '@/api/common';
-// 定义一组预定义的颜色数组，用于在各种场景中轻松引用这些颜色
-// 这些颜色包括从白色到黑色的不同灰度，以及一些鲜艳的颜色，格式有十六进制、RGB、RGBA、HSV、HSL等
-export const predefine_colors = ['#fff', '#ddd', '#ccc', '#999', '#666', '#333', '#000', '#ff4500', '#ff8c00', '#ffd700', '#90ee90', '#00ced1', '#c71585', 'rgba(255, 69, 0, 0.68)', 'rgb(255, 120, 0)', 'hsv(51, 100, 98)', 'hsva(120, 40, 94, 0.5)', 'hsl(181, 100%, 37%)', '#1F93FF', '#c7158577'];
+
+/**
+ * 判断对象数组等是否为空。
+*/
+export function isEmpty(value: any) {
+    return (
+        value === null ||
+        value === undefined ||
+        value === '' ||
+        typeof value === 'number' && isNaN(value) ||
+        (Array.isArray(value) && value.length === 0) ||
+        (typeof value === 'object' && Object.keys(value).length === 0)
+    )
+}
 /**
  * 判断一个对象是否为空。
  *
@@ -148,6 +159,18 @@ export function gradient_handle(color_list: color_list[], direction: string, is_
 }
 
 /**
+ * 计算并组合组件的常用样式。
+ *
+ * 该函数通过调用一系列特定样式的计算函数，来组装一个组件的常用样式字符串。
+ * 这些样式包括渐变色、内边距、外边距、圆角和阴影等，为组件提供了一套完整的外观定义。
+ *
+ * @param new_style  组件的新样式对象，包含了需要计算的样式属性。
+ * @returns 返回一个字符串，包含了计算后的样式定义，可以被直接应用于组件的样式属性。
+ */
+export function common_styles_computer(new_style: componentsCommonCommonStyle) {
+    return radius_computer(new_style.border_radius) + border_computer(new_style) + `overflow:hidden;`;
+}
+/**
  * 设置内边距的方法
  * new_style: 内边距的集合
  * @param {string[], string} path
@@ -184,6 +207,13 @@ export function radius_computer(new_style: radiusStyle, scale: number = 1) {
     return `border-radius: ${new_style.radius_top_left * scale || 0}px ${new_style.radius_top_right * scale || 0}px ${new_style.radius_bottom_right * scale || 0}px ${new_style.radius_bottom_left * scale || 0}px;`;
 }
 
+export const border_computer= (new_style: border_style) => {
+    const { border_is_show = '0', border_color = '', border_type = 'solid', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
+    if (border_is_show == '1') {
+       return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${ border_type };border-color: ${border_color};`
+    }
+    return '';
+}
 /**
  * 设置阴影样式
  * new_style: 外边距的集合
@@ -230,22 +260,6 @@ export function background_computer(new_style: backgroundImgUrlStyle) {
     } else {
         return '';
     }
-}
-/**
- * 计算并组合组件的常用样式。
- *
- * 该函数通过调用一系列特定样式的计算函数，来组装一个组件的常用样式字符串。
- * 这些样式包括渐变色、内边距、外边距、圆角和阴影等，为组件提供了一套完整的外观定义。
- *
- * @param new_style  组件的新样式对象，包含了需要计算的样式属性。
- * @returns 返回一个字符串，包含了计算后的样式定义，可以被直接应用于组件的样式属性。
- */
-export function common_styles_computer(new_style: componentsCommonCommonStyle) {
-    return gradient_computer(new_style) + margin_computer(new_style) + radius_computer(new_style) + box_shadow_computer(new_style) + `overflow:hidden;`;
-}
-
-export function common_img_computer(new_style: componentsCommonCommonStyle) {
-    return padding_computer(new_style) + background_computer(new_style) + `overflow:hidden;`;
 }
 
 /**
@@ -445,5 +459,165 @@ export const online_url = async (directory: string = '') => {
             });
         }
         return attachemnt_host + directory;
+    }
+};
+/**
+ * 获取标题样式
+ * 根据配置信息生成标题的CSS样式字符串
+ * @param config 包含配置信息的对象，用于决定标题的样式
+ * @returns 返回一个字符串，包含了标题的CSS样式
+ */
+export const get_title_style = (config: any) => {
+    // 从配置中提取与计算机相关的数据
+    const data = config.computer;
+    // 标题大小控制
+    // 根据配置中的filed_title_size_type字段决定标题字体大小
+    let style = `font-weight: 700;font-size:${ data.filed_title_size_type == 'big' ? 22 : data.filed_title_size_type == 'middle' ?  16 : 12 }px;color:#333;`
+    //标题宽度控制
+    // 根据flex_direction字段决定标题的对齐方式和宽度
+    if (data.flex_direction == 'column') {
+        style += `text-align: left;`;
+    } else if (data.flex_direction == 'row') {
+        style += `width: ${ data.filed_title_width }px;text-align:${ data.filed_title_justification}`;
+    }
+    // 返回拼接好的样式字符串
+    return style;
+}
+/**
+ * 根据配置信息获取图标尺寸
+ * 
+ * 此函数旨在通过配置信息中的相关设置来确定图标的合适尺寸
+ * 它根据计算机配置中的文件标题字体大小来决定图标的大小
+ * 
+ * @param config 包含配置信息的对象，特别是计算机相关的配置
+ * @returns {number} 图标的推荐尺寸，单位为像素
+ */
+export const get_icon_size = (config: any) => {
+    // 提取配置对象中的计算机相关数据
+    const data = config.computer;
+    // 根据文件标题字体大小决定图标尺寸
+    return data.filed_title_size_type == 'big' ? 20 : data.filed_title_size_type == 'middle' ?  14 : 12;
+}
+/**
+ * 根据配置信息获取框架样式
+ * 此函数旨在为不同的计算机配置提供动态样式调整选项
+ * 它主要通过调整高度和字体大小来适应不同的显示需求
+ * 
+ * @param config - 包含计算机配置信息的对象
+ * @returns 返回一个字符串，包含了根据配置动态生成的CSS样式
+ */
+export const get_frame_style = (config: any) => {
+    // 提取配置对象中的计算机相关数据
+    const data = config.computer;
+    
+    // 根据字段标题字体大小动态生成框架的样式
+    // 字体大小和高度根据配置的不同而变化
+    return `height:${ data.filed_title_size_type == 'big' ? 56 : data.filed_title_size_type == 'middle' ?  42 : 32 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+}
+/**
+ * 根据配置信息生成布局样式
+ * 此函数旨在根据配置对象中计算机相关数据生成动态的CSS样式字符串，用于控制布局
+ * 主要通过配置信息中的flex_direction字段来决定布局的方向和对齐方式
+ * 
+ * @param config 包含计算机配置信息的对象，用于生成动态样式
+ * @returns 返回一个字符串，包含了根据配置信息生成的CSS样式
+ */
+export const get_layout_style = (config: any) => {
+    // 提取配置信息中的计算机数据
+    const data = config.computer;
+    
+    // 初始化样式字符串，包含基本的flex布局设置和gap属性，flex-direction根据配置信息动态设置
+    let style = `display:flex;gap:10px;flex-direction:${ data.flex_direction };`
+    
+    // 根据flex_direction的值，添加相应的对齐方式
+    if (data.flex_direction == 'row') {
+        // 当flex_direction为row时，添加垂直居中对齐
+        style += `align-items: center;`;
+    } else if (data.flex_direction == 'column') {
+        // 当flex_direction为column时，添加水平居中对齐
+        style += `justify-content: center;`;
+    }
+    
+    // 返回生成的样式字符串
+    return style;
+}
+
+/**
+ * 格式检查函数
+ * @param data 待检查的数据对象
+ */
+export const get_format_checks = (data: any) => {
+    // 判断是否是必填字段
+    if (data.is_required == '1') {
+        // 如果是必填字段，则判断值是否为空
+        if (!isEmpty(data.value)) {
+            // 否就清除报错显示
+            data.common_config.is_error = '0';
+            data.common_config.error_text = '';
+        } else {
+            // 是否报错显示
+            data.common_config.is_error = '1';
+            data.common_config.error_text = '必填字段不能为空';
+        }
+    } else {
+        // 对非必填字段进行格式检查
+        get_format_checks_v2(data.common_config, data.value);
+    }
+}
+
+const type_config = [
+    { name: '手机号码', value: 'phone-number', check: /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/ },
+    { name: '电话号码', value: 'telephone-number', check: [/^0\d{0,3}-?\d{7,8}$/, /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/] },
+    { name: '邮政编码', value: 'postal-code', check: /^[1-9]\d{5}$/ },
+    { name: '身份证号码', value: 'id-no', check: /^[1-9]\d{5}(18|19|20)\d{2}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])\d{3}(\d|X|x)$/ },
+    { name: '邮箱', value: 'email', check: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+];
+
+// 构建 Map 提升查找效率
+const typeConfigMap = new Map(type_config.map(item => [item.value, item]));
+
+/**
+ * 根据通用配置和给定值进行格式校验
+ * 该函数用于检查输入值是否符合特定的格式要求，主要应用于用户输入验证
+ * 
+ * @param common_config 通用配置对象，包含格式和错误信息的配置
+ * @param value 需要进行格式校验的值
+ */
+export const get_format_checks_v2 = (common_config: componentsCommonCommonStyle, value: any) => {
+    // 检查值是否为空，如果为空则直接重置错误状态
+    if (!isEmpty(value)) {
+        // 根据通用配置中的格式，从类型配置映射中获取对应的格式检查项
+        const item = typeConfigMap.get(common_config.format);
+        // 如果找不到对应的格式检查项，则不进行后续操作
+        if (!item) return;
+
+        // 初始化验证状态为不通过
+        let isValid = false;
+        // 检查项可能是一个数组，包含多个正则表达式，循环遍历直到找到一个匹配的正则表达式
+        if (Array.isArray(item.check)) {
+            for (const regex of item.check) {
+                // 如果当前正则表达式匹配成功，则标记验证状态为通过，并停止循环
+                if (regex.test(value)) {
+                    isValid = true;
+                    break;
+                }
+            }
+        } else {
+            // 如果检查项不是一个数组，直接进行正则表达式匹配
+            isValid = item.check.test(value);
+        }
+
+        // 根据验证结果更新通用配置对象的错误状态和错误信息
+        if (isValid) {
+            common_config.is_error = '0';
+            common_config.error_text = '';
+        } else {
+            common_config.is_error = '1';
+            common_config.error_text = `请输入正确的${item.name}格式`;
+        }
+    } else {
+        // 如果值为空，重置错误状态
+        common_config.is_error = '0';
+        common_config.error_text = '';
     }
 };
