@@ -4,8 +4,8 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题 
-                    <el-select v-model="form.type" value-key="id" size="small" class="select-type" fit-input-width :teleported="false" popper-class="select-type" placement="bottom" @change="type_change">
-                        <el-option v-for="item in form_type_option.filter(item => item.value !== form.type)" :key="item.value" :label="item.name" :value="item.value" />
+                    <el-select v-model="form.type" value-key="id" size="small" name="单行文本" class="select-type" fit-input-width :teleported="false" popper-class="select-type" placement="bottom" @change="type_change">
+                        <el-option v-for="item in form_type_option" :key="item.value" :label="item.name" :value="item.value" />
                     </el-select>
                 </div>
                 <el-input v-model="form.title" placeholder="请输入标题" @change="operation_end"></el-input>
@@ -32,6 +32,9 @@
                     <el-input v-model="form.form_value" placeholder="请输入默认值" @change="operation_end"></el-input>
                 </div>
             </el-form-item>
+        </template>
+        <template v-else>
+            <option-config v-model:multicolour="form.is_multicolour" :list="form.option_list" :multiple="false"></option-config>
         </template>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
@@ -95,6 +98,6 @@ const operation_end = () => {
 :deep(.select-type .el-select-dropdown__item) {
     padding: 0 1rem !important;
     font-size: 1.2rem;
-    color: #333333;
+    // color: #333333;
 }
 </style>

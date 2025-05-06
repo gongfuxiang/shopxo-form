@@ -333,3 +333,11 @@
 .required-error {
     background: #fef6e6;
 }
+
+.custom-tooltip {
+    margin-bottom: -1rem !important;
+    padding: 0 0.5rem; /* 去掉内边距 */
+    background: #FAEEEE !important;
+    border: 1px solid #FAEEEE !important;
+    color: #DA3E32 !important;
+}

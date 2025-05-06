@@ -1,12 +1,10 @@
 <template>
     <VueDraggable v-model="from" :animation="500" target=".sort-target" handle=".icon-drag" :scroll="true" :on-sort="on_sort">
-        <TransitionGroup type="transition" tag="ul" name="fade" class="sort-target flex-col gap-x-20">
-            <li v-for="(item, index) in from" :key="index" class="flex gap-y-16 re">
+        <TransitionGroup type="transition" tag="ul" name="fade" class="sort-target flex-col gap-10">
+            <li v-for="(item, index) in from" :key="index" class="flex-row alingn-c gap-y-16 re">
                 <slot :row="item" :index="index" />
                 <icon name="drag" size="16" class="cursor-move" />
-                <div class="c-pointer do-not-trigger" @click.stop="remove(index)">
-                    <icon name="delete-o" size="18" color="6" />
-                </div>
+                <icon name="delete-o" size="18" color="6" @click="remove(index)"/>
             </li>
         </TransitionGroup>
     </VueDraggable>
@@ -58,7 +56,7 @@ const on_sort = () => {
 }
 
 .cursor-move {
-    color: #ddd;
+    color: #838892;
     cursor: move;
 }
 .remove-icon {

@@ -2,7 +2,7 @@ import defaultCommon from './index';
 interface option {
     name: string;   
     value: string;
-    is_color: string;
+    is_outer?: string;
     color: string;
 }
 interface DefaultInput {
@@ -12,6 +12,7 @@ interface DefaultInput {
     option_list: option[];
     placeholder: string;
     is_required: string;
+    is_multicolour: string;
     format: string;
     com_width: number;
     com_height: number;
@@ -20,11 +21,12 @@ interface DefaultInput {
 
 const defaultInput: DefaultInput = {
     type: 'single-text',
-    option_list: [{ name: '选项一', value: 'option1', is_color: '0', color: '' }, { name: '选项二', value: 'option2', is_color: '0', color: '' }, { name: '选项三', value: 'option3', is_color: '0', color: '' }],
+    option_list: [{ name: '选项1', value: 'option1', color: '#eb5050' }, { name: '选项2', value: 'option2', color: '#f0a800' }, { name: '选项3', value: 'option3', color: '#46c26f' }],
     title: '单行文本',
     form_value: '',
     placeholder: '请输入内容',
     is_required: '0',
+    is_multicolour: '0',
     format: 'none',
     com_width: 200,
     com_height: 200,
