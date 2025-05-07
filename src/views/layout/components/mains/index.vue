@@ -186,7 +186,6 @@ const on_sort = (event: SortableEvent) => {
 };
 // 选择
 const on_choose = (index: number, item: any) => {
-    console.log(index, item);
     set_show_tabs(index);
 };
 // 删除

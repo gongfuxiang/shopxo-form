@@ -57,14 +57,14 @@ const form = ref<diy_data_item>({
                 flex_direction: 'column',
                 filed_title_width: 100,
                 filed_title_justification: 'left',
-                filed_title_size_type: 'middle',
+                filed_title_size_type: 'small',
                 input_width_type: 'default',
             },
             mobile: {
                 flex_direction: 'column',
                 filed_title_width: 100,
                 filed_title_justification: 'left',
-                filed_title_size_type: 'middle',
+                filed_title_size_type: 'small',
                 input_width_type: 'default',
             }
         },

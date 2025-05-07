@@ -158,27 +158,6 @@ const type_change = (val: string) => {
 </script>
 
 <style lang="scss" scoped>
-.two-copies-group {
-    .el-radio-button {
-        overflow: hidden;
-        width: 50%;
-        :deep(.el-radio-button__inner) {
-            width: 100%;
-            background: #fff;
-        }
-        :deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
-            color: $cr-primary;
-            background: #fff;
-            border: 0.1rem solid $cr-primary;
-        }
-    }
-}
-.three-copies-group {
-    .el-radio-button {
-        overflow: hidden;
-        width: 33%;
-    }
-}
 .title-location-icon {
     padding: 1rem;
     background: #FFFFFF;

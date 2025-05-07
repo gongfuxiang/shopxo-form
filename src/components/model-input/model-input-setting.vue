@@ -8,13 +8,13 @@
                         <el-option v-for="item in form_type_option" :key="item.value" :label="item.name" :value="item.value" />
                     </el-select>
                 </div>
-                <el-input v-model="form.title" placeholder="请输入标题" @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">提示文字</div>
-                <el-input v-model="form.placeholder" placeholder="请输入提示文字" @change="operation_end"></el-input>
+                <el-input v-model="form.placeholder" placeholder="请输入提示文字" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
         <template v-if="form.type == 'single-text'">
@@ -29,12 +29,12 @@
             <el-form-item label-width="0">
                 <div class="flex-col gap-10 w h">
                     <div class="new_title">默认值</div>
-                    <el-input v-model="form.form_value" placeholder="请输入默认值" @change="operation_end"></el-input>
+                    <el-input v-model="form.form_value" placeholder="请输入默认值" clearable @change="operation_end"></el-input>
                 </div>
             </el-form-item>
         </template>
         <template v-else>
-            <option-config v-model:multicolour="form.is_multicolour" :list="form.option_list" :multiple="false"></option-config>
+            <option-config v-model:multicolour="form.is_multicolour" v-model:radio-value="form.form_value" :list="form.option_list" :multiple="false" @option-change="option_change"></option-config>
         </template>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
@@ -42,7 +42,24 @@
                 <el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" />
             </div>
         </el-form-item>
-        <border-config :value="form.common_config" />
+        <template v-if="form.type !== 'single-text'">
+            <el-form-item label-width="0">
+            </el-form-item>
+        </template>
+        <template v-if="form.type !== 'radio-btns'">
+            <border-config :value="form.common_config" />
+        </template>
+        <template v-else>
+            <el-form-item label-width="0">
+                <div class="flex-col gap-10 w h">
+                    <div class="new_title">分布方式</div>
+                    <el-radio-group v-model="form.arrangement" class="two-copies-group w h" is-button>
+                        <el-radio-button value="horizontal">横向排列</el-radio-button>
+                        <el-radio-button value="vertical">纵向排列</el-radio-button>
+                    </el-radio-group>
+                </div>
+            </el-form-item>
+        </template>
         <help-config :value="form.common_config" />
     </el-form>
 </template>
@@ -61,8 +78,8 @@ const form = ref(props.value);
 // 选项成本选项
 const form_type_option = [
     { name: '单行文本', value: 'single-text' },
-    { name: '下拉框', value: 'radio-btns' },
-    { name: '单选按钮组', value: 'select' },
+    { name: '下拉框', value: 'select' },
+    { name: '单选按钮组', value: 'radio-btns' },
 ];
 // 校验类型选项
 const format_option = [
@@ -73,9 +90,19 @@ const format_option = [
     { name: '身份证号码', value: 'id-no' },
     { name: '邮箱', value: 'email' },
 ];
-
-const type_change = (val: string) => {
+// 切换内容的时候默认值清空
+const type_change = () => {
     form.value.form_value = '';
+};
+// 判断配置项是否有误
+const option_change = (val: boolean) => {
+    if (!val) {
+        form.value.common_config.is_error = '1';
+        form.value.common_config.error_text = '此项配置有误，请检查字段属性';
+    } else {
+        form.value.common_config.is_error = '0';
+        form.value.common_config.error_text = '';
+    }
 };
 
 const emit = defineEmits(['operation_end']);

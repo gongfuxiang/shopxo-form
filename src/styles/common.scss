@@ -328,16 +328,53 @@
     .el-input__wrapper {
         box-shadow: none !important;
     }
+    .el-select__wrapper {
+        box-shadow: none !important;
+        min-height: 3rem;
+        line-height: 2.2rem;
+    }
+    .el-select__input {
+        height: 2.2rem;
+    }
 }
 
 .required-error {
     background: #fef6e6;
 }
 
-.custom-tooltip {
+.custom-error-tooltip {
     margin-bottom: -1rem !important;
     padding: 0 0.5rem; /* 去掉内边距 */
     background: #FAEEEE !important;
     border: 1px solid #FAEEEE !important;
     color: #DA3E32 !important;
+}
+
+.two-copies-group {
+    .el-radio-button {
+        overflow: hidden;
+        width: 50%;
+        .el-radio-button__inner {
+            width: 100%;
+            background: #fff;
+        }
+        .el-radio-button__original-radio:checked + .el-radio-button__inner {
+            color: $cr-primary;
+            background: #fff;
+            border: 0.1rem solid $cr-primary;
+        }
+    }
+}
+.three-copies-group {
+    .el-radio-button {
+        overflow: hidden;
+        width: 33%;
+    }
+}
+
+.vertical-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
 }

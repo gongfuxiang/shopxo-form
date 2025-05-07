@@ -210,7 +210,7 @@ export function radius_computer(new_style: radiusStyle, scale: number = 1) {
 export const border_computer= (new_style: border_style) => {
     const { border_is_show = '0', border_color = '', border_type = 'solid', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
     if (border_is_show == '1') {
-       return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${ border_type };border-color: ${border_color};`
+       return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${ border_type };border-color: ${border_color};box-sizing: content-box;`
     }
     return '';
 }
@@ -498,6 +498,29 @@ export const get_icon_size = (config: any) => {
     // 根据文件标题字体大小决定图标尺寸
     return data.filed_title_size_type == 'big' ? 20 : data.filed_title_size_type == 'middle' ?  14 : 12;
 }
+
+export const get_color_style = (config: any) => {
+    // 提取配置对象中的计算机相关数据
+    const data = config.computer;
+    let padding = '0.3rem 0.6rem';
+    let size = '12';
+    switch (data.filed_title_size_type) {
+        case 'big':
+            size = '20';
+            padding = '1.1rem 1.2rem';
+            break;
+        case 'middle':
+            size = '14';
+            padding = '0.5rem 0.6rem';
+            break;
+        default:
+            size = '12';
+            padding = '0 0.6rem';
+            break;
+    }
+    // 根据文件标题字体大小决定图标尺寸
+    return `padding:${ padding };font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+}
 /**
  * 根据配置信息获取框架样式
  * 此函数旨在为不同的计算机配置提供动态样式调整选项
@@ -512,7 +535,7 @@ export const get_frame_style = (config: any) => {
     
     // 根据字段标题字体大小动态生成框架的样式
     // 字体大小和高度根据配置的不同而变化
-    return `height:${ data.filed_title_size_type == 'big' ? 56 : data.filed_title_size_type == 'middle' ?  42 : 32 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+    return `height:${ data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ?  40 : 30 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
 }
 /**
  * 根据配置信息生成布局样式
@@ -554,6 +577,8 @@ export const get_format_checks = (data: any) => {
             // 否就清除报错显示
             data.common_config.is_error = '0';
             data.common_config.error_text = '';
+            // 对字段进行格式检查
+            get_format_checks_v2(data.common_config, data.value);
         } else {
             // 是否报错显示
             data.common_config.is_error = '1';

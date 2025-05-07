@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
-import { get_title_style, get_layout_style, get_frame_style, get_icon_size } from '@/utils/index';
+import { get_title_style, get_layout_style, get_frame_style, get_icon_size, get_color_style } from '@/utils/index';
 export const commonStore = defineStore('common', () => {
     // 链接是否需要调接口判断
     const is_common_api = ref(false);
@@ -64,6 +64,7 @@ export const commonStore = defineStore('common', () => {
     // 输入框大小控制
     const frame_style = computed(() => get_frame_style(form_layout.value));
     const help_icon_size = computed(() => get_icon_size(form_layout.value));
+    const color_style = computed(() => get_color_style(form_layout.value));
     return {
         common,
         is_common_api,
@@ -75,6 +76,7 @@ export const commonStore = defineStore('common', () => {
         layout_style,
         frame_style,
         help_icon_size,
+        color_style,
         set_common,
         set_is_common_api,
         set_is_immersion_model,

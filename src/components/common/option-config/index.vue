@@ -5,12 +5,12 @@
                 <div class="flex-row align-c gap-5 right-title">彩色<el-switch v-model="multicolour" active-value="1" inactive-value="0"></el-switch></div>
             </div>
             <template v-if="multiple">
-                <el-checkbox-group v-model="radio1">
+                <el-checkbox-group v-model="checkValue">
                     <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-checkbox :value="row.value" class="option-width">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" clearable @change="input_change(row.name, index)"></el-input>
                                 </el-tooltip>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
@@ -20,8 +20,8 @@
                     </drag>
                     <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
                         <el-checkbox :value="last_drag_item.value" class="option-width">
-                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
+                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" clearable @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
                             </el-tooltip>
                         </el-checkbox>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>
@@ -29,12 +29,12 @@
                 </el-checkbox-group>
             </template>
             <template v-else>
-                <el-radio-group v-model="radio2">
+                <el-radio-group v-model="radioValue">
                     <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-radio :value="row.value" class="option-width">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" clearable @change="input_change(row.name, index)"></el-input>
                                 </el-tooltip>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
@@ -44,8 +44,8 @@
                     </drag>
                     <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
                         <el-radio :value="last_drag_item.value" class="option-width">
-                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
+                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" clearable @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
                             </el-tooltip>
                         </el-radio>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>
@@ -81,6 +81,9 @@ import { predefine_colors } from '@/utils/common';
 import { get_math } from "@/utils/index";
 // 弹出框显示逻辑
 const multicolour = defineModel('multicolour', { type: String, default: '0' })
+// 默认值处理
+const radioValue = defineModel('radioValue', { type: String, default: '' });
+const checkValue = defineModel('checkValue', { type: Array as PropType<string[]>, default: [] });
 interface Props {
     list: any[];
     multiple: boolean;
@@ -116,9 +119,7 @@ watchEffect(() => {
     return last.is_outer === '1';
 });
 
-const emits = defineEmits(['remove','onsort']);
-const radio1 = ref([]);
-const radio2 = ref('');
+const emits = defineEmits(['remove','onsort', 'option-change']);
 // #region 添加选项
 const add = () => {
     let length = drag_list.value.length;
@@ -183,8 +184,12 @@ const dialogVisible = ref(false);
 const textarea = ref('');
 // 点击编辑的时候将数组转变成字符串
 const bulk_edit = () => {
-    const safeList = Array.isArray(drag_list.value) ? drag_list.value : [];
-    const names = safeList.map(item => item.name ?? '').join('\n');
+    let old_data = cloneDeep(Array.isArray(drag_list.value) ? drag_list.value : []);
+    // 判断是否有其他内容，如果有的话删除最后一个
+    if (is_drag_outer.value) {
+        old_data.splice(drag_list.value.length - 1, 1);
+    }
+    const names = old_data.map(item => item.name ?? '').join('\n');
     textarea.value = names;
     dialogVisible.value = true;
 }
@@ -193,7 +198,8 @@ const cancel = () => {
 }
 // 点击确定之后将数据转变成数组
 const submit = () => {
-    const data = (textarea.value || '').split(/[\r\n]+/g);
+    // 去掉首尾空格之后做数据处理
+    const data = (textarea.value || '').trim().split(/[\r\n]+/g);
     if (data.length > 0) {
         drag_list.value = data.map((item: any, index: number) => {
             return {
@@ -203,6 +209,11 @@ const submit = () => {
             }
         });
     }
+    add_outer();
+    // 批量编辑之后清除数据
+    radioValue.value = '';
+    checkValue.value = [];
+    // 关闭弹出框
     dialogVisible.value = false;
 }
 //#endregion
@@ -222,10 +233,41 @@ const on_sort = (item: any) => {
         drag_list.value = item;
     }
 };
+// 删除选项时的操作
 const remove = (index: number) => {
+    // 防止 index 越界
+    if (index < 0 || index >= drag_list.value.length) {
+        console.warn('Invalid index provided to remove function');
+        return;
+    }
+    // 先删除数据，然后判断是否存在
     drag_list.value.splice(index, 1);
+    const new_data = cloneDeep(drag_list.value.map(item => item.name ?? ''));
+    if (props.multiple) {
+        if (!isEmpty(checkValue.value)) {
+            checkValue.value = checkValue.value.filter((item: any) => new_data.includes(item));
+            return;
+        }
+    } else {
+        if (!isEmpty(radioValue.value)) {
+            if (!new_data.includes(radioValue.value)) {
+                radioValue.value = '';
+            }
+            return;
+        }
+    }
 };
 //#endregion
+
+watch(() => drag_list.value, (new_value) => {
+    const newListLength = new Set(new_value.map(item => item.name)).size;
+    const listLength = new_value.length;
+    if(listLength > newListLength){
+        emits('option-change', false);
+    } else {
+        emits('option-change', true);
+    }
+}, { immediate: true, deep: true });
 </script>
 
 <style lang="scss" scoped>
