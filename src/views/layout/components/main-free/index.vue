@@ -81,13 +81,9 @@ const emits = defineEmits(['update-setting']);
 // 拖拽数据
 const diy_data = ref(props.diyData);
 // 监听
-watch(
-    () => props.diyData,
-    (newValue) => {
-        debugger;
-        diy_data.value = newValue;
-    }
-);
+watch(() => props.diyData, (newValue) => {
+    diy_data.value = newValue;
+});
 
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);

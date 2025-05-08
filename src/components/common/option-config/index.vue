@@ -10,7 +10,7 @@
                         <template #default="{ row, index }">
                             <el-checkbox :value="row.value" class="option-width">
                                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" clearable @change="input_change(row.name, index)"></el-input>
+                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
                                 </el-tooltip>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
@@ -21,7 +21,7 @@
                     <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
                         <el-checkbox :value="last_drag_item.value" class="option-width">
                             <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" clearable @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
                             </el-tooltip>
                         </el-checkbox>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>
@@ -34,7 +34,7 @@
                         <template #default="{ row, index }">
                             <el-radio :value="row.value" class="option-width">
                                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" clearable @change="input_change(row.name, index)"></el-input>
+                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
                                 </el-tooltip>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
@@ -45,7 +45,7 @@
                     <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
                         <el-radio :value="last_drag_item.value" class="option-width">
                             <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" clearable @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
                             </el-tooltip>
                         </el-radio>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>

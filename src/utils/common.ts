@@ -9,6 +9,54 @@ export const old_padding = { padding: 0, padding_top: 0, padding_bottom: 0, padd
 export const old_margin = { margin: 0, margin_top: 0, margin_bottom: 0, margin_left: 0, margin_right: 0 };
 
 export const old_border_and_box_shadow = { border_is_show: '0', border_color: '#FF3F3F', border_style: 'solid',border_size: { padding: 1, padding_top: 1, padding_right: 1, padding_bottom: 1, padding_left: 1, }, box_shadow_color: '', box_shadow_x: 0, box_shadow_y: 0, box_shadow_blur: 0, box_shadow_spread: 0 };
+
+export const layout_settings = {
+    computer: {
+        flex_direction: 'column',
+        filed_title_width: 100,
+        filed_title_justification: 'left',
+        filed_title_size_type: 'small',
+        input_width_type: 'default',
+    },
+    mobile: {
+        flex_direction: 'column',
+        filed_title_width: 100,
+        filed_title_justification: 'left',
+        filed_title_size_type: 'small',
+        input_width_type: 'default',
+    }
+};
+
+export const style_settings = {
+    computer: {
+        background_type: 'color',
+        background_color: '#F8F8F8',
+        background_image: [],
+        heading_type: 'color',
+        heading_color: '#C1EBFF',
+        heading_image: [],
+        is_show_heading_title: '0',
+        heading_title_location: "left",
+        heading_title_size: 14,
+        heading_title_font_weight: 'normal',
+        heading_title_color: '#000000',
+        submit_color: '#2A94FF',
+    },
+    mobile: {
+        background_type: 'color',
+        background_color: '#F8F8F8',
+        background_image: [],
+        heading_type: 'color',
+        heading_color: '#C1EBFF',
+        heading_image: [],
+        is_show_heading_title: '0',
+        heading_title_location: "left",
+        heading_title_size: 14,
+        heading_title_font_weight: 'normal',
+        heading_title_color: '#000000',
+        submit_color: '#2A94FF',
+    }
+}
 // 只好设置
 export const font_weight = [
     { name: '加粗', value: 'bold' },

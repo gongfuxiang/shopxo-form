@@ -278,3 +278,9 @@ p {
         border: 0;
     }
 }
+
+.custom-select {
+    .el-select-dropdown__header {
+        padding: 0;
+    }
+}

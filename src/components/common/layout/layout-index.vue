@@ -1,5 +1,5 @@
 <template>
-    <layout-dialog v-model:visible="dialogVisible" :title="configType == 'layout' ? '表单布局' : '表单样式'" @close_event="close_event">
+    <layout-dialog v-model:visible="dialogVisible" :title="configType == 'layout' ? '表单布局' : '表单样式'" @handle-close="handleClose">
         <div class="flex-row h w">
            <div class="main flex-1 bg-f8">
 
@@ -38,9 +38,11 @@ watch(() => props.value, () => {
 const type_value = ref('computer');
 // 弹出框显示逻辑
 const dialogVisible = defineModel('visible', { type: Boolean, default: false })
-const close_event = () => {
+const emit = defineEmits(['handleClose']);
+const handleClose = () => {
     type_value.value = 'computer';
     dialogVisible.value = false;
+    emit('handleClose');
 };
 </script>
 

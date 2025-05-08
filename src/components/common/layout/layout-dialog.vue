@@ -11,10 +11,11 @@ const props = defineProps({
     }
 });
 const dialogVisible = defineModel('visible', { type: Boolean, default: false });
+const emit = defineEmits(['handleClose']);
 const handleClose = () => {
     dialogVisible.value = false;
+    emit('handleClose');
 };
-const emits = defineEmits(['accomplish']);
 </script>
 
 <style lang="scss" scoped></style>

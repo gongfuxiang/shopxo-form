@@ -27,27 +27,7 @@
                 <div class="pa-30">
                     <div class="drag-content flex-row br-f1 radius-xl pa-16">
                         <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" class="drag-area re flex-1" ghost-class="ghost" :on-sort="on_sort" :on-start="on_start" :on-end="on_end">
-                            <div v-for="(item, index) in diy_data" :key="item.id" class="item" :class="[{ active: item.show_tabs == '1', 'required-error': item.com_data.is_required == '1' && item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item)">
-                                <div v-if="item.show_tabs == '1'" class="oprate">
-                                    <div class="icon" @click.stop="set_enable(index)">
-                                        <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
-                                    </div>
-                                    <span class="divider"></span>
-                                    <div class="icon" @click="on_del(index)">
-                                        <icon name="del" size="10"></icon>
-                                    </div>
-                                    <span class="divider"></span>
-                                    <div class="icon" @click="on_copy(index, item)">
-                                        <icon name="copy" size="10"></icon>
-                                    </div>
-                                </div>
-                                <div>
-                                    <!-- 单行文本 -->
-                                    <template v-if="item.key == 'single-text'">
-                                        <model-input :value="item.com_data"></model-input>
-                                    </template>
-                                </div>
-                            </div>
+                            <div-content :diy-data="diy_data" @on_choose="on_choose" @del="on_del" @copy="on_copy"></div-content>
                         </VueDraggable>
                     </div>
                 </div>
@@ -73,13 +53,9 @@ const emits = defineEmits(['update-setting']);
 // 拖拽数据
 const diy_data = ref(props.diyData);
 // 监听
-watch(
-    () => props.diyData,
-    (newValue) => {
-        debugger;
-        diy_data.value = newValue;
-    }
-);
+watch(() => props.diyData, (newValue) => {
+    diy_data.value = newValue;
+});
 
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
@@ -145,10 +121,12 @@ const url_computer = (name: string) => {
 
 // 复制
 const clone_item_com_data = (item: commonComponentData) => {
-    console.log(item);
     return {
         name: item.name,
         id: get_math(),
+        mark_name: '',
+        show_tabs: '1',
+        is_enable: '1',
         key: item.key,
         com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
@@ -159,7 +137,6 @@ const clone_item_com_data = (item: commonComponentData) => {
 const show_model_border = ref(true);
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
-    console.log(item);
     const new_item = {
         ...item,
         id: get_math(),
@@ -181,7 +158,6 @@ const on_end = () => {
 };
 // 拖拽排序
 const on_sort = (event: SortableEvent) => {
-    console.log(event);
     set_show_tabs(event.newIndex || 0);
 };
 // 选择
@@ -210,15 +186,15 @@ const on_del = (index: number) => {
     });
 };
 // 复制
-const on_copy = (index: number, item: any) => {
-    const new_item = cloneDeep(item);
-    new_item.id = get_math();
-    new_item.show_tabs = '0';
-    diy_data.value.splice(index + 1, 0, new_item);
-};
-const set_enable = (index: number) => {
-    const old_data = get_diy_index_data(index);
-    old_data.is_enable = old_data.is_enable == '1' ? '0' : '1';
+const on_copy = (index: number) => {
+    // 获取当前数据, 复制的时候id更换一下
+    const new_data = {
+        ...cloneDeep(get_diy_index_data(index)),
+        id: get_math(),
+    };
+    // 在当前位置下插入数据
+    diy_data.value.splice(index, 0, new_data);
+    set_show_tabs(index + 1);
 };
 // 获取当前传递过来的index对应的diy_data中的数据
 const get_diy_index_data = (index: number) => {
@@ -231,7 +207,7 @@ const set_show_tabs = (index: number) => {
         item.show_tabs = '0';
         if (for_index == index) {
             item.show_tabs = '1';
-            emits('update-setting', diy_data.value[index]);
+            emits('update-setting', item, diy_data.value);
         }
     });
 };

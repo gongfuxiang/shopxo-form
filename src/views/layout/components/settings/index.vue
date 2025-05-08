@@ -44,7 +44,7 @@
             <div v-else class="ptb-20 plr-12">
                 <div class="setting-content">
                     <template v-if="model_value.key == 'single-text'">
-                        <model-input-setting :value="model_value.com_data"></model-input-setting>
+                        <model-input-setting :value="model_value.com_data" :model-id="model_value.id"></model-input-setting>
                     </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
@@ -52,11 +52,13 @@
                 </div>
             </div>
         </el-scrollbar>
-        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings"></layout-index>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" @handle-close="handleClose"></layout-index>
     </div>
 </template>
 
 <script setup lang="ts">
+import { layout_settings, style_settings } from '@/utils/common';
+import { isEqual } from "lodash";
 const props = defineProps({
     value: {
         type: Object,
@@ -65,7 +67,7 @@ const props = defineProps({
     isShowFormModel: {
         type: Boolean,
         default: false,
-    },
+    }
 });
 const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });
@@ -81,6 +83,22 @@ const dialog_type = ref('layout');
 const open_dialog = (value: string) => {
     dialog_visible.value = true;
     dialog_type.value = value;
+};
+// 关闭之后判断是否有更改
+const handleClose = () => {
+    if (dialog_type.value == 'layout') {
+        if (isEqual(form.value.layout_settings, layout_settings) ) {
+            form.value.is_layout_settings = '0';
+        } else {
+            form.value.is_layout_settings = '1';
+        }
+    } else {
+        if (isEqual(form.value.style_settings, style_settings) ) {
+            form.value.is_style_settings = '0';
+        } else {
+            form.value.is_style_settings = '1';
+        }
+    }
 };
 </script>
 

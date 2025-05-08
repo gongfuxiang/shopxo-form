@@ -15,8 +15,8 @@
 
 <script setup lang="ts">
 import { cloneDeep } from 'lodash';
+import { layout_settings, style_settings } from '@/utils/common';
 import defaultSettings from './index';
-import { background_computer } from '@/utils';
 import { commonStore } from '@/store';
 const common_store = commonStore();
 interface diy_data_item {
@@ -52,53 +52,9 @@ const form = ref<diy_data_item>({
     overall_config: {
         type_value: 'default',
         is_layout_settings: '0',
-        layout_settings: {
-            computer: {
-                flex_direction: 'column',
-                filed_title_width: 100,
-                filed_title_justification: 'left',
-                filed_title_size_type: 'small',
-                input_width_type: 'default',
-            },
-            mobile: {
-                flex_direction: 'column',
-                filed_title_width: 100,
-                filed_title_justification: 'left',
-                filed_title_size_type: 'small',
-                input_width_type: 'default',
-            }
-        },
+        layout_settings: cloneDeep(layout_settings),
         is_style_settings: '0',
-        style_settings: {
-            computer: {
-                background_type: 'color',
-                background_color: '#F8F8F8',
-                background_image: [],
-                heading_type: 'color',
-                heading_color: '#C1EBFF',
-                heading_image: [],
-                is_show_heading_title: '0',
-                heading_title_location: "left",
-                heading_title_size: 14,
-                heading_title_font_weight: 'normal',
-                heading_title_color: '#000000',
-                submit_color: '#2A94FF',
-            },
-            mobile: {
-                background_type: 'color',
-                background_color: '#F8F8F8',
-                background_image: [],
-                heading_type: 'color',
-                heading_color: '#C1EBFF',
-                heading_image: [],
-                is_show_heading_title: '0',
-                heading_title_location: "left",
-                heading_title_size: 14,
-                heading_title_font_weight: 'normal',
-                heading_title_color: '#000000',
-                submit_color: '#2A94FF',
-            }
-        }, 
+        style_settings: cloneDeep(style_settings), 
         is_front_end_cache: '1',
         is_show_submit: '1',
         submit_title: '提交',
@@ -112,8 +68,9 @@ const diy_data_item = ref({});
 const key = ref('');
 
 // 更新设置
-const update_setting = (data: any) => {
+const update_setting = (data: any, diy: any[]) => {
     diy_data_item.value = data;
+    form.value.diy_data = diy;
     is_show_form_model.value = false;
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);
@@ -126,7 +83,8 @@ onMounted(() => {
 const init = () => {
     form.value.diy_data = data_merge(form.value.diy_data);
 };
-
+// 将内容传递给子组件, 避免多次传递
+provide('diy_data', computed(() => form.value.diy_data));
 // 数据合并
 const data_merge = (list: string[]) => {
     list.forEach((item: any) => {

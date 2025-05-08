@@ -44,6 +44,14 @@
         </el-form-item>
         <template v-if="form.type !== 'single-text'">
             <el-form-item label-width="0">
+                <div class="flex-col gap-10 w h">
+                    <div class="new_title">显隐规则</div>
+                    <el-button v-if="form.show_hidden_list.length == 0" @click="open_dialog">设置</el-button>
+                    <div v-if="form.show_hidden_list.length > 0" class="flex-row jc-sb align-c gap-10 layout-style pr-10" @click="open_dialog">
+                        <div class="title">已设置显隐规则</div>
+                        <icon name="edit" size="18"/>
+                    </div>
+                </div>
             </el-form-item>
         </template>
         <template v-if="form.type !== 'radio-btns'">
@@ -61,6 +69,7 @@
             </el-form-item>
         </template>
         <help-config :value="form.common_config" />
+        <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :model-id="modelId" @submit="submit"></show-hidden>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -72,6 +81,10 @@ const props = defineProps({
     value: {
         type: Object,
         default: () => ({}),
+    },
+    modelId: {
+        type: String,
+        default: '',
     },
 });
 const form = ref(props.value);
@@ -104,7 +117,13 @@ const option_change = (val: boolean) => {
         form.value.common_config.error_text = '';
     }
 };
-
+const dialog_visible = ref(false);
+const open_dialog = () => {
+    dialog_visible.value = true;
+};
+const submit = (val: any) => {
+    form.value.show_hidden_list = val;
+};
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
     emit('operation_end');
