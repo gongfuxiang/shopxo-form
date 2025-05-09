@@ -26,7 +26,13 @@
                     </div>
                     <div v-if="form.format == 'num'" class="flex-row align-c gap-10"><el-checkbox v-model="form.is_thousandths_symbol" label="显示千分符" true-value="1" false-value="0" /></div>
                     <div v-if="form.is_decimal == '1' || (form.format == 'num' && form.is_thousandths_symbol == '1')" class="num-preview">
-                        {{ formatNumber('99999', form.format == 'num' && form.is_thousandths_symbol == '1')}}
+                        <template v-if="form.format == 'num' && form.is_thousandths_symbol == '1'">
+                            {{ formatNumber(Number(formatNumber(99999, false)).toFixed(form.decimal_num).toString(), true) }}
+                        </template>
+                        <template v-else>
+                            {{  Number(formatNumber(99999, false)).toFixed(form.decimal_num) }}
+                        </template>
+                        
                         <template v-if="form.format == 'percentage'">%</template>
                     </div>
                 </div>
@@ -35,7 +41,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <el-input v-model="form.form_value" placeholder="请输入默认值" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.form_value" placeholder="请输入默认值" clearable @blur="decimal_num_change" @change="operation_end"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -79,7 +85,7 @@ const format_option = [
     { name: '数值', value: 'num' },
     { name: '百分比', value: 'percentage' }
 ];
-
+// 小数点处理
 const decimal_num_change = () => {
     if (!isEmpty(form.value.form_value)) {
         form.value.form_value = Number(formatNumber(form.value.form_value, false)).toFixed(form.value.decimal_num).toString();
