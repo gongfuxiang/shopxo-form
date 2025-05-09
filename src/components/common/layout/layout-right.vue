@@ -39,8 +39,8 @@
                 </div>
             </div>
         </div>
-        <div v-if="portType == 'computer' && form.flex_direction == 'row'" class="flex-col gap-10 w h">
-            <div class="new_title">输入框宽度</div>
+        <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
+            <div class="new_title flex-row align-c gap-10">输入框宽度<tooltip content="控制字段输入框的宽度，标准模式下宽度固定，自动模式下宽度占满整列" placement="top" /></div>
             <el-radio-group v-model="form.input_width_type" class="two-copies-group w h" is-button>
                 <el-radio-button value="default">标准</el-radio-button>
                 <el-radio-button value="auto">自动</el-radio-button>

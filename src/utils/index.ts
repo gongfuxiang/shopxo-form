@@ -535,7 +535,7 @@ export const get_frame_style = (config: any) => {
     
     // 根据字段标题字体大小动态生成框架的样式
     // 字体大小和高度根据配置的不同而变化
-    return `height:${ data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ?  40 : 30 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+    return `width:${ data.input_width_type == 'default' ? '354px' : '100%' };height:${ data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ?  40 : 30 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
 }
 /**
  * 根据配置信息生成布局样式
@@ -646,3 +646,11 @@ export const get_format_checks_v2 = (common_config: componentsCommonCommonStyle,
         common_config.error_text = '';
     }
 };
+
+export const formatNumber = (num: string | number, is_convert: boolean) => {
+    if (is_convert) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+        return num.toString().replace(/,/g, "");
+    }
+}

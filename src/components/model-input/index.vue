@@ -74,6 +74,7 @@ const style_container = computed(() => common_styles_computer(form.value.common_
 </script>
 <style lang="scss" scoped>
 .content {
+    width: 100%;
     pointer-events: none;
 }
 .select-tag {

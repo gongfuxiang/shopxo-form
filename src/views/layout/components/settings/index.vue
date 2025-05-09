@@ -43,8 +43,17 @@
             </div>
             <div v-else class="ptb-20 plr-12">
                 <div class="setting-content">
-                    <template v-if="model_value.key == 'single-text'">
+                    <!-- 单行文本 | 下拉框 | 单选按钮组-->
+                    <template v-if="['single-text', 'select', 'radio-btns'].includes(model_value.key)">
                         <model-input-setting :value="model_value.com_data" :model-id="model_value.id"></model-input-setting>
+                    </template>
+                    <!-- 多行文本 -->
+                    <template v-if="model_value.key == 'multi-text'">
+                        <model-textarea-setting :value="model_value.com_data" :model-id="model_value.id"></model-textarea-setting>
+                    </template>
+                    <!-- 数字 -->
+                    <template v-if="model_value.key == 'number'">
+                        <model-number-setting :value="model_value.com_data" :model-id="model_value.id"></model-number-setting>
                     </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>

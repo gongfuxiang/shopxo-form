@@ -15,9 +15,17 @@
         </div>
         <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
             <div class="main-content">
-                <!-- 单行文本 -->
-                <template v-if="item.key == 'single-text'">
+                <!-- 单行文本 | 下拉框 | 单选按钮组-->
+                <template v-if="['single-text', 'select', 'radio-btns'].includes(item.key)">
                     <model-input :value="item.com_data"></model-input>
+                </template>
+                <!-- 多行文本 -->
+                <template v-if="item.key == 'multi-text'">
+                    <model-multi-text :value="item.com_data"></model-multi-text>
+                </template>
+                <!-- 数字 -->
+                <template v-if="item.key == 'number'">
+                    <model-number :value="item.com_data"></model-number>
                 </template>
             </div>
         </div>
@@ -71,6 +79,7 @@ const get_diy_index_data = (index: number) => {
         max-width: 100rem;
         background-color: #fff;
         margin: 0 auto;
+        padding-bottom: 4rem;
         .item {
             position: relative;
             cursor: all-scroll;

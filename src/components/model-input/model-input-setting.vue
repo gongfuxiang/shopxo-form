@@ -1,9 +1,9 @@
 <template>
     <el-form :model="form" label-width="40" label-position="left" @submit.prevent>
-        <div class="mb-10 fw">内容设置</div>
+        <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb">标题 
+                <div class="new_title flex-row align-c jc-sb w h">标题 
                     <el-select v-model="form.type" value-key="id" size="small" name="单行文本" class="select-type" fit-input-width :teleported="false" popper-class="select-type" placement="bottom" @change="type_change">
                         <el-option v-for="item in form_type_option" :key="item.value" :label="item.name" :value="item.value" />
                     </el-select>
@@ -39,7 +39,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">校验</div>
-                <el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" />
+                <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
         <template v-if="form.type !== 'single-text'">
@@ -85,7 +85,7 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
-    },
+    }
 });
 const form = ref(props.value);
 // 选项成本选项
@@ -133,17 +133,25 @@ const operation_end = () => {
 <style scoped lang="scss"> 
 .select-type {
     width: 9rem;
-    height: 1.8rem;
-    :deep(.el-select__wrapper) {
+    height: 2rem;
+}
+:deep(.el-select.el-select--small.select-type) {
+    .el-select__wrapper {
         box-shadow: none !important;
         font-size: 1rem;
+        min-height: 2rem;
         background: #F6F6F6;
         border-radius: 2px;
     }
-}
-:deep(.select-type .el-select-dropdown__item) {
-    padding: 0 1rem !important;
-    font-size: 1.2rem;
-    // color: #333333;
+    .el-select-dropdown__item {
+        padding: 0 1rem !important;
+        font-size: 1.2rem;
+        // color: #333333;
+    }
+    .el-select__selected-item.el-select__placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 </style>
