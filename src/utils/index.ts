@@ -662,13 +662,43 @@ export const formatNumber = (num: string | number, is_convert: boolean) => {
         const number = num.toString();
         // 使用正则表达式将整数部分每三位用逗号分隔
         const integerPart = number.split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        // 避免小数没空的时候也处理
-        // 获取小数部分，如果存在的话，并确保小数部分不超过两位
-        const decimalPart = number.split('.')[1] == null ? '' : '.' + number.split('.')[1]; // 小数部分保留两位并获取字符串形式的小数部分
+        // 避免小数为空的时候也处理
+        const decimalPart = number.split('.')[1] == null ? '' : '.' + number.split('.')[1];
         // 组合整数部分和小数部分
         return integerPart + decimalPart;
     } else {
         // 如果不需要转换，移除所有逗号并返回
         return num.toString().replace(/,/g, "");
     }
+}
+
+const convert_to_chinese_currency = (amount: number | string) => {
+    const num = Number(amount);
+    // 定义数字到中文的映射
+    const numMap = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
+    // 定义单位，从元到分
+    const units = ['分', '角', '元', '拾', '佰', '仟', '万', '亿', '拾', '佰', '仟', '万', '拾', '佰', '仟']; // 修正单位数组
+
+    // 处理小数部分
+    let decimalPart = (num * 100).toFixed(0).substr(-2); // 取小数点后两位
+    let decimalChinese = '';
+    for (let i = 0; i < decimalPart.length; i++) {
+        decimalChinese += numMap[Number(decimalPart[i])];
+        decimalChinese += units[i];
+    }
+
+    // 处理整数部分
+    amount = Math.floor(num); // 转换为整数处理，避免小数点影响
+    let integerPart = amount.toString();
+    let integerChinese = '';
+    for (let i = 0; i < integerPart.length; i++) {
+        const digit = Number(integerPart[i]); // 显式转换为数字
+        integerChinese += numMap[digit]; // 使用数字索引访问 numMap
+        if (i < integerPart.length - 1) { // 非最后一位时添加单位
+            integerChinese += units[units.length - integerPart.length + i]; // 动态匹配单位
+        }
+    }
+
+    // 拼接整数部分和小数部分
+    return integerChinese + (decimalChinese ? '整' : '') + (decimalChinese || '');
 }

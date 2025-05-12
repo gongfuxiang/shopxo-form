@@ -1,18 +1,127 @@
 <template>
-    <el-input v-model="form_value"></el-input>
+    <div ref="el" :class="`rendering-area percent-input-wrapper ${ is_focus ? 'focus-input' : 'blur-input'}`" @click="percent_input_click">
+        <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" @focus="focus_input" @blur="blur_input">
+            <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
+        </el-input>
+        <template v-if="isPercentage">
+            <div>%</div>
+        </template>
+    </div>
 </template>
 
 <script lang="ts" setup>
+import { formatNumber } from '@/utils/index'
+import { isEmpty } from "lodash";
+import type ElInput from 'element-plus/es/components/input/src/input.vue'
 const props = defineProps({
     isDecimal: {
         type: Boolean,
         default: false,
     },
+    decimalNum: {
+        type: Number,
+        default: 0
+    },
     isThousandPoint: {
         type: Boolean,
         default: false,
     },
-
+    isPercentage:{
+        type: Boolean,
+        default: false,
+    },
+    format: {
+        type: String,
+        default: 'num'
+    },
+    isThousandthsSymbol: {
+        type: String,
+        default: '0'
+    },
+    moneySign: {
+        type: String,
+        default: ''
+    }
 });
-const form_value = defineModel('value', { type: String, default: '' });
+const form_value = defineModel({ type: String, default: '' });
+//#region 获取容器最大宽度
+const el = ref(null)
+const input_width = ref(0)
+useResizeObserver(el, (entries) => {
+    const entry = entries[0]
+    const { width } = entry.contentRect
+    input_width.value = width;
+})
+//#endregion
+// 点击div的时候, 输入框默认获取焦点
+const is_focus = ref(false);
+const el_input = ref<InstanceType<typeof ElInput> | null>(null);
+const percent_input_click = () => {
+    if (el_input.value) {
+        is_focus.value = true;
+        el_input.value.focus();
+    }
+}
+const focus_input = () => {
+    is_focus.value = true;
+    // 不为空的时候，获取焦点的时候将千分位的转化为数字避免用户输入的时候出现问题
+    if (!isEmpty(form_value.value)) {
+        form_value.value = Number(formatNumber(form_value.value, false)).toFixed(props.decimalNum);
+    } else {
+        form_value.value = '';
+    }
+}
+const emit = defineEmits(['blur'])
+const blur_input = () => {
+    is_focus.value = false;
+    if (!isEmpty(form_value.value)) {
+        // 为数字并且时千分位的是你
+        if (props.format == 'num' && props.isThousandthsSymbol == '1') {
+            form_value.value = formatNumber(Number(formatNumber(form_value.value, false)).toFixed(props.decimalNum).toString(), true)
+        } else {
+            form_value.value = Number(formatNumber(form_value.value, false)).toFixed(props.decimalNum)
+        }
+    } else {
+        form_value.value = '';
+    }
+    emit('blur')
+}
+// 监听内容发生变化时，重新触发方法
+watch(() => [props.decimalNum, props.isThousandthsSymbol, props.format], () => {
+    blur_input();
+}, {immediate: true, deep: true})
+//#region 获取百分比时的最大宽度
+const use_input_width = ref(26);
+watchEffect(() => {
+    if (props.isPercentage) {
+        const min_width = 26 + (form_value.value.length * 7);
+        const max_width = input_width.value - 14;
+        if (min_width < max_width) {
+            use_input_width.value = min_width;
+        } else {
+            use_input_width.value = max_width;
+        }
+    }
+})
+//#endregion
 </script>
+
+<style scoped lang="scss">
+.percent-input-wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-right: 1rem;
+    align-items: center;
+    border-radius: 4px;
+}
+.blur-input {
+    border:1px solid #E3E3E3;
+}
+.focus-input {
+    border:1px solid #409eff; 
+}
+:deep(.el-input__prefix) {
+    padding-right: 0.5rem;
+}
+</style>

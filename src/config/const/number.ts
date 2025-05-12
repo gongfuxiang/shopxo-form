@@ -8,6 +8,9 @@ interface DefaultInput {
     format: string;
     is_decimal: string;
     is_thousandths_symbol: string;
+    is_display_uppercase: string;
+    is_display_money: string;
+    money_sign: string;
     decimal_num: number;
     min_num: string;
     max_num: string;
@@ -17,13 +20,16 @@ interface DefaultInput {
 }
 
 const defaultInput: DefaultInput = {
-    title: '多行文本',
+    title: '数字',
     form_value: '',
     placeholder: '请输入内容',
     is_required: '0',
     is_limit_num: '0',
     is_decimal: '0',
     is_thousandths_symbol: '0',
+    is_display_uppercase: '0',
+    is_display_money: '0',
+    money_sign: '',
     decimal_num: 0,
     format: 'num',
     min_num: '',
