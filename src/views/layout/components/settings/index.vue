@@ -55,6 +55,14 @@
                     <template v-if="model_value.key == 'number'">
                         <model-number-setting :value="model_value.com_data" :model-id="model_value.id"></model-number-setting>
                     </template>
+                    <!-- 日期时间 -->
+                    <template v-if="model_value.key == 'date'">
+                        <model-date-setting :value="model_value.com_data" :model-id="model_value.id"></model-date-setting>
+                    </template>
+                    <!-- 日期时间组 -->
+                    <template v-if="model_value.key == 'date-group'">
+                        <model-date-group-setting :value="model_value.com_data" :model-id="model_value.id"></model-date-group-setting>
+                    </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
                     </template>

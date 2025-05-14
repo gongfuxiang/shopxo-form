@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :style="common_store.frame_style + style_container" @blur="blur"></number-input>
+                <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :style="common_store.frame_style + style_container" @blur="data_check" @change="data_check"></number-input>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
         </div>
@@ -14,10 +14,6 @@ import { common_styles_computer, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
 import { isEmpty } from 'lodash';
 const common_store = commonStore();
-/**
- * @description: 视频 （渲染）
- * @param value{Object} 传过来的数据，用于数据渲染
- */
 const props = defineProps({
     value: {
         type: Object,
@@ -26,9 +22,9 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 
-const blur = () => {
+const data_check = () => {
     // 判断是否是必填字段,并且没有值
-    if (form.value.is_required == '1' && isEmpty(form.value)) {
+    if (form.value.is_required == '1' && isEmpty(form.value.form_value)) {
         // 是否报错显示
         form.value.common_config.is_error = '1';
         form.value.common_config.error_text = '必填字段不能为空';

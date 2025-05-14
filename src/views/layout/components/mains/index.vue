@@ -77,7 +77,7 @@ const components = ref<componentsData[]>([
             { name: '复选框组', key: 'checkbox', data: [] },
             { name: '下拉框', key: 'select', data: [] },
             { name: '下拉复选框', key: 'select-multi', data: [] },
-            { name: '选项卡', key: 'tabs', data: [] },
+            // { name: '选项卡', key: 'tabs', data: [] },
             { name: '日期时间组', key: 'date-group', data: [] },
         ],
     },

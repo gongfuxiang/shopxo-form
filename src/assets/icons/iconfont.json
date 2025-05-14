@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44315593",
+      "name": "0513日期",
+      "font_class": "date",
+      "unicode": "e7bd",
+      "unicode_decimal": 59325
+    },
+    {
       "icon_id": "44047965",
       "name": "客服电话",
       "font_class": "chat-tel",

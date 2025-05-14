@@ -5,7 +5,7 @@
             <div class="title re">
                 <el-radio-group v-model="upload_type" is-button @change="upload_type_change">
                     <el-radio-button value="img" :disabled="!(const_upload_type == 'img') && isCheckConfirm">图片</el-radio-button>
-                    <el-radio-button v-if="isIcon" value="icon" :disabled="!isIcon && isCheckConfirm">图标</el-radio-button>
+                    <el-radio-button v-if="isIcon" value="icon" :disabled="(const_upload_type !== 'icon' && const_upload_type !== 'img') || (!isIcon && isCheckConfirm)">图标</el-radio-button>
                     <el-radio-button value="video" :disabled="!(const_upload_type == 'video') && isCheckConfirm">视频</el-radio-button>
                     <el-radio-button value="file" :disabled="!(const_upload_type == 'file') && isCheckConfirm">文件</el-radio-button>
                 </el-radio-group>

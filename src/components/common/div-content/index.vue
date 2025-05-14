@@ -27,6 +27,14 @@
                 <template v-if="item.key == 'number'">
                     <model-number :value="item.com_data"></model-number>
                 </template>
+                <!-- 日期时间 -->
+                <template v-if="item.key == 'date'">
+                    <model-date :value="item.com_data"></model-date>
+                </template>
+                <!-- 日期时间 -->
+                <template v-if="item.key == 'date-group'">
+                    <model-date-group :value="item.com_data"></model-date-group>
+                </template>
             </div>
         </div>
     </div>

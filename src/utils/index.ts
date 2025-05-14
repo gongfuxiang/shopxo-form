@@ -569,24 +569,20 @@ export const get_layout_style = (config: any) => {
  * 格式检查函数
  * @param data 待检查的数据对象
  */
-export const get_format_checks = (data: any) => {
-    // 判断是否是必填字段
-    if (data.is_required == '1') {
-        // 如果是必填字段，则判断值是否为空
-        if (!isEmpty(data.value)) {
-            // 否就清除报错显示
-            data.common_config.is_error = '0';
-            data.common_config.error_text = '';
+export const get_format_checks = (data: any, is_format: boolean = false) => {
+    // 判断是否是必填字段,并且没有值
+    if (data.is_required == '1' && isEmpty(data.form_value)) {
+        // 是否报错显示
+        data.common_config.is_error = '1';
+        data.common_config.error_text = '必填字段不能为空';
+    } else {
+        // 否就清除报错显示
+        data.common_config.is_error = '0';
+        data.common_config.error_text = '';
+        if (is_format) {
             // 对字段进行格式检查
             get_format_checks_v2(data.common_config, data.value);
-        } else {
-            // 是否报错显示
-            data.common_config.is_error = '1';
-            data.common_config.error_text = '必填字段不能为空';
         }
-    } else {
-        // 对非必填字段进行格式检查
-        get_format_checks_v2(data.common_config, data.value);
     }
 }
 
@@ -702,3 +698,82 @@ const convert_to_chinese_currency = (amount: number | string) => {
     // 拼接整数部分和小数部分
     return integerChinese + (decimalChinese ? '整' : '') + (decimalChinese || '');
 }
+
+
+//#region 样式更新时配置更新
+export const date_style_options = (date_style: string) => {
+    const style = (unit: any, is_last: boolean = false) => style_handle(date_style, unit, is_last);
+    return [
+        { value: 'option1', label: `HH${style('hour')}mm${style('minute', true)}` },
+        { value: 'option2', label: `HH${style('hour')}mm${style('minute')}ss${ style('second', true) }` },
+        { value: 'option3', label: `YYYY${style('year')}MM${style('month', true)}` },
+        { value: 'option4', label: `YYYY${style('year')}MM${style('month')}DD${style('day', true)}` },
+        { value: 'option5', label: `YYYY${style('year')}MM${style('month')}DD${style('day')}HH${style('hour')}mm${style('minute', true)}` },
+        { value: 'option6', label: `YYYY${style('year')}MM${style('month')}DD${style('day')}HH${style('hour')}mm${style('minute')}ss${style('second', true)}` }
+    ];
+};
+// 定义可用的 date_style 类型
+type DateStyle = 'horizontal' | 'slash' | 'chinese';
+
+// 明确声明 styles 类型
+const styles: Record<DateStyle, Record<string, string>> = {
+    horizontal: {
+        year: '-',
+        month: '-',
+        day: ' ',
+        hour: ':',
+        minute: ':',
+        second: ''
+    },
+    slash: {
+        year: '/',
+        month: '/',
+        day: ' ',
+        hour: ':',
+        minute: ':',
+        second: ''
+    },
+    chinese: {
+        year: '年',
+        month: '月',
+        day: '日 ',
+        hour: '时',
+        minute: '分',
+        second: '秒'
+    }
+};
+
+
+/**
+ * 根据指定的类型和是否为最后一个元素获取相应的样式
+ * 
+ * 此函数旨在根据用户选择的日期样式（currentStyle）和请求的类型（type）返回适当的样式
+ * 如果当前样式不存在、请求的样式类型不存在，或者在特定条件下（当前样式不是中文且为最后一个元素），
+ * 函数将返回空字符串
+ * 
+ * @param type - 需要获取样式的类型
+ * @param is_last - 是否为最后一个元素，默认为false
+ * @returns 返回对应的样式字符串或空字符串
+ */
+ const style_handle = (date_style: string, type: string, is_last: boolean = false) => {
+    // 将form.value.date_style断言为DateStyle类型，确保类型安全
+    const currentStyle = date_style as DateStyle; // 类型断言
+    // 检查当前样式是否存在于预定义的样式中，如果不存在，返回空字符串
+    if (!(currentStyle in styles)) {
+        return '';
+    }
+
+    // 根据当前样式获取对应的样式映射
+    const mapping = styles[currentStyle];
+    // 根据类型获取对应的样式结果
+    const result = mapping[type];
+
+    // 如果结果未定义，或者当前样式不是中文且为最后一个元素，返回空字符串
+    if (result === undefined || (currentStyle !== 'chinese' && is_last)) {
+        return '';
+    }
+
+    // 返回找到的样式结果
+    return result;
+};
+//#endregion

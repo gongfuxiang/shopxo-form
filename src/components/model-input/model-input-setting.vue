@@ -73,10 +73,6 @@
     </el-form>
 </template>
 <script setup lang="ts">
-/**
- * @description: 单行文本 （设置）
- * @param value{Object} 传过来的数据，用于数据渲染
- */
 const props = defineProps({
     value: {
         type: Object,

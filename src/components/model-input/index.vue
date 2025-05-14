@@ -17,7 +17,7 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container">
+                        <el-select v-model="form.form_value" multiple filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
                             <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
@@ -34,7 +34,7 @@
                     </div>
                 </template>
                 <template v-else>
-                    <el-input v-model="form.form_value" :style="common_store.frame_style + style_container" :placeholder="form.placeholder" @change="data_check"></el-input>
+                    <el-input v-model="form.form_value" :style="common_store.frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
                 </template>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
@@ -45,10 +45,6 @@
 import { common_styles_computer, get_format_checks, isEmpty } from "@/utils";
 import { commonStore } from "@/store";
 const common_store = commonStore();
-/**
- * @description: 视频 （渲染）
- * @param value{Object} 传过来的数据，用于数据渲染
- */
 const props = defineProps({
     value: {
         type: Object,
@@ -57,8 +53,8 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 
-const data_check = () => {
-    get_format_checks(form.value)
+const data_check = (val: boolean = false) => {
+    get_format_checks(form.value, val)
 };
 // 没有彩色时的公共样式
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);

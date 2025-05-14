@@ -16,7 +16,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">格式</div>
-                <el-select v-model="form.format" value-key="id" filterable placeholder="请选择输入格式" size="default" class="flex-1" @change="format_change">
+                <el-select v-model="form.format" value-key="id" filterable placeholder="请选择输入格式" @change="format_change">
                     <el-option v-for="item in format_option" :key="item.value" :label="item.name" :value="item.value" />
                 </el-select>
                 <div class="flex-col gap-10">
@@ -29,7 +29,7 @@
                         <div class="flex-row align-c gap-10"><el-checkbox v-model="form.is_display_uppercase" label="显示大写" true-value="1" false-value="0" /><tooltip content="仅展示页面有效"></tooltip></div>
                         <div class="flex-row align-c gap-10"><el-checkbox v-model="form.is_display_money" label="显示金额" true-value="1" false-value="0" /></div>
                         <template v-if="form.is_display_money == '1'">
-                            <el-select v-model="form.money_sign" value-key="id" filterable placeholder="请选择金额符号" size="default" class="flex-1" @change="operation_end">
+                            <el-select v-model="form.money_sign" value-key="id" filterable clearable placeholder="请选择金额符号" @change="operation_end">
                                 <el-option v-for="item in money_option" :key="item.value" :label="item.name" :value="item.value" />
                             </el-select>
                         </template>
@@ -73,10 +73,6 @@
 <script setup lang="ts">
 import { formatNumber } from '@/utils/index'
 import { isEmpty } from 'lodash';
-/**
- * @description: 单行文本 （设置）
- * @param value{Object} 传过来的数据，用于数据渲染
- */
 const props = defineProps({
     value: {
         type: Object,
