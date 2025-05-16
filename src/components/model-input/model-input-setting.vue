@@ -3,15 +3,13 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb w h">标题 
-                    <el-select v-model="form.type" value-key="id" size="small" name="单行文本" class="select-type" fit-input-width :teleported="false" popper-class="select-type" placement="bottom" @change="type_change">
-                        <el-option v-for="item in form_type_option" :key="item.value" :label="item.name" :value="item.value" />
-                    </el-select>
+                <div class="new_title flex-row align-c jc-sb w h">标题
+                    <component-switch-select v-model="form.type" :option-list="form_type_option" @dropdown_click="dropdown_click"/>
                 </div>
                 <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
-        <el-form-item label-width="0">
+        <el-form-item v-if="form.type !== 'radio-btns'" label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">提示文字</div>
                 <el-input v-model="form.placeholder" placeholder="请输入提示文字" clearable @change="operation_end"></el-input>
@@ -84,7 +82,7 @@ const props = defineProps({
     }
 });
 const form = ref(props.value);
-// 选项成本选项
+// 切换组件选项
 const form_type_option = [
     { name: '单行文本', value: 'single-text' },
     { name: '下拉框', value: 'select' },
@@ -99,10 +97,13 @@ const format_option = [
     { name: '身份证号码', value: 'id-no' },
     { name: '邮箱', value: 'email' },
 ];
-// 切换内容的时候默认值清空
-const type_change = () => {
+//#region 下拉框显示
+const dropdown_click = (val: string) => {
+    form.value.type = val;
+    // 切换内容的时候默认值清空
     form.value.form_value = '';
-};
+}
+//#endregion
 // 判断配置项是否有误
 const option_change = (val: boolean) => {
     if (!val) {

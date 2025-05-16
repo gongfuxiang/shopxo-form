@@ -4,7 +4,7 @@
             <form-title :value="props.value"></form-title>
             <div class="content">
                 <template v-if="form.type == 'radio-btns'">
-                    <el-radio-group v-model="form.form_value" :class="{ 'vertical-group' : form.arrangement == 'vertical' }" size="large">
+                    <el-radio-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]">
                         <el-radio v-for="item in form.option_list" :key="item.value" :value="item.value">
                             <div class="flex-row gap-10 align-c">
                                 <div :style="option_style(item)">{{ item.name }}</div>
@@ -17,7 +17,7 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
+                        <el-select v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
                             <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">

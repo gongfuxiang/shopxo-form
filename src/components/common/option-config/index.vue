@@ -84,6 +84,12 @@ const multicolour = defineModel('multicolour', { type: String, default: '0' })
 // 默认值处理
 const radioValue = defineModel('radioValue', { type: String, default: '' });
 const checkValue = defineModel('checkValue', { type: Array as PropType<string[]>, default: [] });
+const outer_data = {
+    name: '其他',
+    value: 'outer',
+    is_outer: '1',
+    color: '#051e500a',
+}
 interface Props {
     list: any[];
     multiple: boolean;
@@ -153,14 +159,8 @@ const color_change = (length: number) => {
     }
 };
 const add_outer = () => {
-    const data = {
-        name: '其他',
-        value: 'outer',
-        is_outer: '1',
-        color: '#051e500a',
-    }
     if (!is_drag_outer.value) {
-        drag_list.value.push(data);
+        drag_list.value.push(outer_data);
     }
 }
 // #endregion
@@ -199,9 +199,10 @@ const cancel = () => {
 // 点击确定之后将数据转变成数组
 const submit = () => {
     // 去掉首尾空格之后做数据处理
-    const data = (textarea.value || '').trim().split(/[\r\n]+/g);
-    if (data.length > 0) {
-        drag_list.value = data.map((item: any, index: number) => {
+    const textarea_value = (textarea.value || '').trim().split(/[\r\n]+/g);
+    let data: any[] = []
+    if (textarea_value.length > 0) {
+        data = textarea_value.map((item: any, index: number) => {
             return {
                 name: item,
                 value: 'option' + get_math(),
@@ -209,7 +210,12 @@ const submit = () => {
             }
         });
     }
-    add_outer();
+    if (is_drag_outer.value) {
+        const new_data = cloneDeep([...data, outer_data]);
+        drag_list.value = new_data;
+    } else {
+        drag_list.value = data;
+    }
     // 批量编辑之后清除数据
     radioValue.value = '';
     checkValue.value = [];
@@ -220,14 +226,8 @@ const submit = () => {
 //#region 操作逻辑
 // 拖拽之后的顺序
 const on_sort = (item: any) => {
-    const data = [{
-        name: '其他',
-        value: 'outer',
-        is_outer: '1',
-        color: '#051e500a',
-    }]
     if (is_drag_outer.value) {
-        const new_data = cloneDeep(item.concat(data));
+        const new_data = cloneDeep([...item, outer_data]);
         drag_list.value = new_data;
     } else {
         drag_list.value = item;
@@ -237,7 +237,6 @@ const on_sort = (item: any) => {
 const remove = (index: number) => {
     // 防止 index 越界
     if (index < 0 || index >= drag_list.value.length) {
-        console.warn('Invalid index provided to remove function');
         return;
     }
     // 先删除数据，然后判断是否存在

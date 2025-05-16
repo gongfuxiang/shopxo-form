@@ -35,6 +35,10 @@
                 <template v-if="item.key == 'date-group'">
                     <model-date-group :value="item.com_data"></model-date-group>
                 </template>
+                <!-- 多选按钮组 ｜ 下拉复选框 -->
+                <template v-if="['checkbox', 'select-multi'].includes(item.key)">
+                    <model-checkbox :value="item.com_data"></model-checkbox>
+                </template>
             </div>
         </div>
     </div>

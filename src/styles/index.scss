@@ -284,3 +284,9 @@ p {
         padding: 0;
     }
 }
+.adaptive-height {
+    gap: 1rem;
+    .el-radio, .el-checkbox {
+        height: 100%;
+    }
+}

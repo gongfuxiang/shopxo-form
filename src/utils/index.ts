@@ -519,7 +519,7 @@ export const get_color_style = (config: any) => {
             break;
     }
     // 根据文件标题字体大小决定图标尺寸
-    return `padding:${ padding };font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+    return `padding:${ padding };line-height:2.2rem;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
 }
 /**
  * 根据配置信息获取框架样式

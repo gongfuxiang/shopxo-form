@@ -63,6 +63,10 @@
                     <template v-if="model_value.key == 'date-group'">
                         <model-date-group-setting :value="model_value.com_data" :model-id="model_value.id"></model-date-group-setting>
                     </template>
+                    <!-- 多选按钮组 ｜ 下拉复选框 -->
+                    <template v-if="['checkbox', 'select-multi'].includes(model_value.key)">
+                        <model-checkbox-setting :value="model_value.com_data" :model-id="model_value.id"></model-checkbox-setting>
+                    </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
                     </template>

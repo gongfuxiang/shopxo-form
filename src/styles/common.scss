@@ -394,3 +394,21 @@
         text-align: left;
     }
 }
+.component-switch {
+    border-radius: 0.2rem;
+    background: #FFFFFF;
+    .el-dropdown-menu.el-dropdown-menu--large {
+        padding: 0.4rem;
+        width: 10rem;
+    }
+    .el-dropdown-menu__item {
+        font-size: 1.2rem;
+        color: #333333;
+        padding: 0.4rem !important;
+        border-radius: 0.2rem;
+    }
+    .el-dropdown-menu__item:hover {
+        background-color: #F7F7F7;
+        color: #333;
+    }
+}

@@ -5,6 +5,7 @@ import defaultTextarea from '@/config/const/textarea';
 import defaultNumber from '@/config/const/number';
 import defaultDate from '@/config/const/date';
 import defaultDateGroup from '@/config/const/date-group';
+import defaultCheckbox from '@/config/const/checkbox';
 // 系统设置
 interface DefaultSettings {
     single_text: object;
@@ -14,6 +15,7 @@ interface DefaultSettings {
     number: object;
     date: object;
     date_group: object;
+    checkbox: object;
 }
 
 const defaultSettings: DefaultSettings = {
@@ -24,6 +26,7 @@ const defaultSettings: DefaultSettings = {
     number: defaultNumber,
     date: defaultDate,
     date_group: defaultDateGroup,
+    checkbox: defaultCheckbox,
 };
 
 export default defaultSettings;
