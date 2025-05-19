@@ -14,7 +14,7 @@ interface DefaultInput {
     option_list: option[];
     placeholder: string;
     is_required: string;
-    add_option: string;
+    is_add_option: string;
     is_limit_num: string;
     min_num: string;
     max_num: string;
@@ -32,7 +32,7 @@ const defaultInput: DefaultInput = {
     option_list: [{ name: '选项1', value: 'option1', color: '#eb5050' }, { name: '选项2', value: 'option2', color: '#f0a800' }, { name: '选项3', value: 'option3', color: '#46c26f' }],
     placeholder: '请选择内容',
     is_required: '0',
-    add_option: '0',
+    is_add_option: '0',
     is_limit_num: '0',
     min_num: '',
     max_num: '',

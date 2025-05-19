@@ -111,8 +111,11 @@ const default_merge = (data: any, key: string) => {
 const is_show_form_model = ref(false);
 // 表单配置 事件
 const form_config_event = () => {
+    // 点击表单配置的时候清空选中效果
+    form.value.diy_data.forEach((item) => {
+        item.show_tabs = '0';
+    });
     is_show_form_model.value = !is_show_form_model.value;
-    
 };
 </script>
 

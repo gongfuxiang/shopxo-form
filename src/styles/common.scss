@@ -412,3 +412,11 @@
         color: #333;
     }
 }
+
+.custom-popover .el-popper__arrow {
+    display: none;
+}
+
+.el-select-dropdown.is-multiple.custom-select .el-select-dropdown__item.is-selected::after {
+    display: none;
+}

@@ -1,6 +1,6 @@
 <template>
     <div ref="el" :class="`rendering-area percent-input-wrapper ${ is_focus ? 'focus-input' : 'blur-input'}`" @click="percent_input_click">
-        <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" @focus="focus_input" @blur="blur_input">
+        <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
             <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
         </el-input>
         <template v-if="isPercentage">
@@ -21,6 +21,10 @@ const props = defineProps({
     decimalNum: {
         type: Number,
         default: 0
+    },
+    placeholder: {
+        type: String,
+        default: ''
     },
     isThousandPoint: {
         type: Boolean,

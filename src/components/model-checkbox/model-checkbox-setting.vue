@@ -17,13 +17,21 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">选项设置</div>
-                <div><el-checkbox v-model="form.add_option" label="允许成员填写时添加新选项" true-value="1" false-value="0" /></div>
+                <div><el-checkbox v-model="form.is_add_option" label="允许成员填写时添加新选项" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">校验</div>
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
+                <div><el-checkbox v-model="form.is_limit_num" label="限制可选数量" true-value="1" false-value="0" /></div>
+                <template v-if="form.is_limit_num == '1'">
+                    <div class="flex-row gap-10 w">
+                        <number-input v-model="form.min_num" class="rendering-area" placeholder="不限" @blur="handle_min_max_blur('min_num')"></number-input>
+                        <div class="flex-1">~</div>
+                        <number-input v-model="form.max_num" class="rendering-area" placeholder="不限" @blur="handle_min_max_blur('max_num')"></number-input>
+                    </div>
+                </template>
             </div>
         </el-form-item>
         <template v-if="form.type == 'checkbox'">
@@ -44,6 +52,8 @@
     </el-form>
 </template>
 <script setup lang="ts">
+import { parse_and_format } from '@/utils';
+
 const props = defineProps({
     value: {
         type: Object,
@@ -75,6 +85,31 @@ const option_change = (val: boolean) => {
         form.value.common_config.error_text = '';
     }
 };
+/**
+ * 处理最小值和最大值输入框失焦事件
+ * 该函数旨在确保最小值和最大值符合规定的十进制数，并防止最小值大于最大值
+ * 当最小值大于最大值时，将两个值设置为相等
+ * 
+ * @param {string} triggerField - 触发该函数的字段，只能是 'min_num' 或 'max_num'
+ */
+ const handle_min_max_blur = (triggerField: 'min_num' | 'max_num') => {
+    // 从表单中提取当前的最小值、最大值和小数位数
+    const { min_num, max_num } = form.value;
+
+    // 解析并格式化最小值和最大值
+    const min = parse_and_format(min_num, 0);
+    const max = parse_and_format(max_num, 0);
+
+    // 确保最小值不大于最大值，如果违反，则将两个值设置为相等
+    if (min !== null && max !== null && min > max) {
+        if (triggerField === 'min_num') {
+            form.value.max_num = form.value.min_num;
+        } else {
+            form.value.min_num = form.value.max_num;
+        }
+    }
+};
+
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
     emit('operation_end');

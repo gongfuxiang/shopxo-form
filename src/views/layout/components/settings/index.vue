@@ -48,23 +48,23 @@
                         <model-input-setting :value="model_value.com_data" :model-id="model_value.id"></model-input-setting>
                     </template>
                     <!-- 多行文本 -->
-                    <template v-if="model_value.key == 'multi-text'">
+                    <template v-else-if="model_value.key == 'multi-text'">
                         <model-textarea-setting :value="model_value.com_data" :model-id="model_value.id"></model-textarea-setting>
                     </template>
                     <!-- 数字 -->
-                    <template v-if="model_value.key == 'number'">
+                    <template v-else-if="model_value.key == 'number'">
                         <model-number-setting :value="model_value.com_data" :model-id="model_value.id"></model-number-setting>
                     </template>
                     <!-- 日期时间 -->
-                    <template v-if="model_value.key == 'date'">
+                    <template v-else-if="model_value.key == 'date'">
                         <model-date-setting :value="model_value.com_data" :model-id="model_value.id"></model-date-setting>
                     </template>
                     <!-- 日期时间组 -->
-                    <template v-if="model_value.key == 'date-group'">
+                    <template v-else-if="model_value.key == 'date-group'">
                         <model-date-group-setting :value="model_value.com_data" :model-id="model_value.id"></model-date-group-setting>
                     </template>
                     <!-- 多选按钮组 ｜ 下拉复选框 -->
-                    <template v-if="['checkbox', 'select-multi'].includes(model_value.key)">
+                    <template v-else-if="['checkbox', 'select-multi'].includes(model_value.key)">
                         <model-checkbox-setting :value="model_value.com_data" :model-id="model_value.id"></model-checkbox-setting>
                     </template>
                     <template v-else>

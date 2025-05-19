@@ -569,7 +569,7 @@ export const get_layout_style = (config: any) => {
  * 格式检查函数
  * @param data 待检查的数据对象
  */
-export const get_format_checks = (data: any, is_format: boolean = false) => {
+export const get_format_checks = (data: any, is_format: boolean = false, type: string = '') => {
     // 判断是否是必填字段,并且没有值
     if (data.is_required == '1' && isEmpty(data.form_value)) {
         // 是否报错显示
@@ -580,9 +580,47 @@ export const get_format_checks = (data: any, is_format: boolean = false) => {
         data.common_config.is_error = '0';
         data.common_config.error_text = '';
         if (is_format) {
-            // 对字段进行格式检查
-            get_format_checks_v2(data.common_config, data.value);
+            if (type == 'number') { // 数字组件的校验逻辑
+                number_range_handle(data);
+            } else if (type == 'checkbox') { // 复选框和复选下拉框的校验逻辑
+                checkbox_range_handle(data);
+            } else { // 单行文本的校验逻辑
+                // 对字段进行格式检查
+                get_format_checks_v2(data.common_config, data);
+            }
         }
+    }
+}
+// 复选框和复选下拉框的校验逻辑
+const checkbox_range_handle = (data: any) => {
+    const { form_value, min_num = '',  max_num = '' } = data;
+    const length = form_value?.length || 0;
+    const minNum = Number(min_num);
+    const maxNum = Number(max_num); 
+    if ((!isEmpty(min_num) && length < minNum) || (!isEmpty(max_num) && length > maxNum)) {
+        // 是否报错显示
+        data.common_config.is_error = '1';
+        data.common_config.error_text = `请选择${ min_num }~${ max_num }项`;
+    } else {
+        // 否就清除报错显示
+        data.common_config.is_error = '0';
+        data.common_config.error_text = '';
+    }
+}
+// 数字组件的校验逻辑
+const number_range_handle = (data: any) => {
+    const { form_value, min_num = '',  max_num = '', format = 'num'} = data;
+    const num = Number(form_value);
+    const minNum = Number(min_num);
+    const maxNum = Number(max_num); 
+    if ((!isEmpty(min_num) && num < minNum) || (!isEmpty(max_num) && num > maxNum)) {
+        // 是否报错显示
+        data.common_config.is_error = '1';
+        data.common_config.error_text = `请输入${ min_num }${ format == 'num' ? '': '%'}~${ max_num }${ format == 'num' ? '': '%'}之间的数`;
+    } else {
+        // 否就清除报错显示
+        data.common_config.is_error = '0';
+        data.common_config.error_text = '';
     }
 }
 
@@ -777,3 +815,10 @@ const styles: Record<DateStyle, Record<string, string>> = {
     return result;
 };
 //#endregion
+
+// 工具函数：安全地将字符串转为数字并格式化
+export const parse_and_format = (value: any, decimalNum: number): number | null => {
+    if (isEmpty(value)) return null;
+    const num = Number(formatNumber(value, false));
+    return isNaN(num) ? null : parseFloat(num.toFixed(decimalNum));
+};

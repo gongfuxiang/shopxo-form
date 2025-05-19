@@ -1,6 +1,20 @@
 // 定义一组预定义的颜色数组，用于在各种场景中轻松引用这些颜色
 // 这些颜色包括从白色到黑色的不同灰度，以及一些鲜艳的颜色，格式有十六进制、RGB、RGBA、HSV、HSL等
 export const predefine_colors = ['#eb5050', '#f0a800', '#46c26f', '#a2c204', '#00aed1', '#5865f5', '#c643e0', '#f0437d', '#fa8118', '#d6c504', '#00b899', '#6ac73c', '#2f7deb', '#7e47eb', '#d941c0', '#485970', '#f9cbcb', '#fbe5b3', '#c8edd4', '#e3edb4', '#b3e7f1', '#cdd1fc', '#eec7f6', '#fbc7d8', '#fed9ba', '#f3eeb4', '#b3eae0', '#d2eec5', '#c1d8f9', '#d8c8f9', '#f4c6ec', '#c8cdd4'];
+
+export const color_change = (length: number) => {
+    // 如果大于这个大小，就按照多余的数量来获取颜色
+    if (length > predefine_colors.length) {
+        const new_length = predefine_colors.length - length;
+        if (new_length > predefine_colors.length) {
+            color_change(new_length);
+        } else {
+            return predefine_colors[length];
+        }
+    } else {
+        return predefine_colors[length];
+    }
+};
 // 数据的默认值，避免没有值的时候报错
 export const old_radius = { radius: 0, radius_top_left: 0, radius_top_right: 0, radius_bottom_left: 0, radius_bottom_right: 0 };
 

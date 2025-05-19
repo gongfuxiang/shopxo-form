@@ -77,7 +77,7 @@
 
 <script lang="ts" setup> 
 import { isEmpty, cloneDeep } from 'lodash';
-import { predefine_colors } from '@/utils/common';
+import { color_change, predefine_colors } from '@/utils/common';
 import { get_math } from "@/utils/index";
 // 弹出框显示逻辑
 const multicolour = defineModel('multicolour', { type: String, default: '0' })
@@ -143,19 +143,6 @@ const add = () => {
         drag_list.value.splice(length, 0, data);
     } else {
         drag_list.value.push(data);
-    }
-};
-const color_change = (length: number) => {
-    // 如果大于这个大小，就按照多余的数量来获取颜色
-    if (length > predefine_colors.length) {
-        const new_length = predefine_colors.length - length;
-        if (new_length > predefine_colors.length) {
-            color_change(new_length);
-        } else {
-            return predefine_colors[length];
-        }
-    } else {
-        return predefine_colors[length];
     }
 };
 const add_outer = () => {

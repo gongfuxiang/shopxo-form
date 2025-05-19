@@ -49,7 +49,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'"  class="rendering-area"></number-input>
+                <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" class="rendering-area"></number-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -59,9 +59,9 @@
                 <div><el-checkbox v-model="form.is_limit_num" label="限定数值范围" true-value="1" false-value="0" /></div>
                 <template v-if="form.is_limit_num == '1'">
                     <div class="flex-row gap-10 w">
-                        <number-input v-model="form.min_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" class="rendering-area"></number-input>
+                        <number-input v-model="form.min_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" placeholder="不限" class="rendering-area" @blur="handle_min_max_blur('min_num')"></number-input>
                         <div class="flex-1">~</div>
-                        <number-input v-model="form.max_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" class="rendering-area" ></number-input>
+                        <number-input v-model="form.max_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" placeholder="不限" class="rendering-area" @blur="handle_min_max_blur('max_num')"></number-input>
                     </div>
                 </template>
             </div>
@@ -71,7 +71,7 @@
     </el-form>
 </template>
 <script setup lang="ts">
-import { formatNumber } from '@/utils/index'
+import { formatNumber, parse_and_format } from '@/utils/index'
 import { isEmpty } from 'lodash';
 const props = defineProps({
     value: {
@@ -99,6 +99,37 @@ const decimal_num_change = () => {
         form.value.form_value = Number(formatNumber(form.value.form_value, false)).toFixed(form.value.decimal_num).toString();
     }
 }
+
+
+/**
+ * 处理最小值和最大值输入框失焦事件
+ * 该函数旨在确保最小值和最大值符合规定的十进制数，并防止最小值大于最大值
+ * 当最小值大于最大值时，将两个值设置为相等
+ * 
+ * @param {string} triggerField - 触发该函数的字段，只能是 'min_num' 或 'max_num'
+ */
+ const handle_min_max_blur = (triggerField: 'min_num' | 'max_num') => {
+    // 从表单中提取当前的最小值、最大值和小数位数
+    const { min_num, max_num, decimal_num = 0 } = form.value;
+
+    // 校验 decimalNum 是否为有效整数
+    if (typeof decimal_num !== 'number' || decimal_num < 0 || !Number.isInteger(decimal_num)) {
+        return;
+    }
+
+    // 解析并格式化最小值和最大值
+    const min = parse_and_format(min_num, decimal_num);
+    const max = parse_and_format(max_num, decimal_num);
+
+    // 确保最小值不大于最大值，如果违反，则将两个值设置为相等
+    if (min !== null && max !== null && min > max) {
+        if (triggerField === 'min_num') {
+            form.value.max_num = form.value.min_num;
+        } else {
+            form.value.min_num = form.value.max_num;
+        }
+    }
+};
 // 格式切换时的处理显示逻辑
 const format_change = () => {
     form.value.money_sign = '';

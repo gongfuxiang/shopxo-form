@@ -23,7 +23,11 @@
                     <template #header>
                         <el-input v-model="input_value3" class="search-select-input" placeholder="搜索" :prefix-icon="Search" size="large" />
                     </template>
-                    <el-option v-for="item in diy_data.filter((item1: any) => item1.name.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.name" />
+                    <el-checkbox-group :model-value="form_item.is_show">
+                        <el-option v-for="item in diy_data.filter((item1: any) => item1.name.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.name">
+                            <el-checkbox :value="item.id" :label="item.name">{{ item.name }}</el-checkbox>
+                        </el-option>
+                    </el-checkbox-group>
                 </el-select>
                 <icon name="delete-o" size="18" color="6" @click="remove(index)"/>
             </div>
