@@ -32,7 +32,7 @@
             </el-form-item>
         </template>
         <template v-else>
-            <option-config v-model:multicolour="form.is_multicolour" v-model:radio-value="form.form_value" :list="form.option_list" :multiple="false" @option-change="option_change"></option-config>
+            <option-config v-model:multicolour="form.is_multicolour" v-model:radio-value="form.form_value" :list="form.option_list" :multiple="false" @option-change="option_change" @onsort="option_list_change"></option-config>
         </template>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
@@ -113,6 +113,9 @@ const option_change = (val: boolean) => {
         form.value.common_config.is_error = '0';
         form.value.common_config.error_text = '';
     }
+};
+const option_list_change = (val: boolean) => {
+    form.value.option_list = val;
 };
 const dialog_visible = ref(false);
 const open_dialog = () => {

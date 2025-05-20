@@ -39,6 +39,14 @@
                 <template v-if="['checkbox', 'select-multi'].includes(item.key)">
                     <model-checkbox :value="item.com_data"></model-checkbox>
                 </template>
+                <!-- 定位 -->
+                <template v-if="item.key == 'position'">
+                    <model-position :value="item.com_data"></model-position>
+                </template>
+                <!-- 富文本 -->
+                <template v-if="item.key == 'rich-text'">
+                    <model-rich-text :value="item.com_data"></model-rich-text>
+                </template>
             </div>
         </div>
     </div>

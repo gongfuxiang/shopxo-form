@@ -3,7 +3,7 @@
         <div class="dialog-add">{{ data_type_map }}<icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="#666"/></div>
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item v-for="item in props.optionList.filter(item1 => data_type !== item1.value)" :key="item.value" @click.stop="dropdown_click(item.value)">{{ item.name }}</el-dropdown-item>
+                <el-dropdown-item v-for="item in props.optionList.filter(item1 => data_type !== item1.value)" :key="item.value" @click="dropdown_click(item.value)">{{ item.name }}</el-dropdown-item>
             </el-dropdown-menu>
         </template>
     </el-dropdown>

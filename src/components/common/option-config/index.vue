@@ -125,7 +125,7 @@ watchEffect(() => {
     return last.is_outer === '1';
 });
 
-const emits = defineEmits(['remove','onsort', 'option-change']);
+const emits = defineEmits(['onsort', 'option-change']);
 // #region 添加选项
 const add = () => {
     let length = drag_list.value.length;
@@ -199,13 +199,16 @@ const submit = () => {
     }
     if (is_drag_outer.value) {
         const new_data = cloneDeep([...data, outer_data]);
-        drag_list.value = new_data;
+        emits('onsort', new_data);
     } else {
-        drag_list.value = data;
+        emits('onsort', data);
     }
     // 批量编辑之后清除数据
-    radioValue.value = '';
-    checkValue.value = [];
+    if (props.multiple) {
+        checkValue.value = [];
+    } else {
+        radioValue.value = '';
+    }
     // 关闭弹出框
     dialogVisible.value = false;
 }
@@ -215,9 +218,9 @@ const submit = () => {
 const on_sort = (item: any) => {
     if (is_drag_outer.value) {
         const new_data = cloneDeep([...item, outer_data]);
-        drag_list.value = new_data;
+        emits('onsort', new_data);
     } else {
-        drag_list.value = item;
+        emits('onsort', item);
     }
 };
 // 删除选项时的操作
@@ -228,7 +231,7 @@ const remove = (index: number) => {
     }
     // 先删除数据，然后判断是否存在
     drag_list.value.splice(index, 1);
-    const new_data = cloneDeep(drag_list.value.map(item => item.name ?? ''));
+    const new_data = cloneDeep(drag_list.value.map(item => item.value ?? ''));
     if (props.multiple) {
         if (!isEmpty(checkValue.value)) {
             checkValue.value = checkValue.value.filter((item: any) => new_data.includes(item));

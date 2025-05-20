@@ -67,6 +67,14 @@
                     <template v-else-if="['checkbox', 'select-multi'].includes(model_value.key)">
                         <model-checkbox-setting :value="model_value.com_data" :model-id="model_value.id"></model-checkbox-setting>
                     </template>
+                    <!-- 定位 -->
+                    <template v-else-if="model_value.key == 'position'">
+                        <model-position-setting :value="model_value.com_data" :model-id="model_value.id"></model-position-setting>
+                    </template>
+                    <!-- 富文本 -->
+                    <template v-else-if="model_value.key == 'rich-text'">
+                        <model-rich-text-setting :value="model_value.com_data" :model-id="model_value.id"></model-rich-text-setting>
+                    </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
                     </template>

@@ -17,7 +17,7 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
+                        <el-select v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multi-select flex-1" :style="common_store.frame_style + style_container" @change="data_check">
                             <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
@@ -75,5 +75,10 @@ const style_container = computed(() => common_styles_computer(form.value.common_
 }
 .select-tag {
     color: #a8abb2;
+}
+.multi-select {
+    :deep(.el-select__wrapper) {
+        padding-left: 0.4rem;
+    }
 }
 </style>

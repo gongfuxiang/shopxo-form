@@ -7,7 +7,7 @@
                     <el-checkbox-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]" @change="data_check">
                         <el-checkbox v-for="item in form.option_list" :key="item.value" :value="item.value"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
                     </el-checkbox-group>
-                    <el-popover :visible="popover_visible" placement="top-start" trigger='click' effect="light" popper-class="custom-popover" :width="200">
+                    <el-popover v-if="form.is_add_option == '1'" :visible="popover_visible" placement="top-start" trigger='click' effect="light" popper-class="custom-popover" :width="200">
                         <div class="flex-col gap-20">
                             <el-form ref="ruleFormRef" :model="popover_form" :rules="rules" label-width="85" status-icon>
                                 <el-form-item label-width="0" prop="popover_option">
@@ -20,7 +20,7 @@
                             </el-form>
                         </div>
                         <template #reference>
-                            <div v-if="form.is_add_option == '1'" class="add-option flex-row gap-10 align-c" @click="add_option">
+                            <div class="add-option flex-row gap-10 align-c" @click="add_option">
                                 <icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/>
                                 <span class="size-14 cr-primary">添加选项</span>
                             </div>
@@ -109,7 +109,7 @@ const rules = reactive<FormRules<popoverForm>>({
         { required: true, message: '请输入选项名称', trigger: ['change', 'blur'] },
     ],
 });
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = ref<FormInstance>();
 const popover_visible = ref(false);
 // 点击添加选项
 const add_option = () => {
