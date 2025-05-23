@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44407285",
+      "name": "解锁",
+      "font_class": "lock",
+      "unicode": "e7c4",
+      "unicode_decimal": 59332
+    },
+    {
+      "icon_id": "44403331",
+      "name": "线性五角星",
+      "font_class": "five-pointed",
+      "unicode": "e7bf",
+      "unicode_decimal": 59327
+    },
+    {
+      "icon_id": "44403330",
+      "name": "面性五角星",
+      "font_class": "pointed",
+      "unicode": "e7c0",
+      "unicode_decimal": 59328
+    },
+    {
+      "icon_id": "44403328",
+      "name": "线性新形",
+      "font_class": "the-heart",
+      "unicode": "e7c1",
+      "unicode_decimal": 59329
+    },
+    {
+      "icon_id": "44403329",
+      "name": "手机",
+      "font_class": "phone",
+      "unicode": "e7c2",
+      "unicode_decimal": 59330
+    },
+    {
+      "icon_id": "44403327",
+      "name": "面性心形",
+      "font_class": "heart",
+      "unicode": "e7c3",
+      "unicode_decimal": 59331
+    },
+    {
       "icon_id": "44381890",
       "name": "定位",
       "font_class": "latitude-location",

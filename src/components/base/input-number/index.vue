@@ -2,7 +2,7 @@
 <template>
     <div class="input-number" :class="iconName ? 'has-icon' : ''">
         <icon v-if="iconName" :name="iconName" size="14" color="3" class="input-icon"></icon>
-        <el-input-number v-model="internal_value" :min="min" :max="max" type="number" placeholder="0" controls-position="right" @keyup.enter="preventDefault" @blur="blur"></el-input-number>
+        <el-input-number v-model="internal_value" :min="min" :max="max" type="number" placeholder="0" controls-position="right" @keyup.enter="preventDefault" @blur="blur" @change="change"></el-input-number>
     </div>
 </template>
 
@@ -26,10 +26,13 @@ const internal_value = defineModel({ type: Number, default: 0 });
 const preventDefault = (e: DragEvent) => {
     e.preventDefault();
 }
-const emit = defineEmits(['operation_end']);
+const emit = defineEmits(['operation_end', 'change']);
 const blur = () => {
     emit('operation_end');
 };
+const change = () => {
+    emit('change');
+}
 </script>
 <style lang="scss" scoped>
 .input-number {

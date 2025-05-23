@@ -420,3 +420,10 @@
 .el-select-dropdown.is-multiple.custom-select .el-select-dropdown__item.is-selected::after {
     display: none;
 }
+
+.desc-title {
+    font-size: 1.2rem;
+    color: #999;
+    white-space: nowrap;
+    text-align: right;
+}

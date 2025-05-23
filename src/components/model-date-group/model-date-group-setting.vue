@@ -10,7 +10,14 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">提示文字</div>
-                <el-input v-model="form.placeholder" placeholder="请输入提示文字" clearable @change="operation_end"></el-input>
+                <div class="flex-row align-c gap-10">
+                    <span class="desc-title">开始时间</span>
+                    <el-input v-model="form.start_placeholder" placeholder="请输入开始时间的提示文字" clearable @change="operation_end"></el-input>
+                </div>
+                <div class="flex-row align-c gap-10">
+                    <span class="desc-title">结束时间</span>
+                    <el-input v-model="form.end_placeholder" placeholder="请输入结束时间的提示文字" clearable @change="operation_end"></el-input>
+                </div>
             </div>
         </el-form-item>
         <el-form-item label-width="0">

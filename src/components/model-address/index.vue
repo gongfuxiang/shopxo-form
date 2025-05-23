@@ -3,7 +3,12 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :placeholder="form.placeholder" :style="common_store.frame_style + style_container" @blur="data_check" @change="data_check"></number-input>
+                <div class="flex-col gap-10 align-c" :style="common_store.frame_style + 'height: 100%;'">
+                    <el-cascader v-model="form.form_value" :options="common_store.address_list" :style="common_store.frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check" />
+                    <template v-if="form.address_type == 'detailed'">
+                        <el-input v-model="form.detailed_value" type="textarea" :style="style_container" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入详细地址"></el-input>
+                    </template>
+                </div>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
         </div>
@@ -20,18 +25,16 @@ const props = defineProps({
     },
 });
 const form = computed(() => props.value);
-
 const data_check = () => {
-    get_format_checks(form.value, true, 'number');
+    get_format_checks(form.value, false);
 };
 // 用于样式显示
 const style_container = computed(() => common_styles_computer(form.value.common_config));
 </script>
 <style lang="scss" scoped>
-.content {
-    pointer-events: none;
-}
-.select-tag {
-    color: #a8abb2;
+.pc-disable {
+    cursor: all-scroll;
+    background: rgba(5, 30, 80, 0.04);
+    opacity: 0.4;
 }
 </style>

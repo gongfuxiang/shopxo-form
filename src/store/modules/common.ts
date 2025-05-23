@@ -1,5 +1,6 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
+import CommonAPI from '@/api/common';
 import { get_title_style, get_layout_style, get_frame_style, get_icon_size, get_color_style } from '@/utils/index';
 export const commonStore = defineStore('common', () => {
     // 链接是否需要调接口判断
@@ -7,6 +8,7 @@ export const commonStore = defineStore('common', () => {
     const is_immersion_model = ref(false);
     const is_have_tabs = ref(false);
     const header_height = ref(0);
+    const address_list = ref([]);
     const common = ref({
         article_category: [] as any[], //---- 文章分类
         attachment_category: [] as any[], //---- 附件分类
@@ -57,6 +59,11 @@ export const commonStore = defineStore('common', () => {
     const set_header_height = (height: number) => {
         header_height.value = height;
     };
+    const get_address = () => {
+        CommonAPI.getAddress().then((res: any) => {
+            address_list.value = res.data;
+        });
+    };
     // 标题样式
     const title_style = computed(() => get_title_style(form_layout.value));
     // 布局样式
@@ -77,11 +84,13 @@ export const commonStore = defineStore('common', () => {
         frame_style,
         help_icon_size,
         color_style,
+        address_list,
         set_common,
         set_is_common_api,
         set_is_immersion_model,
         set_is_have_tabs,
         set_header_height,
         set_form_layout,
+        get_address,
     };
 });

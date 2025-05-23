@@ -21,12 +21,12 @@
             </div>
         </el-form-item>
         <el-form-item label-width="0">
-            <div class="flex-col gap-10 w h">
-                <div class="new_title">校验</div>
+            <div class="flex-col w h">
+                <div class="new_title mb-10">校验</div>
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
                 <div><el-checkbox v-model="form.is_limit_num" label="限制可选数量" true-value="1" false-value="0" /></div>
                 <template v-if="form.is_limit_num == '1'">
-                    <div class="flex-row gap-10 w">
+                    <div class="flex-row gap-10 w mt-10">
                         <number-input v-model="form.min_num" class="rendering-area" placeholder="不限" @blur="handle_min_max_blur('min_num')"></number-input>
                         <div class="flex-1">~</div>
                         <number-input v-model="form.max_num" class="rendering-area" placeholder="不限" @blur="handle_min_max_blur('max_num')"></number-input>

@@ -47,6 +47,22 @@
                 <template v-if="item.key == 'rich-text'">
                     <model-rich-text :value="item.com_data"></model-rich-text>
                 </template>
+                <!-- 地址 -->
+                <template v-if="item.key == 'address'">
+                    <model-address :value="item.com_data"></model-address>
+                </template>
+                <!-- 手机 -->
+                <template v-if="item.key == 'phone'">
+                    <model-phone :value="item.com_data"></model-phone>
+                </template>
+                <!-- 密码 -->
+                <template v-if="item.key == 'pwd'">
+                    <model-pwd :value="item.com_data"></model-pwd>
+                </template>
+                <!-- 评分 -->
+                <template v-if="item.key == 'score'">
+                    <model-score :value="item.com_data"></model-score>
+                </template>
             </div>
         </div>
     </div>

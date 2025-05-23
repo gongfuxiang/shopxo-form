@@ -5,13 +5,13 @@
             <div class="content w">
                 <template v-if="['option1', 'option2'].includes(form.date_type)">
                     <div class="re w h" :style="common_store.frame_style + style_container + 'height: 100%;'">
-                        <el-time-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" clearable placeholder="" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                        <el-time-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" clearable :placeholder="form.placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                         <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                     </div>
                 </template>
                 <template v-else>
                     <div class="re w h" :style="common_store.frame_style + style_container + 'height: 100%;'">
-                        <el-date-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'month' : form.date_type == 'option4' ? 'date' : 'datetime'" clearable placeholder="" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                        <el-date-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'month' : form.date_type == 'option4' ? 'date' : 'datetime'" clearable :placeholder="form.placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                         <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                     </div>
                 </template>

@@ -9,6 +9,10 @@ import defaultCheckbox from '@/config/const/checkbox';
 import defaultSelectMulti from '@/config/const/select_multi';
 import defaultPosition from '@/config/const/position';
 import defaultRichText from '@/config/const/rich_text';
+import defaultAddress from '@/config/const/address';
+import defaultPhone from '@/config/const/phone';
+import defaultPwd from '@/config/const/pwd';
+import defaultScore from '@/config/const/score'
 // 系统设置
 interface DefaultSettings {
     single_text: object;
@@ -22,6 +26,10 @@ interface DefaultSettings {
     select_multi: object;
     position: object;
     rich_text: object;
+    address: object;
+    phone: object;
+    pwd: object;
+    score: object;
 }
 
 const defaultSettings: DefaultSettings = {
@@ -36,6 +44,10 @@ const defaultSettings: DefaultSettings = {
     select_multi: defaultSelectMulti,
     position: defaultPosition,
     rich_text: defaultRichText,
+    address: defaultAddress,
+    phone: defaultPhone,
+    pwd: defaultPwd,
+    score: defaultScore
 };
 
 export default defaultSettings;

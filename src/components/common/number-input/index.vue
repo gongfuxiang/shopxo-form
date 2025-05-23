@@ -79,12 +79,20 @@ const emit = defineEmits(['blur'])
 const blur_input = () => {
     is_focus.value = false;
     if (!isEmpty(form_value.value)) {
+        let all_list = form_value.value.replace(/[^0-9.]/g, '');
+        // 去除不是数字和.的值
+        let num = Number(formatNumber(all_list, false)).toFixed(props.decimalNum);
         // 为数字并且时千分位的是你
         if (props.format == 'num' && props.isThousandthsSymbol == '1') {
-            form_value.value = formatNumber(Number(formatNumber(form_value.value, false)).toFixed(props.decimalNum).toString(), true)
-        } else {
-            form_value.value = Number(formatNumber(form_value.value, false)).toFixed(props.decimalNum)
+            // 如果有多个.的话，去除多个.
+            const parts = all_list.split('.');
+            if (parts.length > 2) {
+                // 如果有多个小数点，则只保留第一个
+                all_list = parts[0] + '.' + parts.slice(1).join('');
+            }
+            num = formatNumber(Number(formatNumber(all_list, false)).toFixed(props.decimalNum).toString(), true)
         }
+        form_value.value = num;
     } else {
         form_value.value = '';
     }

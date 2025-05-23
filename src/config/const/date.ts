@@ -15,7 +15,7 @@ interface DefaultInput {
 const defaultInput: DefaultInput = {
     title: '日期时间',
     form_value: '',
-    placeholder: '请输入内容',
+    placeholder: '请选择时间',
     is_required: '0',
     date_style: 'horizontal',
     date_type: 'option6',

@@ -29,12 +29,12 @@
                             </template>
                         </el-select>
                         <template v-if="form.form_value == 'outer'">
-                            <el-input v-model="form.outer_value" :style="common_store.frame_style + style_container" placeholder="请填写内容"></el-input>
+                            <el-input v-model="form.outer_value" :style="common_store.frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                         </template>
                     </div>
                 </template>
                 <template v-else>
-                    <el-input v-model="form.form_value" :style="common_store.frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
+                    <el-input v-model="form.form_value" :style="common_store.frame_style + style_container" :placeholder="form.placeholder"  @blur="data_check(true)" @change="data_check(true)"></el-input>
                 </template>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>

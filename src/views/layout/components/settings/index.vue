@@ -75,6 +75,22 @@
                     <template v-else-if="model_value.key == 'rich-text'">
                         <model-rich-text-setting :value="model_value.com_data" :model-id="model_value.id"></model-rich-text-setting>
                     </template>
+                    <!-- 地址 -->
+                    <template v-else-if="model_value.key == 'address'">
+                        <model-address-setting :value="model_value.com_data" :model-id="model_value.id"></model-address-setting>
+                    </template>
+                    <!-- 手机 -->
+                    <template v-else-if="model_value.key == 'phone'">
+                        <model-phone-setting :value="model_value.com_data" :model-id="model_value.id"></model-phone-setting>
+                    </template>
+                    <!-- 密码 -->
+                    <template v-else-if="model_value.key == 'pwd'">
+                        <model-pwd-setting :value="model_value.com_data" :model-id="model_value.id"></model-pwd-setting>
+                    </template>
+                    <!-- 评分 -->
+                    <template v-else-if="model_value.key == 'score'">
+                        <model-score-setting :value="model_value.com_data" :model-id="model_value.id"></model-score-setting>
+                    </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
                     </template>

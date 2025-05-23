@@ -2,10 +2,9 @@ import defaultCommon from './index';
 
 interface DefaultSelect {
     title: string;
-    form_value: string[];
-    detailed_value: string;
-    address_type: string;
+    form_value: string;
     placeholder: string;
+    icon_name: string;
     is_required: string;
     com_width: number;
     com_height: number;
@@ -13,11 +12,10 @@ interface DefaultSelect {
 }
 
 const defaultSelect: DefaultSelect = {
-    title: '地址',
-    address_type: 'noDetailed',
-    form_value: [],
-    detailed_value: '',
-    placeholder: '请选择内容',
+    title: '密码',
+    form_value: '',
+    placeholder: '请输入密码',
+    icon_name: 'lock',
     is_required: '0',
     com_width: 200,
     com_height: 200,

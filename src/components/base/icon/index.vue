@@ -1,5 +1,5 @@
 <template>
-    <i class="iconfont" :class="className" :style="'font-size:' + size + 'px;' + (props.color && (props.color.indexOf('#') != -1 || props.color.indexOf('rgba') != -1) ? 'color:' + props.color + ';' : '') + styles" @click="onClick">
+    <i class="iconfont" :class="className" :style="'font-size:' + size + 'px;' + (props.color && (props.color.indexOf('#') != -1 || props.color.indexOf('rgba') != -1) ? 'color:' + props.color + ';' : '') + styles" @mousemove="mousemove" @mouseleave="mouseleave" @click="onClick">
         <slot></slot>
     </i>
 </template>
@@ -28,11 +28,17 @@ const props = defineProps({
 const className = computed(() => {
     return `icon-${props.name} ${props.color ? (props.color.indexOf('#') == -1 ? `cr-${props.color}` : '') : ''}`;
 });
-const emit = defineEmits(['click']);
+const emit = defineEmits(['click', 'mousemove', 'mouseleave']);
 function onClick() {
     // 回调方法
     emit('click');
 }
+const mousemove = () => {
+    emit('mousemove');
+};
+const mouseleave = () => {
+    emit('mouseleave');
+};
 </script>
 
 <style lang="scss">

@@ -53,12 +53,12 @@
             </div>
         </el-form-item>
         <el-form-item label-width="0">
-            <div class="flex-col gap-10 w h">
-                <div class="new_title">校验</div>
+            <div class="flex-col w h">
+                <div class="new_title mb-10">校验</div>
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
                 <div><el-checkbox v-model="form.is_limit_num" label="限定数值范围" true-value="1" false-value="0" /></div>
                 <template v-if="form.is_limit_num == '1'">
-                    <div class="flex-row gap-10 w">
+                    <div class="flex-row gap-10 w mt-10">
                         <number-input v-model="form.min_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" placeholder="不限" class="rendering-area" @blur="handle_min_max_blur('min_num')"></number-input>
                         <div class="flex-1">~</div>
                         <number-input v-model="form.max_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" placeholder="不限" class="rendering-area" @blur="handle_min_max_blur('max_num')"></number-input>

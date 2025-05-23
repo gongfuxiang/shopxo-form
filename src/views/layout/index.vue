@@ -17,6 +17,7 @@
 import { cloneDeep } from 'lodash';
 import { layout_settings, style_settings } from '@/utils/common';
 import defaultSettings from './index';
+import CommonAPI from '@/api/common';
 import { commonStore } from '@/store';
 const common_store = commonStore();
 interface diy_data_item {
@@ -77,9 +78,16 @@ const update_setting = (data: any, diy: any[]) => {
 };
 // 页面加载
 onMounted(() => {
-    init();
+    common_init();
 });
 
+const common_init = () => {
+    common_store.get_address();
+    CommonAPI.getInit().then((res: any) => {
+        common_store.set_common(res.data);
+        init();
+    });
+};
 const init = () => {
     form.value.diy_data = data_merge(form.value.diy_data);
 };

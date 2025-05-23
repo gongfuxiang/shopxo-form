@@ -17,6 +17,9 @@ interface DefaultInput {
     option_list: option[];
     placeholder: string;
     is_required: string;
+    is_limit_num: string;
+    max_num: string;
+    min_num: string;
     is_multicolour: string;
     show_hidden_list: show_hidden[];
     format: string;
@@ -35,6 +38,9 @@ const defaultInput: DefaultInput = {
     outer_value: '',
     placeholder: '请输入内容',
     is_required: '0',
+    is_limit_num: '0',
+    max_num: '',
+    min_num: '',
     is_multicolour: '0',
     format: 'none',
     arrangement: 'horizontal',
