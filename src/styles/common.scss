@@ -336,6 +336,10 @@
     .el-select__input {
         height: 2.2rem;
     }
+    .el-upload-dragger {
+        border: none;
+        padding: 0;
+    }
 }
 
 .required-error {

@@ -91,6 +91,30 @@
                     <template v-else-if="model_value.key == 'score'">
                         <model-score-setting :value="model_value.com_data" :model-id="model_value.id"></model-score-setting>
                     </template>
+                    <!-- 上传图片｜上传视频 ｜ 上传文件 -->
+                    <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_value.key)">
+                        <model-upload-setting :value="model_value.com_data" :model-id="model_value.id" :accept-type="model_value.key == 'upload-img' ? 'img' : model_value.key == 'upload-video' ? 'video' : 'file'"></model-upload-setting>
+                    </template>
+                    <!-- 辅助线 -->
+                    <template v-else-if="model_value.key == 'auxiliary-line'">
+                        <model-auxiliary-line-setting :value="model_value.com_data" :model-id="model_value.id"></model-auxiliary-line-setting>
+                    </template>
+                    <!-- 文本 -->
+                    <template v-else-if="model_value.key == 'text'">
+                        <model-text-setting :value="model_value.com_data" :model-id="model_value.id"></model-text-setting>
+                    </template>
+                    <!-- 图片 -->
+                    <template v-else-if="model_value.key == 'img'">
+                        <model-img-setting :value="model_value.com_data" :model-id="model_value.id"></model-img-setting>
+                    </template>
+                    <!-- 视频 -->
+                    <template v-else-if="model_value.key == 'video'">
+                        <model-video-setting :value="model_value.com_data" :model-id="model_value.id"></model-video-setting>
+                    </template>
+                    <!-- 视频 -->
+                    <template v-else-if="model_value.key == 'attachments'">
+                        <model-attachments-setting :value="model_value.com_data" :model-id="model_value.id"></model-attachments-setting>
+                    </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
                     </template>

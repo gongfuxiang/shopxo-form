@@ -537,6 +537,15 @@ export const get_frame_style = (config: any) => {
     // 字体大小和高度根据配置的不同而变化
     return `width:100%;max-width:${ data.input_width_type == 'default' ? '354px' : '100%' };height:${ data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ?  40 : 30 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
 }
+
+export const get_frame_size = (config: any) => { 
+    // 提取配置对象中的计算机相关数据
+    const data = config.computer;
+    
+    // 根据字段标题字体大小动态生成框架的样式
+    // 字体大小和高度根据配置的不同而变化
+    return `font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
+}
 /**
  * 根据配置信息生成布局样式
  * 此函数旨在根据配置对象中计算机相关数据生成动态的CSS样式字符串，用于控制布局

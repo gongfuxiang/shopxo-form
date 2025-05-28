@@ -63,6 +63,30 @@
                 <template v-if="item.key == 'score'">
                     <model-score :value="item.com_data"></model-score>
                 </template>
+                <!-- 辅助线 -->
+                <template v-if="item.key == 'auxiliary-line'">
+                    <model-auxiliary-line :value="item.com_data"></model-auxiliary-line>
+                </template>
+                <!-- 上传图片｜上传视频 ｜ 上传文件 -->
+                <template v-if="['upload-img', 'upload-video', 'upload-attachments'].includes(item.key)">
+                    <model-upload :value="item.com_data" :accept-type="item.key == 'upload-img' ? 'img' : item.key == 'upload-video' ? 'video' : 'file'"></model-upload>
+                </template>
+                <!-- 文本 -->
+                <template v-if="item.key == 'text'">
+                    <model-text :value="item.com_data"></model-text>
+                </template>
+                <!-- 图片 -->
+                <template v-if="item.key == 'img'">
+                    <model-img :value="item.com_data"></model-img>
+                </template>
+                <!-- 视频 -->
+                <template v-if="item.key == 'video'">
+                    <model-video :value="item.com_data"></model-video>
+                </template>
+                <!-- 文件 -->
+                <template v-if="item.key == 'attachments'">
+                    <model-attachments :value="item.com_data"></model-attachments>
+                </template>
             </div>
         </div>
     </div>

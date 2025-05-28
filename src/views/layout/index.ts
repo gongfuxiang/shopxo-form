@@ -12,7 +12,15 @@ import defaultRichText from '@/config/const/rich_text';
 import defaultAddress from '@/config/const/address';
 import defaultPhone from '@/config/const/phone';
 import defaultPwd from '@/config/const/pwd';
-import defaultScore from '@/config/const/score'
+import defaultScore from '@/config/const/score';
+import defaultAuxiliaryLine from '@/config/const/auxiliary-line';
+import defaultText from '@/config/const/text';
+import defaultImg from '@/config/const/img';
+import defaultVideo from '@/config/const/video';
+import defaultUploadImg from '@/config/const/upload-img';
+import defaultUploadVideo from '@/config/const/upload-video';
+import defaultUploadAttachments from '@/config/const/upload-attachments';
+import defaultAttachments from '@/config/const/attachments'
 // 系统设置
 interface DefaultSettings {
     single_text: object;
@@ -30,6 +38,14 @@ interface DefaultSettings {
     phone: object;
     pwd: object;
     score: object;
+    auxiliary_line: object;
+    text: object;
+    img: object;
+    video: object;
+    upload_img: object;
+    upload_video: object;
+    upload_attachments: object;
+    attachments: object;
 }
 
 const defaultSettings: DefaultSettings = {
@@ -47,7 +63,15 @@ const defaultSettings: DefaultSettings = {
     address: defaultAddress,
     phone: defaultPhone,
     pwd: defaultPwd,
-    score: defaultScore
+    score: defaultScore,
+    auxiliary_line: defaultAuxiliaryLine,
+    text: defaultText,
+    img: defaultImg,
+    video: defaultVideo,
+    attachments: defaultAttachments,
+    upload_img: defaultUploadImg,
+    upload_video: defaultUploadVideo,
+    upload_attachments: defaultUploadAttachments,
 };
 
 export default defaultSettings;
