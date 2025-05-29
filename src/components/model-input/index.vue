@@ -17,14 +17,14 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multi-select flex-1" :style="common_store.frame_style + style_container" @change="data_check">
-                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-option>
+                        <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
+                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" class="flex-row align-c select-option" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
                                     <div class="select-tag" :style="common_styles">{{ form.placeholder }}</div>
                                 </template>
                                 <template v-else>
-                                    <div v-for="item in form.option_list.filter((item1: any) => form.form_value == item1.value)" :key="item.value" :style="option_style(item)">{{ item.name }}</div>
+                                    <div v-for="item in form.option_list.filter((item1: any) => form.form_value.includes(item1.value))" :key="item.value" :style="option_style(item)">{{ item.name }}</div>
                                 </template>
                             </template>
                         </el-select>
@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import { common_styles_computer, get_format_checks, isEmpty } from "@/utils";
 import { commonStore } from "@/store";
+import type { ElSelect } from "element-plus";
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -67,6 +68,19 @@ const option_style = (val: any) => {
 }
 // 用于样式显示
 const style_container = computed(() => common_styles_computer(form.value.common_config));
+// 关闭下拉框
+const selectRef = ref<InstanceType<typeof ElSelect> | null>(null);
+// 单选选择框为了兼容颜色设置，清空老数据并赋值新数据
+const select_click = (val: any) => {
+    if (!form.value.form_value.includes(val)) {
+        form.value.form_value = [];
+        form.value.form_value.push(val);
+    }
+    // 点击之后关闭下拉框的弹出框
+    if (selectRef.value) {
+        selectRef.value.blur();
+    }
+}
 </script>
 <style lang="scss" scoped>
 .select-tag {
@@ -76,5 +90,8 @@ const style_container = computed(() => common_styles_computer(form.value.common_
     :deep(.el-select__wrapper) {
         padding-left: 0.4rem;
     }
+}
+.select-option {
+    cursor: pointer !important;
 }
 </style>

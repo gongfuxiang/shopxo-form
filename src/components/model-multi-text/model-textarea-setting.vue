@@ -31,6 +31,7 @@
                         <el-input v-model="form.max_num" placeholder="不限" clearable size="small" @change="operation_end"></el-input>
                     </div>
                 </template>
+                <desensitization v-model:value="form.desensitization_value" v-model:show="form.is_desensitization"></desensitization>
             </div>
         </el-form-item>
         <border-config :value="form.common_config" />

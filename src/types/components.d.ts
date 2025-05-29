@@ -14,6 +14,7 @@ declare module 'vue' {
     ComponentSwitchSelect: typeof import('./../components/common/component-switch-select/index.vue')['default']
     copy: typeof import('./../components/model-video copy/index.vue')['default']
     CustomRate: typeof import('./../components/model-score/components/custom-rate.vue')['default']
+    Desensitization: typeof import('./../components/common/desensitization/index.vue')['default']
     DivContent: typeof import('./../components/common/div-content/index.vue')['default']
     Drag: typeof import('./../components/base/drag/index.vue')['default']
     EditorConfig: typeof import('./../components/common/editor-config/index.vue')['default']

@@ -2,16 +2,9 @@ import CommonAPI from '@/api/common';
 
 /**
  * 判断对象数组等是否为空。
-*/
+ */
 export function isEmpty(value: any) {
-    return (
-        value === null ||
-        value === undefined ||
-        value === '' ||
-        typeof value === 'number' && isNaN(value) ||
-        (Array.isArray(value) && value.length === 0) ||
-        (typeof value === 'object' && Object.keys(value).length === 0)
-    )
+    return value === null || value === undefined || value === '' || (typeof value === 'number' && isNaN(value)) || (Array.isArray(value) && value.length === 0) || (typeof value === 'object' && Object.keys(value).length === 0);
 }
 /**
  * 判断一个对象是否为空。
@@ -207,13 +200,13 @@ export function radius_computer(new_style: radiusStyle, scale: number = 1) {
     return `border-radius: ${new_style.radius_top_left * scale || 0}px ${new_style.radius_top_right * scale || 0}px ${new_style.radius_bottom_right * scale || 0}px ${new_style.radius_bottom_left * scale || 0}px;`;
 }
 
-export const border_computer= (new_style: border_style) => {
+export const border_computer = (new_style: border_style) => {
     const { border_is_show = '0', border_color = '', border_type = 'solid', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
     if (border_is_show == '1') {
-       return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${ border_type };border-color: ${border_color};box-sizing: content-box;`
+        return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${border_type};border-color: ${border_color};box-sizing: content-box;`;
     }
     return '';
-}
+};
 /**
  * 设置阴影样式
  * new_style: 外边距的集合
@@ -341,10 +334,10 @@ export const percentage_count = (num: number, container_size: number) => {
  */
 export const areAllEqual = (a: number, b: number, c: number, d: number) => {
     if (a === null || a === undefined || b === null || b === undefined || c === null || c === undefined || d === null || d === undefined) {
-      return false;
+        return false;
     }
     return a === b && b === c && c === d;
-  }
+};
 
 /**
  * 计算当前偏移量
@@ -472,23 +465,23 @@ export const get_title_style = (config: any) => {
     const data = config.computer;
     // 标题大小控制
     // 根据配置中的filed_title_size_type字段决定标题字体大小
-    let style = `font-weight: 700;font-size:${ data.filed_title_size_type == 'big' ? 22 : data.filed_title_size_type == 'middle' ?  16 : 12 }px;color:#333;`
+    let style = `font-weight: 700;font-size:${data.filed_title_size_type == 'big' ? 22 : data.filed_title_size_type == 'middle' ? 16 : 12}px;color:#333;`;
     //标题宽度控制
     // 根据flex_direction字段决定标题的对齐方式和宽度
     if (data.flex_direction == 'column') {
         style += `text-align: left;`;
     } else if (data.flex_direction == 'row') {
-        style += `width: ${ data.filed_title_width }px;text-align:${ data.filed_title_justification}`;
+        style += `width: ${data.filed_title_width}px;text-align:${data.filed_title_justification}`;
     }
     // 返回拼接好的样式字符串
     return style;
-}
+};
 /**
  * 根据配置信息获取图标尺寸
- * 
+ *
  * 此函数旨在通过配置信息中的相关设置来确定图标的合适尺寸
  * 它根据计算机配置中的文件标题字体大小来决定图标的大小
- * 
+ *
  * @param config 包含配置信息的对象，特别是计算机相关的配置
  * @returns {number} 图标的推荐尺寸，单位为像素
  */
@@ -496,8 +489,8 @@ export const get_icon_size = (config: any) => {
     // 提取配置对象中的计算机相关数据
     const data = config.computer;
     // 根据文件标题字体大小决定图标尺寸
-    return data.filed_title_size_type == 'big' ? 20 : data.filed_title_size_type == 'middle' ?  14 : 12;
-}
+    return data.filed_title_size_type == 'big' ? 20 : data.filed_title_size_type == 'middle' ? 14 : 12;
+};
 
 export const get_color_style = (config: any) => {
     // 提取配置对象中的计算机相关数据
@@ -519,48 +512,48 @@ export const get_color_style = (config: any) => {
             break;
     }
     // 根据文件标题字体大小决定图标尺寸
-    return `padding:${ padding };line-height:2.2rem;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
-}
+    return `padding:${padding};line-height:2.2rem;font-size:${data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ? 14 : 12}px;`;
+};
 /**
  * 根据配置信息获取框架样式
  * 此函数旨在为不同的计算机配置提供动态样式调整选项
  * 它主要通过调整高度和字体大小来适应不同的显示需求
- * 
+ *
  * @param config - 包含计算机配置信息的对象
  * @returns 返回一个字符串，包含了根据配置动态生成的CSS样式
  */
 export const get_frame_style = (config: any) => {
     // 提取配置对象中的计算机相关数据
     const data = config.computer;
-    
+
     // 根据字段标题字体大小动态生成框架的样式
     // 字体大小和高度根据配置的不同而变化
-    return `width:100%;max-width:${ data.input_width_type == 'default' ? '354px' : '100%' };height:${ data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ?  40 : 30 }px;font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
-}
+    return `width:100%;max-width:${data.input_width_type == 'default' ? '354px' : '100%'};height:${data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ? 40 : 30}px;font-size:${data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ? 14 : 12}px;`;
+};
 
-export const get_frame_size = (config: any) => { 
+export const get_frame_size = (config: any) => {
     // 提取配置对象中的计算机相关数据
     const data = config.computer;
-    
+
     // 根据字段标题字体大小动态生成框架的样式
     // 字体大小和高度根据配置的不同而变化
-    return `font-size:${ data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ?  14 : 12 }px;`
-}
+    return `font-size:${data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ? 14 : 12}px;`;
+};
 /**
  * 根据配置信息生成布局样式
  * 此函数旨在根据配置对象中计算机相关数据生成动态的CSS样式字符串，用于控制布局
  * 主要通过配置信息中的flex_direction字段来决定布局的方向和对齐方式
- * 
+ *
  * @param config 包含计算机配置信息的对象，用于生成动态样式
  * @returns 返回一个字符串，包含了根据配置信息生成的CSS样式
  */
 export const get_layout_style = (config: any) => {
     // 提取配置信息中的计算机数据
     const data = config.computer;
-    
+
     // 初始化样式字符串，包含基本的flex布局设置和gap属性，flex-direction根据配置信息动态设置
-    let style = `display:flex;gap:10px;flex-direction:${ data.flex_direction };`
-    
+    let style = `display:flex;gap:10px;flex-direction:${data.flex_direction};`;
+
     // 根据flex_direction的值，添加相应的对齐方式
     if (data.flex_direction == 'row') {
         // 当flex_direction为row时，添加垂直居中对齐
@@ -569,10 +562,10 @@ export const get_layout_style = (config: any) => {
         // 当flex_direction为column时，添加水平居中对齐
         style += `justify-content: center;`;
     }
-    
+
     // 返回生成的样式字符串
     return style;
-}
+};
 
 /**
  * 格式检查函数
@@ -589,49 +582,52 @@ export const get_format_checks = (data: any, is_format: boolean = false, type: s
         data.common_config.is_error = '0';
         data.common_config.error_text = '';
         if (is_format) {
-            if (type == 'number') { // 数字组件的校验逻辑
+            if (type == 'number') {
+                // 数字组件的校验逻辑
                 number_range_handle(data);
-            } else if (type == 'checkbox') { // 复选框和复选下拉框的校验逻辑
+            } else if (type == 'checkbox') {
+                // 复选框和复选下拉框的校验逻辑
                 checkbox_range_handle(data);
-            } else { // 单行文本的校验逻辑
+            } else {
+                // 单行文本的校验逻辑
                 // 对字段进行格式检查
                 get_format_checks_v2(data.common_config, data.form_value);
             }
         }
     }
-}
+};
 // 复选框和复选下拉框的校验逻辑
 const checkbox_range_handle = (data: any) => {
-    const { form_value, min_num = '',  max_num = '' } = data;
+    const { form_value, min_num = '', max_num = '' } = data;
     const length = form_value?.length || 0;
     const minNum = Number(min_num);
-    const maxNum = Number(max_num); 
+    const maxNum = Number(max_num);
     if ((!isEmpty(min_num) && length < minNum) || (!isEmpty(max_num) && length > maxNum)) {
         // 是否报错显示
         data.common_config.is_error = '1';
-        data.common_config.error_text = `请选择${ min_num }~${ max_num }项`;
+        data.common_config.error_text = `请选择${min_num}~${max_num}项`;
     } else {
         // 否就清除报错显示
         data.common_config.is_error = '0';
         data.common_config.error_text = '';
     }
-}
+};
 // 数字组件的校验逻辑
 const number_range_handle = (data: any) => {
-    const { form_value, min_num = '',  max_num = '', format = 'num'} = data;
+    const { form_value, min_num = '', max_num = '', format = 'num' } = data;
     const num = Number(form_value);
     const minNum = Number(min_num);
-    const maxNum = Number(max_num); 
+    const maxNum = Number(max_num);
     if ((!isEmpty(min_num) && num < minNum) || (!isEmpty(max_num) && num > maxNum)) {
         // 是否报错显示
         data.common_config.is_error = '1';
-        data.common_config.error_text = `请输入${ min_num }${ format == 'num' ? '': '%'}~${ max_num }${ format == 'num' ? '': '%'}之间的数`;
+        data.common_config.error_text = `请输入${min_num}${format == 'num' ? '' : '%'}~${max_num}${format == 'num' ? '' : '%'}之间的数`;
     } else {
         // 否就清除报错显示
         data.common_config.is_error = '0';
         data.common_config.error_text = '';
     }
-}
+};
 
 const type_config = [
     { name: '手机号码', value: 'phone-number', check: /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/ },
@@ -642,12 +638,12 @@ const type_config = [
 ];
 
 // 构建 Map 提升查找效率
-const typeConfigMap = new Map(type_config.map(item => [item.value, item]));
+const typeConfigMap = new Map(type_config.map((item) => [item.value, item]));
 
 /**
  * 根据通用配置和给定值进行格式校验
  * 该函数用于检查输入值是否符合特定的格式要求，主要应用于用户输入验证
- * 
+ *
  * @param common_config 通用配置对象，包含格式和错误信息的配置
  * @param value 需要进行格式校验的值
  */
@@ -695,7 +691,7 @@ export const get_format_checks_v2 = (common_config: componentsCommonCommonStyle,
  * 格式化数字字符串或数值
  * 此函数根据是否需要转换，将输入的数字字符串或数值格式化为带有逗号分隔的字符串
  * 如果不需要转换，则移除输入中的所有逗号
- * 
+ *
  * @param num - 输入的数字字符串或数值
  * @param is_convert - 指示是否需要转换的布尔值
  * @returns 格式化后的数字字符串
@@ -705,16 +701,16 @@ export const formatNumber = (num: string | number, is_convert: boolean) => {
         // 将输入转换为字符串形式以便处理
         const number = num.toString();
         // 使用正则表达式将整数部分每三位用逗号分隔
-        const integerPart = number.split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        const integerPart = number.split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         // 避免小数为空的时候也处理
         const decimalPart = number.split('.')[1] == null ? '' : '.' + number.split('.')[1];
         // 组合整数部分和小数部分
         return integerPart + decimalPart;
     } else {
         // 如果不需要转换，移除所有逗号并返回
-        return num.toString().replace(/,/g, "");
+        return num.toString().replace(/,/g, '');
     }
-}
+};
 
 const convert_to_chinese_currency = (amount: number | string) => {
     const num = Number(amount);
@@ -738,26 +734,26 @@ const convert_to_chinese_currency = (amount: number | string) => {
     for (let i = 0; i < integerPart.length; i++) {
         const digit = Number(integerPart[i]); // 显式转换为数字
         integerChinese += numMap[digit]; // 使用数字索引访问 numMap
-        if (i < integerPart.length - 1) { // 非最后一位时添加单位
+        if (i < integerPart.length - 1) {
+            // 非最后一位时添加单位
             integerChinese += units[units.length - integerPart.length + i]; // 动态匹配单位
         }
     }
 
     // 拼接整数部分和小数部分
     return integerChinese + (decimalChinese ? '整' : '') + (decimalChinese || '');
-}
-
+};
 
 //#region 样式更新时配置更新
 export const date_style_options = (date_style: string) => {
     const style = (unit: any, is_last: boolean = false) => style_handle(date_style, unit, is_last);
     return [
         { value: 'option1', label: `HH${style('hour')}mm${style('minute', true)}` },
-        { value: 'option2', label: `HH${style('hour')}mm${style('minute')}ss${ style('second', true) }` },
+        { value: 'option2', label: `HH${style('hour')}mm${style('minute')}ss${style('second', true)}` },
         { value: 'option3', label: `YYYY${style('year')}MM${style('month', true)}` },
         { value: 'option4', label: `YYYY${style('year')}MM${style('month')}DD${style('day', true)}` },
         { value: 'option5', label: `YYYY${style('year')}MM${style('month')}DD${style('day')}HH${style('hour')}mm${style('minute', true)}` },
-        { value: 'option6', label: `YYYY${style('year')}MM${style('month')}DD${style('day')}HH${style('hour')}mm${style('minute')}ss${style('second', true)}` }
+        { value: 'option6', label: `YYYY${style('year')}MM${style('month')}DD${style('day')}HH${style('hour')}mm${style('minute')}ss${style('second', true)}` },
     ];
 };
 // 定义可用的 date_style 类型
@@ -771,7 +767,7 @@ const styles: Record<DateStyle, Record<string, string>> = {
         day: ' ',
         hour: ':',
         minute: ':',
-        second: ''
+        second: '',
     },
     slash: {
         year: '/',
@@ -779,7 +775,7 @@ const styles: Record<DateStyle, Record<string, string>> = {
         day: ' ',
         hour: ':',
         minute: ':',
-        second: ''
+        second: '',
     },
     chinese: {
         year: '年',
@@ -787,23 +783,22 @@ const styles: Record<DateStyle, Record<string, string>> = {
         day: '日 ',
         hour: '时',
         minute: '分',
-        second: '秒'
-    }
+        second: '秒',
+    },
 };
-
 
 /**
  * 根据指定的类型和是否为最后一个元素获取相应的样式
- * 
+ *
  * 此函数旨在根据用户选择的日期样式（currentStyle）和请求的类型（type）返回适当的样式
  * 如果当前样式不存在、请求的样式类型不存在，或者在特定条件下（当前样式不是中文且为最后一个元素），
  * 函数将返回空字符串
- * 
+ *
  * @param type - 需要获取样式的类型
  * @param is_last - 是否为最后一个元素，默认为false
  * @returns 返回对应的样式字符串或空字符串
  */
- const style_handle = (date_style: string, type: string, is_last: boolean = false) => {
+const style_handle = (date_style: string, type: string, is_last: boolean = false) => {
     // 将form.value.date_style断言为DateStyle类型，确保类型安全
     const currentStyle = date_style as DateStyle; // 类型断言
     // 检查当前样式是否存在于预定义的样式中，如果不存在，返回空字符串
@@ -831,4 +826,44 @@ export const parse_and_format = (value: any, decimalNum: number): number | null 
     if (isEmpty(value)) return null;
     const num = Number(formatNumber(value, false));
     return isNaN(num) ? null : parseFloat(num.toFixed(decimalNum));
+};
+
+/**
+ * 根据指定类型对字符串进行脱敏处理，若不满足格式要求则返回 '***'
+ * @param value 待脱敏的字符串
+ * @param type 脱敏类型
+ * @returns 脱敏后的字符串或 '***'
+ */
+export const get_desensitization = (value: string, type: string): string => {
+    switch (type) {
+        case 'all':
+            // 全部字符替换为 *
+            return value.replace(/./g, '*');
+        case 'name':
+            // 姓名：保留首尾各 1 个字
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? value.replace(/^(.).*(.)$/, '$1**$2') : value.replace(/./g, '*');
+        case 'email':
+            // 邮箱：显示前 3 位和 @ 及之后部分
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ? value.replace(/^([a-zA-Z0-9]{3})[a-zA-Z0-9.+-]*@/, '$1****@') : value.replace(/./g, '*');
+        case 'phone':
+            // 手机号：显示前 3 位和后 4 位
+            return /^1[3-9]\d{9}$/.test(value) ? value.replace(/^(\d{3})\d{4}(\d{4})$/, '$1****$2') : value.replace(/./g, '*');
+        case 'money':
+            // 金额：统一显示 *****
+            return '*****';
+        case 'id':
+            // 身份证：显示后 4 位
+            return /^\d{17}[\dXx]$/.test(value) ? value.replace(/^.*(\d{4})$/, '**********$1') : value.replace(/./g, '*');
+        case 'address':
+            // 地址：显示前 4 个汉字和后 4 个汉字
+            return /^[\u4e00-\u9fa5]{8,}$/.test(value) ? value.replace(/^([\u4e00-\u9fa5]{4})[\u4e00-\u9fa5]*(?=(.{4}))$/, '$1****$2') : value.replace(/./g, '*');
+        case 'IP_address':
+            // IP 地址：只显示第一段
+            return /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/.test(value) ? value.split('.')[0] + '****' : value.replace(/./g, '*');
+        case 'car_number':
+            // 车牌号：显示第一个汉字和最后两位数字
+            return /^[\u4e00-\u9fa5][A-Za-z]\d{5,6}$/.test(value) ? value.replace(/^([\u4e00-\u9fa5]).*(\d{2})$/, '$1****$2') : value.replace(/./g, '*');
+        default:
+            return value.replace(/./g, '*');
+    }
 };

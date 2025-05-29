@@ -7,6 +7,8 @@ interface DefaultInput {
     is_limit_num: string;
     min_num: string;
     max_num: string;
+    is_desensitization: string,
+    desensitization_value: string[],
     com_width: number;
     com_height: number;
     common_config: object;
@@ -20,6 +22,8 @@ const defaultInput: DefaultInput = {
     is_limit_num: '0',
     min_num: '',
     max_num: '',
+    is_desensitization: '0',
+    desensitization_value: [],
     com_width: 200,
     com_height: 200,
     common_config: defaultCommon

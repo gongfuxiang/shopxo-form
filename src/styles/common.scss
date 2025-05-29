@@ -472,3 +472,9 @@
         }
     }
 }
+
+.el-select-dropdown__item.is-selected {
+    .select-name {
+        color: #2a94ff;
+    }
+}

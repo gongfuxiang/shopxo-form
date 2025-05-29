@@ -64,6 +64,7 @@
                         <number-input v-model="form.max_num" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" placeholder="不限" class="rendering-area" @blur="handle_min_max_blur('max_num')"></number-input>
                     </div>
                 </template>
+                <desensitization v-model:value="form.desensitization_value" v-model:show="form.is_desensitization"></desensitization>
             </div>
         </el-form-item>
         <border-config :value="form.common_config" />

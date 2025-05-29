@@ -20,6 +20,8 @@ interface DefaultInput {
     is_limit_num: string;
     max_num: string;
     min_num: string;
+    is_desensitization: string,
+    desensitization_value: string[],
     is_multicolour: string;
     show_hidden_list: show_hidden[];
     format: string;
@@ -41,6 +43,8 @@ const defaultInput: DefaultInput = {
     is_limit_num: '0',
     max_num: '',
     min_num: '',
+    is_desensitization: '0',
+    desensitization_value: [],
     is_multicolour: '0',
     format: 'none',
     arrangement: 'horizontal',

@@ -76,3 +76,15 @@ export const font_weight = [
     { name: '加粗', value: 'bold' },
     { name: '正常', value: '400' },
 ];
+
+export const desensitization_options = [
+    { value: 'all', name: '全脱敏', desc: '脱敏全部内容' },
+    { value: 'name', name: '姓名', desc: '显示前 1 个字，后 1 个字' },
+    { value: 'email', name: '邮箱', desc: '显示前 3 位，@和之后的字' },
+    { value: 'phone', name: '手机号', desc: '显示前 3 位，后 4 位' },
+    { value: 'money', name: '金额', desc: '脱敏全部内容，统一 5 位数' },
+    { value: 'id', name: '身份证件', desc: '显示后 4 位' },
+    { value: 'address', name: '住址', desc: '显示前 4 个字，后 4 个字' },
+    { value: 'IP_address', name: 'IP地址', desc: '显示第 1 段 IP' },
+    { value: 'car_number', name: '车牌号', desc: '显示前 1 个字，后 2 位' },
+]

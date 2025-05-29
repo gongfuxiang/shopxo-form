@@ -47,6 +47,7 @@
                             <number-input v-model="form.max_num" class="rendering-area" placeholder="不限" @blur="handle_min_max_blur('max_num')"></number-input>
                         </div>
                     </template>
+                    <desensitization v-model:value="form.desensitization_value" v-model:show="form.is_desensitization"></desensitization>
                 </template>
             </div>
         </el-form-item>
@@ -114,6 +115,9 @@ const dropdown_click = (val: string) => {
     form.value.type = val;
     // 切换内容的时候默认值清空
     form.value.form_value = '';
+    // 切换内容的时候清空校验类型
+    form.value.is_desensitization = '0';
+    form.value.desensitization_value = [];
 }
 //#endregion
 // 判断配置项是否有误
