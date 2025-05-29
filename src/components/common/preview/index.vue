@@ -6,16 +6,22 @@
                 <el-radio-button value="mobile"><icon name="phone" size="14"></icon></el-radio-button>
             </el-radio-group>
         </template>
-        <div class="flex-row h w bg-f8 pt-30">
-            <div v-if="type_value == 'computer'" class="dialog-main"> 
-                <div class="main-content pa-16" :style="{ height: (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 7.6rem)' : '100%'}">
-                    <div v-for="(item) in diy_data" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
-                        <component-show :value="item"></component-show>
+        <div class="flex-row h w bg-f8">
+            <div v-if="type_value == 'computer'" class="flex-1 dialog-main"> 
+                <!-- 表单数据 -->
+                <div class="main-overflow" :style="{ height: (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 7.6rem)' : '100%'}">
+                    <div class="main-content pa-16">
+                        <div v-for="(item) in diy_data" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
+                            <component-show :value="item"></component-show>
+                        </div>
                     </div>
                 </div>
-                <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer flex-row align-c jc-e gap-20 right-0">
-                    <el-button v-if="form_config.is_show_save_draft == '1'" plain @click="save_draft">{{ form_config.submit_title }}</el-button>
-                    <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color" @click="submit"><span style="color:#fff;">{{ form_config.save_draft_title }}</span></el-button>
+                <!-- 底部数据 -->
+                <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
+                    <div class="main-footer flex-row align-c jc-e gap-20 right-0">
+                        <el-button v-if="form_config.is_show_save_draft == '1'" plain @click="save_draft">{{ form_config.submit_title }}</el-button>
+                        <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color" @click="submit"><span style="color:#fff;">{{ form_config.save_draft_title }}</span></el-button>
+                    </div>
                 </div>
            </div>
         </div>

@@ -12,10 +12,10 @@
                     </template>
                 </div>
                 <!-- 内容信息 -->
-                <div class="w h pt-30">
-                    <div v-if="type_value == 'computer'" class="dialog-main re z-i">
-                        <!-- 头部数据 -->
-                        <div class="main-content" :style="{ height: (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 7.6rem)' : '100%'}">
+                <div v-if="type_value == 'computer'" class="dialog-main re z-i">
+                    <!-- 头部数据 -->
+                    <div class="main-overflow" :style="{ height: (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 7.6rem)' : '100%'}">
+                        <div class="main-content">
                             <div v-if="configType !== 'layout'" class="dialog-main-header">
                                 <template v-if="config_value.heading_type == 'img' && config_value.heading_image > 0">
                                     <image-empty v-model="config_value.heading_image[0]" error-style="width:100%;height:3.2rem;"></image-empty>
@@ -31,8 +31,10 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- 底部数据 -->
-                        <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer flex-row align-c jc-e gap-20 right-0">
+                    </div>
+                    <!-- 底部数据 -->
+                    <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
+                        <div class="main-footer flex-row align-c jc-e gap-20 right-0">
                             <el-button v-if="form_config.is_show_save_draft == '1'" plain>{{ form_config.submit_title }}</el-button>
                             <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color"><span style="color:#fff;">{{ form_config.save_draft_title }}</span></el-button>
                         </div>
