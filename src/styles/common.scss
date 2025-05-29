@@ -340,6 +340,10 @@
         border: none;
         padding: 0;
     }
+    .content {
+        width: 100%;
+        pointer-events: none;
+    }
 }
 
 .required-error {
@@ -430,4 +434,28 @@
     color: #999;
     white-space: nowrap;
     text-align: right;
+}
+
+.dialog-main {
+    width: 100rem;
+    background: #fff;
+    margin: 0 auto;
+    overflow: hidden;
+    height: calc(100% - 7rem);
+    border-radius: 1.2rem;
+    .main-content {
+        width: 100%;
+        height: calc(100% - 7.6rem);
+        overflow: auto;
+    }
+    .main-footer {
+        border-top: 1px solid #f5f5f5;
+        padding: 2.2rem 2rem;
+    }
+    .component-style {
+        padding: 1.8rem 2rem;
+        .rendering-area .content {
+            pointer-events: auto;
+        }
+    }
 }

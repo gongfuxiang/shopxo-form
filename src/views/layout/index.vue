@@ -1,6 +1,6 @@
 <template>
     <div class="layout">
-        <navbar v-model="form.model" @form-config="form_config_event" />
+        <navbar v-model="form.model" @form-config="form_config_event" @preview="preview_event" />
         <div class="content flex-1 flex-row">
             <div v-if="form.overall_config.type_value == 'default'" class="flex-1">
                 <mains :diy-data="form.diy_data" @update-setting="update_setting"></mains>
@@ -8,7 +8,8 @@
             <view v-else class="flex-1">
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
-            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" @type="form.overall_config.type_value = $event"></settings>
+            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event"></settings>
+            <preview v-model:visible="previewVisible" :value="form.diy_data"></preview>
         </div>
     </div>
 </template>
@@ -64,7 +65,11 @@ const form = ref<diy_data_item>({
     },
     diy_data: [],
 });
+// 公共配置信息
 common_store.set_form_layout(form.value.overall_config.layout_settings);
+common_store.set_config(form.value.overall_config);
+common_store.set_model_config(form.value.model);
+
 const diy_data_item = ref({});
 const key = ref('');
 
@@ -119,12 +124,13 @@ const default_merge = (data: any, key: string) => {
 const is_show_form_model = ref(false);
 // 表单配置 事件
 const form_config_event = () => {
-    // 点击表单配置的时候清空选中效果
-    form.value.diy_data.forEach((item) => {
-        item.show_tabs = '0';
-    });
     is_show_form_model.value = !is_show_form_model.value;
 };
+// 预览信息
+const previewVisible = ref(false);
+const preview_event = () => {
+    previewVisible.value = true;
+}
 </script>
 
 <style scoped lang="scss">
@@ -140,5 +146,35 @@ const form_config_event = () => {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+:deep(.el-dialog.layout-dialog) {
+    margin-top: 0;
+    padding: 0;
+    overflow: hidden;
+    top: 7rem;
+    width: 100%;
+    height: calc(100% - 7rem);
+    .el-dialog__header {
+        padding: 2.3rem 2rem;
+        text-align: center;
+        .el-dialog__title {
+            font-size: 16px;
+        }
+        .el-dialog__headerbtn {
+            font-size: 2.4rem;
+            padding: 2rem;
+            height: auto;
+            width: auto;
+        }
+    }
+    .el-dialog__body {
+        background: #f5f5f5;
+        height: 100%;
+    }
+}
+:deep(.el-dialog.layout-dialog.form-dialog) {
+    .el-dialog__header {
+        padding: 1.3rem 2rem;
+    }
 }
 </style>

@@ -33,6 +33,7 @@ const change = (value: any) => {
 const style_container = computed(() => common_styles_computer(form.value.common_config));
 </script>
 <style lang="scss" scoped>
+
 .pc-disable {
     cursor: all-scroll;
     background: rgba(5, 30, 80, 0.04);

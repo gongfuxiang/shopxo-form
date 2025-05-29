@@ -34,10 +34,21 @@ export const commonStore = defineStore('common', () => {
             site_name: '',
         } as any, // 基础数据配置参数
     });
+    const form_config = ref<any>({});
     const form_layout = ref({});
+    type model = {
+        [key: string]: string;
+    }
+    const form_model_config = ref<model>({});
     const set_form_layout = (data: any) => {
         form_layout.value = data;
     };
+    const set_config = (data: any) => {
+        form_config.value = data;
+    };
+    const set_model_config = (data: any) => {
+        form_model_config.value = data;
+    }
     // 存储链接数据
     const set_common = (data: any) => {
         common.value = data;
@@ -87,12 +98,16 @@ export const commonStore = defineStore('common', () => {
         help_icon_size,
         color_style,
         address_list,
+        form_config,
+        form_model_config,
         set_common,
         set_is_common_api,
         set_is_immersion_model,
         set_is_have_tabs,
         set_header_height,
         set_form_layout,
+        set_model_config,
         get_address,
+        set_config,
     };
 });

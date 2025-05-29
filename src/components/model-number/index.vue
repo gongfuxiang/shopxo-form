@@ -28,9 +28,6 @@ const data_check = () => {
 const style_container = computed(() => common_styles_computer(form.value.common_config));
 </script>
 <style lang="scss" scoped>
-.content {
-    pointer-events: none;
-}
 .select-tag {
     color: #a8abb2;
 }

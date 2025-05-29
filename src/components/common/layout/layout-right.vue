@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex-col gap-10 w h">
+        <div v-if="form.flex_direction == 'row'" class="flex-col gap-10 w h">
             <div class="new_title">字段标题样式</div>
             <div class="flex-row gap-10 align-c form-title mb-10">
                 宽度

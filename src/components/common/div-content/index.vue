@@ -15,78 +15,7 @@
         </div>
         <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
             <div class="main-content">
-                <!-- 单行文本 | 下拉框 | 单选按钮组-->
-                <template v-if="['single-text', 'select', 'radio-btns'].includes(item.key)">
-                    <model-input :value="item.com_data"></model-input>
-                </template>
-                <!-- 多行文本 -->
-                <template v-if="item.key == 'multi-text'">
-                    <model-multi-text :value="item.com_data"></model-multi-text>
-                </template>
-                <!-- 数字 -->
-                <template v-if="item.key == 'number'">
-                    <model-number :value="item.com_data"></model-number>
-                </template>
-                <!-- 日期时间 -->
-                <template v-if="item.key == 'date'">
-                    <model-date :value="item.com_data"></model-date>
-                </template>
-                <!-- 日期时间 -->
-                <template v-if="item.key == 'date-group'">
-                    <model-date-group :value="item.com_data"></model-date-group>
-                </template>
-                <!-- 多选按钮组 ｜ 下拉复选框 -->
-                <template v-if="['checkbox', 'select-multi'].includes(item.key)">
-                    <model-checkbox :value="item.com_data"></model-checkbox>
-                </template>
-                <!-- 定位 -->
-                <template v-if="item.key == 'position'">
-                    <model-position :value="item.com_data"></model-position>
-                </template>
-                <!-- 富文本 -->
-                <template v-if="item.key == 'rich-text'">
-                    <model-rich-text :value="item.com_data"></model-rich-text>
-                </template>
-                <!-- 地址 -->
-                <template v-if="item.key == 'address'">
-                    <model-address :value="item.com_data"></model-address>
-                </template>
-                <!-- 手机 -->
-                <template v-if="item.key == 'phone'">
-                    <model-phone :value="item.com_data"></model-phone>
-                </template>
-                <!-- 密码 -->
-                <template v-if="item.key == 'pwd'">
-                    <model-pwd :value="item.com_data"></model-pwd>
-                </template>
-                <!-- 评分 -->
-                <template v-if="item.key == 'score'">
-                    <model-score :value="item.com_data"></model-score>
-                </template>
-                <!-- 辅助线 -->
-                <template v-if="item.key == 'auxiliary-line'">
-                    <model-auxiliary-line :value="item.com_data"></model-auxiliary-line>
-                </template>
-                <!-- 上传图片｜上传视频 ｜ 上传文件 -->
-                <template v-if="['upload-img', 'upload-video', 'upload-attachments'].includes(item.key)">
-                    <model-upload :value="item.com_data" :accept-type="item.key == 'upload-img' ? 'img' : item.key == 'upload-video' ? 'video' : 'file'"></model-upload>
-                </template>
-                <!-- 文本 -->
-                <template v-if="item.key == 'text'">
-                    <model-text :value="item.com_data"></model-text>
-                </template>
-                <!-- 图片 -->
-                <template v-if="item.key == 'img'">
-                    <model-img :value="item.com_data"></model-img>
-                </template>
-                <!-- 视频 -->
-                <template v-if="item.key == 'video'">
-                    <model-video :value="item.com_data"></model-video>
-                </template>
-                <!-- 文件 -->
-                <template v-if="item.key == 'attachments'">
-                    <model-attachments :value="item.com_data"></model-attachments>
-                </template>
+                <component-show :value="item"></component-show>
             </div>
         </div>
     </div>
@@ -139,7 +68,6 @@ const get_diy_index_data = (index: number) => {
         max-width: 100rem;
         background-color: #fff;
         margin: 0 auto;
-        padding-bottom: 4rem;
         .item {
             position: relative;
             cursor: all-scroll;

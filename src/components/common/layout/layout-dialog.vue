@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="title" :close-on-press-escape="false" :close-on-click-modal="true" :append-to-body="false" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" class="layout-dialog" :title="title" :close-on-press-escape="false" :close-on-click-modal="true" :append-to-body="false" :before-close="handleClose">
         <slot></slot>
     </el-dialog>
 </template>

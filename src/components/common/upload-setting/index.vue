@@ -1,10 +1,10 @@
 <template>
 	<div class="custom-upload-container">
 		<!-- 文件上传区域 -->
-		<el-upload v-model:file-list="success_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="flex-row align-c" :style="uploadStyle" :show-file-list="false" drag :on-change="upload_change" :limit="is_number(limit) ? Number(limit) : 500000" :on-exceed="handle_exceed">
-			<div class="el-upload__text pl-12" :style="common_store.frame_size"><span style="color: #2A94FF;">请选择</span>（拖拽或单击后选择{{ props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件' }}<template v-if="is_number(fileSizeLimit)">，单个{{ fileSizeLimit }}Mb以内</template>）</div>
+		<el-upload v-model:file-list="success_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="flex-row align-c jc-c" :style="uploadStyle" :show-file-list="false" drag :on-change="upload_change" :limit="is_number(limit) ? Number(limit) : 500000" :on-exceed="handle_exceed">
+			<div class="el-upload__text text-line-1" :style="common_store.frame_size"><span style="color: #2A94FF;">请选择</span>（拖拽或单击后选择{{ props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件' }}<template v-if="is_number(fileSizeLimit)">，单个{{ fileSizeLimit }}Mb以内</template>）</div>
 		</el-upload>
-		<div class="w h mt-14 flex-row align-c flex-wrap gap-10" :style="common_store.frame_style + 'height: 100%;'">
+		<div v-if="success_list.length > 0" class="w h mt-14 flex-row align-c flex-wrap gap-10" :style="common_store.frame_style + 'height: 100%;'">
 			<div v-for="(item, index) in success_list" :key="index">
 				<template v-if="acceptType == 'file'">
 					<div v-if="item.raw" class="upload-file-style flex-row align-c gap-10 re" @click="preview_event(file_to_base64(item.raw), item.raw.name)"> 

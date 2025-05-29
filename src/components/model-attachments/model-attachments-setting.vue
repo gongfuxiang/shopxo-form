@@ -10,7 +10,6 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">文件上传</div>
-                {{ form.file }}
                 <upload v-model="form.file" :limit="1" type="file" @update:model-value="operation_end"></upload>
             </div>
         </el-form-item>

@@ -121,7 +121,7 @@
                 </div>
             </div>
         </el-scrollbar>
-        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" @handle-close="handleClose"></layout-index>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" :diy-data="props.diyData" @handle-close="handleClose"></layout-index>
     </div>
 </template>
 
@@ -136,7 +136,11 @@ const props = defineProps({
     isShowFormModel: {
         type: Boolean,
         default: false,
-    }
+    },
+    diyData: {
+        type: Array as PropType<any[]>,
+        default: () => [],
+    },
 });
 const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });
@@ -193,31 +197,6 @@ const handleClose = () => {
     }
     :deep(.el-input-number) {
         width: 100%;
-    }
-}
-:deep(.el-dialog) {
-    margin-top: 0;
-    padding: 0;
-    overflow: hidden;
-    top: 7rem;
-    width: 100%;
-    height: calc(100% - 7rem);
-    .el-dialog__header {
-        padding: 2.3rem 2rem;
-        text-align: center;
-        .el-dialog__title {
-            font-size: 16px;
-        }
-        .el-dialog__headerbtn {
-            font-size: 2.4rem;
-            padding: 2rem;
-            height: auto;
-            width: auto;
-        }
-    }
-    .el-dialog__body {
-        background: #f5f5f5;
-        height: 100%;
     }
 }
 </style>

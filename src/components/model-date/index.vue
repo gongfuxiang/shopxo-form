@@ -67,9 +67,6 @@ const custom_icon_click = () => {
 //#endregion
 </script>
 <style lang="scss" scoped>
-.content {
-    pointer-events: none;
-}
 :deep(.model-date) {
     width: 100% !important;
     .el-input__prefix {

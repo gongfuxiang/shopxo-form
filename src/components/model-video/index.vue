@@ -4,13 +4,16 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="re oh" :style="video_style">
-                    <template v-if="!isEmpty(form.video) && isEmpty(form.video_img)">
-                        <video :src="form.video[0].url" class="w h"></video>
+                    <video v-show="is_video_play" ref="videoPlayer" :src="form.video[0]?.url || ''" controls class="w h"></video>
+                    <template v-if="!is_video_play">
+                        <template v-if="(!isEmpty(form.video) && isEmpty(form.video_img))">
+                            <video :src="form.video[0].url" controls class="w h"></video>
+                        </template>
+                        <template v-else>
+                            <image-empty v-model="form.video_img[0]" error-img-style="width:60px;height:60px;"></image-empty>
+                        </template>
+                        <img :src="video_src" class="middle box-shadow-sm round" width="60" height="60" @click="video_change" />
                     </template>
-                    <template v-else>
-                        <image-empty v-model="form.video_img[0]" error-img-style="width:60px;height:60px;"></image-empty>
-                    </template>
-                    <img :src="video_src" class="middle box-shadow-sm round" width="60" height="60" />
                 </div>
             </div>
         </div>
@@ -37,6 +40,15 @@ const video_style = computed(() => {
         height: `${ height }px`,
     };
 });
+const videoPlayer = ref<HTMLVideoElement | null>(null);
+const is_video_play = ref(false);
+const video_change = () => { 
+    const videoEl = videoPlayer.value;
+    if (videoEl) {
+        is_video_play.value = true;
+        videoEl.play();
+    }
+};
 </script>
 <style lang="scss" scoped>
 .rich-text-content {

@@ -268,7 +268,6 @@ const set_show_tabs = (index: number) => {
             max-width: 100rem;
             background-color: #fff;
             margin: 0 auto;
-            padding-bottom: 4rem;
             .item {
                 position: relative;
                 padding: 1.8rem 2rem;

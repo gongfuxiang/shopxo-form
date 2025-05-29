@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44464565",
+      "name": "电脑",
+      "font_class": "computer",
+      "unicode": "e7c5",
+      "unicode_decimal": 59333
+    },
+    {
       "icon_id": "44407285",
       "name": "解锁",
       "font_class": "lock",

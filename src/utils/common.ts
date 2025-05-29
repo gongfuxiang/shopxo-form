@@ -52,7 +52,7 @@ export const style_settings = {
         is_show_heading_title: '0',
         heading_title_location: "left",
         heading_title_size: 14,
-        heading_title_font_weight: 'normal',
+        heading_title_font_weight: '400',
         heading_title_color: '#000000',
         submit_color: '#2A94FF',
     },
@@ -66,7 +66,7 @@ export const style_settings = {
         is_show_heading_title: '0',
         heading_title_location: "left",
         heading_title_size: 14,
-        heading_title_font_weight: 'normal',
+        heading_title_font_weight: '400',
         heading_title_color: '#000000',
         submit_color: '#2A94FF',
     }

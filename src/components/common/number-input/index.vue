@@ -1,11 +1,13 @@
 <template>
     <div ref="el" :class="`rendering-area percent-input-wrapper ${ is_focus ? 'focus-input' : 'blur-input'}`" @click="percent_input_click">
-        <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
-            <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
-        </el-input>
-        <template v-if="isPercentage">
-            <div>%</div>
-        </template>
+        <div class="percent-input">
+            <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
+                <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
+            </el-input>
+            <template v-if="isPercentage">
+                <div>%</div>
+            </template>
+        </div>
     </div>
 </template>
 
@@ -119,7 +121,7 @@ watchEffect(() => {
 </script>
 
 <style scoped lang="scss">
-.percent-input-wrapper {
+.percent-input {
     width: 100%;
     display: flex;
     flex-direction: row;
