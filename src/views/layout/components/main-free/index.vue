@@ -33,12 +33,7 @@
                                     <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
                                         <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
                                             <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1' }" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
-                                                <div :class="['main-content', { 'plug-in-border': item.show_tabs == '1' }]">
-                                                    <!-- 单行文本 -->
-                                                    <template v-if="item.key == 'single-text'">
-                                                        <model-input :value="item.com_data"></model-input>
-                                                    </template>
-                                                </div>
+                                                <div-content custom-class="w h" :diy-data="diy_data" @on_choose="on_choose" @del="on_del" @copy="on_copy"></div-content>
                                             </Vue3DraggableResizable>
                                         </DraggableContainer>
                                         <div ref="areaRef" class="area" :style="init_drag_style"></div>
@@ -67,7 +62,7 @@
 <script setup lang="ts">
 import { SortableEvent, VueDraggable } from 'vue-draggable-plus';
 import { get_math } from '@/utils';
-import { cloneDeep, isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, keyBy } from 'lodash';
 import defaultSettings from '../../index';
 const app = getCurrentInstance();
 const props = defineProps({
@@ -149,17 +144,6 @@ const url_computer = (name: string) => {
     return new_url;
 };
 
-// 复制
-const clone_item_data = (item: commonComponentData) => {
-    return {
-        name: item.name,
-        id: get_math(),
-        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
-        key: item.key,
-        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
-    };
-};
-
 //#region 组件边线相关
 const is_show_component_line = ref(false);
 const show_computer_line = () => {
@@ -187,10 +171,14 @@ let draggedItem = ref<any>({});
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
     const new_item = {
-        ...item,
+        name: item.name,
+        key: item.key,
+        mark_name: '',
         id: get_math(),
         location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
         show_tabs: '1',
+        is_enable: '1',
+        is_hot: '0',
         com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
     diy_data.value.push(new_item);
@@ -201,10 +189,14 @@ const draggable_click = (item: componentsData) => {
 const dragStart = (item: any, event: any) => {
     // 初始化拖拽的数据
     draggedItem.value = {
-        show_tabs: '1',
-        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
-        id: get_math(),
+        name: item.name,
         key: item.key,
+        id: get_math(),
+        mark_name: '',
+        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
+        show_tabs: '1',
+        is_enable: '1',
+        is_hot: '0',
         com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
     // 拖拽的时候清空热区

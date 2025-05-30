@@ -10,6 +10,21 @@
                             <el-radio value="free">自由模式</el-radio>
                         </el-radio-group>
                     </div>
+                    <template v-if="form.type_value === 'free'">
+                        <div class="flex-col gap-10 w h">
+                            <div class="new_title">表单尺寸</div>
+                            <div class="flex-row jc-sb align-c gap-10">
+                                <el-radio-group v-model="form.input_width_type" class="radio_form_size w h" is-button>
+                                    <el-radio-button value="A3">A3</el-radio-button>
+                                    <el-radio-button value="A4">A4</el-radio-button>
+                                    <el-radio-button value="A5">A5</el-radio-button>
+                                    <el-radio-button value="B3">B3</el-radio-button>
+                                    <el-radio-button value="B4">B4</el-radio-button>
+                                    <el-radio-button value="B5">B5</el-radio-button>
+                                </el-radio-group>
+                            </div>
+                        </div>
+                    </template>
                     <div class="flex-col gap-10 w h">
                         <div class="new_title">布局设置</div>
                         <div class="flex-row jc-sb align-c gap-10 layout-style">
@@ -141,10 +156,10 @@ const props = defineProps({
 const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });
 
-const emits = defineEmits(['type']);
+const emits = defineEmits(['type_change']);
 // 切换模式
-const type_change = (val: any) => {
-    emits('type', val);
+const type_change = () => {
+    emits('type_change');
 };
 // 打开弹出框
 const dialog_visible = ref(false);
@@ -193,6 +208,18 @@ const handleClose = () => {
     }
     :deep(.el-input-number) {
         width: 100%;
+    }
+}
+.radio_form_size {
+    :deep(.el-radio-button__inner) {
+        padding: 0.9rem 1.2rem;
+    }
+    :deep(.el-radio-button.is-active) {
+        .el-radio-button__inner {
+            background: #fff;
+            border-color: $cr-main;
+            color: $cr-main;
+        }
     }
 }
 </style>

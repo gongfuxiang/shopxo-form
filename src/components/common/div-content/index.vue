@@ -21,13 +21,13 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { isEmpty } from 'lodash';
-
 interface Props {
     diyData: any[];
+    customClass?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
     diyData: () => [],
+    customClass: '',
 });
 const diy_data = ref(props.diyData);
 watch(() => props.diyData, (val) => {

@@ -8,7 +8,7 @@
             <view v-else class="flex-1">
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
-            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event"></settings>
+            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
             <preview v-model:visible="previewVisible" :value="form.diy_data"></preview>
         </div>
     </div>
@@ -130,6 +130,10 @@ const form_config_event = () => {
 const previewVisible = ref(false);
 const preview_event = () => {
     previewVisible.value = true;
+}
+// 模式切换的时候清空缓存数据
+const type_change = () => {
+    form.value.diy_data = [];
 }
 </script>
 
