@@ -702,13 +702,8 @@ const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
                 .model-wall {
                     width: 100%;
                     height: 100%;
-                    background-image: linear-gradient(45deg, #e5e5e5 25%, transparent 25%), linear-gradient(135deg, #e5e5e5 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5e5e5 75%), linear-gradient(135deg, transparent 75%, #e5e5e5 75%);
-                    background-size: 32px 32px;
-                    background-position:
-                        0 0,
-                        16px 0,
-                        16px -16px,
-                        0 16px;
+                    background-image: linear-gradient(to right, transparent 90%, #eee 10%), linear-gradient(to bottom, transparent 90%, #eee 10%);
+                    background-size: 10px 10px; /* 控制网格线的大小 */
                     margin: 0 auto;
                     .drag-area {
                         height: 100%;

@@ -22,6 +22,10 @@
                                     <el-radio-button value="B4">B4</el-radio-button>
                                     <el-radio-button value="B5">B5</el-radio-button>
                                 </el-radio-group>
+                                <div class="flex-row gap-10 align-c">
+                                    <input-number v-model:model-value="form.width"></input-number>~<input-number v-model:model-value="form.height"></input-number>
+                                    <el-button type="primary" @click="submit">确定</el-button>
+                                </div>
                             </div>
                         </div>
                     </template>
@@ -183,6 +187,17 @@ const handleClose = () => {
             form.value.is_style_settings = '1';
         }
     }
+};
+const option_list = [
+    { name: 'A3', width: 297, height: 420 },
+    { name: 'A4', width: 210, height: 297 },
+    { name: 'A5', width: 148, height: 210 },
+    { name: 'B3', width: 353, height: 500 },
+    { name: 'B4', width: 250, height: 353 },
+    { name: 'B5', width: 176, height: 250 },
+];
+const submit = () => { 
+
 };
 </script>
 
