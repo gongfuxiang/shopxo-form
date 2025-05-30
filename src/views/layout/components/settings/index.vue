@@ -13,7 +13,7 @@
                     <template v-if="form.type_value === 'free'">
                         <div class="flex-col gap-10 w h">
                             <div class="new_title">表单尺寸</div>
-                            <div class="flex-row jc-sb align-c gap-10">
+                            <div class="flex-col jc-c gap-10">
                                 <el-radio-group v-model="form.input_width_type" class="radio_form_size w h" is-button>
                                     <el-radio-button value="A3">A3</el-radio-button>
                                     <el-radio-button value="A4">A4</el-radio-button>
