@@ -139,9 +139,12 @@ const show_model_border = ref(true);
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
     const new_item = {
-        ...item,
+        name: item.name,
         id: get_math(),
+        mark_name: '',
         show_tabs: '1',
+        is_enable: '1',
+        key: item.key,
         com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
     diy_data.value.push(new_item);

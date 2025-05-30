@@ -121,7 +121,7 @@
                 </div>
             </div>
         </el-scrollbar>
-        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" :diy-data="props.diyData" @handle-close="handleClose"></layout-index>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" @handle-close="handleClose"></layout-index>
     </div>
 </template>
 
@@ -136,11 +136,7 @@ const props = defineProps({
     isShowFormModel: {
         type: Boolean,
         default: false,
-    },
-    diyData: {
-        type: Array as PropType<any[]>,
-        default: () => [],
-    },
+    }
 });
 const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });

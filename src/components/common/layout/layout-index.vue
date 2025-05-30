@@ -67,17 +67,14 @@ const props = defineProps({
     value: {
         type: Object,
         default: () => { },
-    },
-    diyData: {
-        type: Array as PropType<any[]>,
-        default: () => [],
     }
 });
+// 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
+const diy_data: any = toRef(inject('diy_data', []));
 // 公共配置信息
 const form_config = computed(() => common_store.form_config);
 // 配置信息，区分是手机端数据还是电脑端数据
 const config_value = computed(() => type_value.value == 'computer' ? form.value.computer : form.value.mobile);
-const diy_data = ref(props.diyData);
 const form = ref(props.value);
 watch(() => props.value, () => {
     form.value = props.value;

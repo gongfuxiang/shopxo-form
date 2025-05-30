@@ -24,8 +24,8 @@
                         <el-input v-model="input_value3" class="search-select-input" placeholder="搜索" :prefix-icon="Search" size="large" />
                     </template>
                     <el-checkbox-group :model-value="form_item.is_show">
-                        <el-option v-for="item in diy_data.filter((item1: any) => item1.name.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.name">
-                            <el-checkbox :value="item.id" :label="item.name">{{ item.name }}</el-checkbox>
+                        <el-option v-for="item in diy_data.filter((item1: any) => item1.com_data.title.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.com_data.title">
+                            <el-checkbox :value="item.id" :label="item.com_data.title">{{ item.com_data.title }}</el-checkbox>
                         </el-option>
                     </el-checkbox-group>
                 </el-select>
@@ -76,7 +76,7 @@ const input_value3 = ref('');
 const dialogVisible = defineModel('visible', { type: Boolean, default: false });
 watchEffect(() => {
     if (dialogVisible.value) {
-        if (form.value.length === 0) {
+        if (props.showList.length === 0) {
             form.value = [{ value:'', is_show:[] }];
         } else {
             form.value = cloneDeep(props.showList);
@@ -106,10 +106,52 @@ const cancel = () => {
     dialogVisible.value = false;
 };
 const emit = defineEmits(['submit']);
+type hiddenData = {
+    id: string;
+    list: string[];
+};
 const submit = () => {
-    data_handle();
-    emit('submit', form.value);
-    dialogVisible.value = false;
+    // 取出所有设置显隐规则的组件
+    const list = diy_data.value.filter((item: any) => item.id !== props.modelId && ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    // 取出其他的显隐规则逻辑
+    let old_hidden_list: hiddenData[] = [];
+    if (list.length > 0) {
+        list.forEach((item: any) => {
+            const show_list = item.com_data.show_hidden_list.reduce((acc: string[], current: { is_show: string[] }) => {
+                return acc.concat(current.is_show);
+            }, []);
+            old_hidden_list.push({ id: item.id, list: show_list });
+        });
+    }
+    // 取出新的显隐规则逻辑处理数组
+    const new_hidden_list = form.value.reduce((acc: string[], current: { is_show: string[] }) => {
+        return acc.concat(current.is_show);
+    }, []);
+    // 遍历新的显隐规则逻辑判断历史的是否有选中当前这个组件的
+    // 提前构建 id 到 list 的映射，提高查找效率
+    const oldHiddenMap = new Map<string, hiddenData[]>();
+    old_hidden_list.forEach((item: { id: string } & hiddenData) => {
+        if (!oldHiddenMap.has(item.id)) {
+            oldHiddenMap.set(item.id, []);
+        }
+        oldHiddenMap.get(item.id)!.push(item);
+    });
+    // 判断是否有逻辑闭环的选择
+    const matchedItem = new_hidden_list.findIndex((itemId: string) => {
+        const list = oldHiddenMap.get(itemId);
+        if (!list) return false;
+        return list.some((subItem: hiddenData) => {
+            return subItem.list.includes(props.modelId);
+        });
+    });
+    // 逻辑闭环时不可添加
+    if (matchedItem !== -1) {
+        ElMessage.error('字段显隐规则设计成环');
+    } else {
+        data_handle();
+        emit('submit', form.value);
+        dialogVisible.value = false;
+    }
 }
 //#endregion
 </script>

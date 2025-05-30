@@ -17,8 +17,8 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="flex-1" :style="common_store.frame_style + style_container" @change="data_check">
-                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" class="flex-row align-c select-option" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
+                        <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="common_store.frame_style + style_container" @change="select_change">
+                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'select-bg': form.form_value.includes(item.value) && form.multicolour == '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
                                     <div class="select-tag" :style="common_styles">{{ form.placeholder }}</div>
@@ -73,13 +73,15 @@ const selectRef = ref<InstanceType<typeof ElSelect> | null>(null);
 // 单选选择框为了兼容颜色设置，清空老数据并赋值新数据
 const select_click = (val: any) => {
     if (!form.value.form_value.includes(val)) {
-        form.value.form_value = [];
-        form.value.form_value.push(val);
+        form.value.form_value = val;
     }
     // 点击之后关闭下拉框的弹出框
     if (selectRef.value) {
         selectRef.value.blur();
     }
+}
+const select_change = (val: any) => {
+    form.value.form_value = Array.isArray(val) ? val[0] : val;
 }
 </script>
 <style lang="scss" scoped>
@@ -93,5 +95,8 @@ const select_click = (val: any) => {
 }
 .select-option {
     cursor: pointer !important;
+}
+.select-bg {
+    background-color: #E6F8F5;
 }
 </style>
