@@ -18,7 +18,7 @@
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
                         <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="common_store.frame_style + style_container" @change="select_change">
-                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'select-bg': form.form_value.includes(item.value) && form.multicolour == '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
+                            <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form.form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form.form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
                                     <div class="select-tag" :style="common_styles">{{ form.placeholder }}</div>
@@ -96,7 +96,10 @@ const select_change = (val: any) => {
 .select-option {
     cursor: pointer !important;
 }
-.select-bg {
+.selected-bg {
     background-color: #E6F8F5;
+}
+.selected-color {
+    color: $cr-main;
 }
 </style>
