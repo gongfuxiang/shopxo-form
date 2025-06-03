@@ -23,84 +23,70 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <el-scrollbar>
-                <div class="pa-30">
-                    <div class="drag-content flex-row">
-                        <!-- 拖拽区 -->
-                        <div class="model-drag re">
-                            <div class="coordinate flex-col re">
-                                <div class="flex-row gap-9 align-e pl-20">
-                                    <template v-for="(item, index) in horizontalTicks" :key="index">
-                                        <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
-                                            <template v-if="index > 0">
-                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index * 10 }}</div>
-                                            </template>
-                                            <template v-else>
-                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
-                                            </template>
+            <div class="drag-content h flex-row">
+                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"></right-side-operation>
+                <!-- 拖拽区 -->
+                <div class="model-content">
+                    <div class="model-drag re">
+                        <div class="coordinate flex-col re">
+                            <div class="flex-row gap-9 align-e pl-20">
+                                <template v-for="(item, index) in horizontalTicks" :key="index">
+                                    <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
+                                        <template v-if="index > 0">
+                                            <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index * 10 }}</div>
+                                        </template>
+                                        <template v-else>
+                                            <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </div>
+                            <div class="horizontal_all_line"></div>
+                        </div>
+                        <div class="coordinate flex-row">
+                            <div class="h flex-row">
+                                <div class="flex-col gap-9 align-e pt-9">
+                                    <template v-for="(item, index) in verticalTicks" :key="index">
+                                        <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
+                                            <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index * 10 }}</div>
                                         </div>
                                     </template>
                                 </div>
-                                <div class="horizontal_all_line"></div>
+                                <div class="vertical_all_line"></div>
                             </div>
-                            <div class="coordinate flex-row">
-                                <div class="h flex-row">
-                                    <div class="flex-col gap-9 align-e pt-9">
-                                        <template v-for="(item, index) in verticalTicks" :key="index">
-                                            <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
-                                                <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index * 10 }}</div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                    <div class="vertical_all_line"></div>
-                                </div>
-                                <div class="model-wall">
-                                    <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
-                                        <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
-                                            <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
-                                                <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
-                                                    <div v-if="item.is_enable == '1'" :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
-                                                        <div v-if="item.show_tabs == '1'" class="oprate">
-                                                            <div class="icon" @click.stop="set_enable(index)">
-                                                                <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
-                                                            </div>
-                                                            <span class="divider"></span>
-                                                            <div class="icon" @click="on_del(index)">
-                                                                <icon name="del" size="10"></icon>
-                                                            </div>
-                                                            <span class="divider"></span>
-                                                            <div class="icon" @click="on_copy(index, item)">
-                                                                <icon name="copy" size="10"></icon>
-                                                            </div>
-                                                        </div>
-                                                        <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
-                                                            <div class="main-content">
-                                                                <component-show :value="item" :is-custom="true"></component-show>
-                                                            </div>
+                            <div class="model-wall">
+                                <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
+                                    <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
+                                        <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
+                                            <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
+                                                <div :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
+                                                    <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+                                                        <div class="main-content">
+                                                            <component-show :value="item" :is-custom="true"></component-show>
                                                         </div>
                                                     </div>
-                                                </Vue3DraggableResizable>
-                                            </DraggableContainer>
-                                            <div ref="areaRef" class="area" :style="init_drag_style"></div>
-                                        </div>
-                                        <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
-                                            <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
-                                            <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
-                                            <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
-                                            <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
-                                            <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
-                                            <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
-                                            <!-- 已完成 -->
-                                            <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
-                                            <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
-                                        </div>
+                                                </div>
+                                            </Vue3DraggableResizable>
+                                        </DraggableContainer>
+                                        <div ref="areaRef" class="area" :style="init_drag_style"></div>
+                                    </div>
+                                    <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
+                                        <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
+                                        <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
+                                        <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
+                                        <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
+                                        <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
+                                        <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
+                                        <!-- 已完成 -->
+                                        <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
+                                        <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </el-scrollbar>
+            </div>
         </div>
     </div>
 </template>
@@ -176,7 +162,7 @@ const components = ref<componentsData[]>([
             { name: '图片', key: 'img', data: [] },
             { name: '视频', key: 'video', data: [] },
             { name: '文件', key: 'attachments', data: [] },
-            { name: '矩形', key: 'rectangle', com_data: [] },
+            { name: '矩形', key: 'rect', com_data: [] },
             { name: '圆形', key: 'round', com_data: [] },
         ],
     },
@@ -623,6 +609,7 @@ const on_del = (index: number) => {
         const show_tabs_index = diy_data.value.findIndex((item: any) => item.show_tabs == '1');
         // 删除的是当前的这个数据
         if (show_tabs_index == index) {
+            // 调用删除接口，然后，更新数据
             diy_data.value.splice(index, 1);
             if (diy_data.value.length > 0) {
                 let new_index: number = index;
@@ -631,18 +618,31 @@ const on_del = (index: number) => {
                     new_index = new_index - 1;
                 }
                 set_show_tabs(new_index);
+            } else {
+                emits('update-setting', {}, diy_data.value, true);
             }
         } else {
             diy_data.value.splice(index, 1);
         }
+        select_index.value = diy_data.value.length > 0 ? select_index.value : null;
     });
 };
 // 复制
-const on_copy = (index: number, item: any) => {
-    const new_item = cloneDeep(item);
-    new_item.id = get_math();
-    new_item.show_tabs = '0';
-    diy_data.value.splice(index + 1, 0, new_item);
+const on_copy = (index: number) => {
+    if (typeof index === 'number' && !isNaN(index)) {
+        const data = cloneDeep(get_diy_index_data(index));
+        // 计算存在多少个相同的key
+        const list = diy_data.value.filter(item => item.key == data.key);
+        // 获取当前数据, 复制的时候id更换一下
+        const new_data = {
+            ...data,
+            // new_name: data.name + list.length, // 添加别名, 复制是在原有的基础上复制，所以必须要不需要判断是否存在历史的
+            id: get_math(),
+        };
+        // 在当前位置下插入数据
+        diy_data.value.splice(index, 0, new_data);
+        set_show_tabs(index + 1);
+    }
 };
 // 设置当前选中的是那个
 const set_show_tabs = (index: number) => {
@@ -650,23 +650,11 @@ const set_show_tabs = (index: number) => {
         // 先将全部的设置为false,再将当前选中的设置为true
         item.show_tabs = '0';
         if (for_index == index) {
+            select_index.value = for_index;
             item.show_tabs = '1';
             emits('update-setting', diy_data.value[index], diy_data.value, true);
         }
     });
-};
-
-//组件置底
-const bottom_up = (index: number) => {
-    if (!isEmpty(diy_data.value[index])) {
-        const old_data = get_diy_index_data(index);
-        const old_length = diy_data.value.length - 1;
-        // 删除当前位置信息
-        diy_data.value.splice(index, 1);
-        // 将数据插入下一层数据中
-        diy_data.value.splice(old_length, 0, old_data);
-        set_show_tabs(old_length);
-    }
 };
 // 是否启用
 const set_enable = (index: number) => {
@@ -870,11 +858,17 @@ onUnmounted(() => {
     .drag-container {
         max-height: calc(100vh - 7rem);
         .drag-content {
-            min-height: 20rem;
-            max-width: 80rem;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
             overflow: hidden;
-            overflow-x: auto;
+            height: 100%;
+            .model-content {
+                max-width: 80rem;
+                margin: 0 auto;
+                padding: 2rem 0;
+                overflow: scroll;
+            }
             .model-drag {
                 width: v-bind(model_drag_width);
                 background-color: #fff;
@@ -979,5 +973,16 @@ onUnmounted(() => {
         left: -0.8rem;
     }
 }
-
+.plug-in-close::before {
+    position: absolute;
+    content: '\5DF2\9690\85CF';
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

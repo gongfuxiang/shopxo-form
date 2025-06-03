@@ -71,6 +71,10 @@
     <template v-if="form.key == 'attachments'">
         <model-attachments :value="form.com_data" :is-custom="isCustom"></model-attachments>
     </template>
+    <!-- 矩形 | 圆形 -->
+    <template v-if="['rect', 'round'].includes(form.key)">
+        <model-rect-or-round :value="form.com_data" :is-custom="isCustom"></model-rect-or-round>
+    </template>
 </template>
 
 <script lang="ts" setup>

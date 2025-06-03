@@ -119,15 +119,19 @@
                     </template>
                     <!-- 图片 -->
                     <template v-else-if="model_value.key == 'img'">
-                        <model-img-setting :value="model_value.com_data" :model-id="model_value.id"></model-img-setting>
+                        <model-img-setting :value="model_value.com_data" :model-id="model_value.id" :is-custom="isCustom"></model-img-setting>
                     </template>
                     <!-- 视频 -->
                     <template v-else-if="model_value.key == 'video'">
-                        <model-video-setting :value="model_value.com_data" :model-id="model_value.id"></model-video-setting>
+                        <model-video-setting :value="model_value.com_data" :model-id="model_value.id" :is-custom="isCustom"></model-video-setting>
                     </template>
                     <!-- 视频 -->
                     <template v-else-if="model_value.key == 'attachments'">
                         <model-attachments-setting :value="model_value.com_data" :model-id="model_value.id"></model-attachments-setting>
+                    </template>
+                    <!-- 矩形 | 圆形 -->
+                    <template v-else-if="['rect', 'round'].includes(model_value.key)">
+                        <model-rect-or-round-setting :value="model_value.com_data" :model-id="model_value.id"></model-rect-or-round-setting>
                     </template>
                     <template v-else>
                         <div class="pa-16 cr-6 mt-40 pt-40 tc">暂无设置</div>
@@ -150,6 +154,10 @@ const props = defineProps({
     isShowFormModel: {
         type: Boolean,
         default: false,
+    },
+    isCustom: {
+        type: Boolean,
+        default: false
     }
 });
 const form = ref(props.value);

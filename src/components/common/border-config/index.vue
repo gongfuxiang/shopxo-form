@@ -9,6 +9,7 @@
                 <el-radio-group v-model="form.border_type" @change="operation_end">
                     <el-radio value="dashed"><div class="border-style-item" style="border: 1px dashed #979797"></div></el-radio>
                     <el-radio value="solid"><div class="border-style-item" style="border: 1px solid #979797"></div></el-radio>
+                    <el-radio value="dotted"><div class="border-style-item" style="border: 1px dotted #979797"></div></el-radio>
                 </el-radio-group>
             </el-form-item>
             <el-form-item label="圆角">

@@ -20,7 +20,9 @@ import defaultVideo from '@/config/const/video';
 import defaultUploadImg from '@/config/const/upload-img';
 import defaultUploadVideo from '@/config/const/upload-video';
 import defaultUploadAttachments from '@/config/const/upload-attachments';
-import defaultAttachments from '@/config/const/attachments'
+import defaultAttachments from '@/config/const/attachments';
+import defaultRect from '@/config/const/rect';
+import defaultRound from '@/config/const/round';
 // 系统设置
 interface DefaultSettings {
     single_text: object;
@@ -46,6 +48,8 @@ interface DefaultSettings {
     upload_video: object;
     upload_attachments: object;
     attachments: object;
+    rect: object;
+    round: object;
 }
 
 const defaultSettings: DefaultSettings = {
@@ -72,6 +76,8 @@ const defaultSettings: DefaultSettings = {
     upload_img: defaultUploadImg,
     upload_video: defaultUploadVideo,
     upload_attachments: defaultUploadAttachments,
+    rect: defaultRect,
+    round: defaultRound,
 };
 
 export default defaultSettings;
