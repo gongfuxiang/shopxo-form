@@ -16,7 +16,7 @@ const defaultText: DefaultText = {
     img_width: 100,
     img_scale_type: '1',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

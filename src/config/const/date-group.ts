@@ -23,7 +23,7 @@ const defaultInput: DefaultInput = {
     date_type: 'option6',
     icon_name: 'date',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

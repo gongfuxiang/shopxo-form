@@ -14,16 +14,12 @@
                         <div class="flex-col gap-10 w h">
                             <div class="new_title">表单尺寸</div>
                             <div class="flex-col jc-c gap-10">
-                                <el-radio-group v-model="form.input_width_type" class="radio_form_size w h" is-button>
-                                    <el-radio-button value="A3">A3</el-radio-button>
-                                    <el-radio-button value="A4">A4</el-radio-button>
-                                    <el-radio-button value="A5">A5</el-radio-button>
-                                    <el-radio-button value="B3">B3</el-radio-button>
-                                    <el-radio-button value="B4">B4</el-radio-button>
-                                    <el-radio-button value="B5">B5</el-radio-button>
+                                <el-radio-group v-model="custom_config.type" class="radio_form_size w h" is-button @change="custom_type_change">
+                                    <el-radio-button v-for="(item, index) in option_list" :key="index" :value="item.name">{{ item.name }}</el-radio-button>
+
                                 </el-radio-group>
                                 <div class="flex-row gap-10 align-c">
-                                    <input-number v-model:model-value="form.width"></input-number>~<input-number v-model:model-value="form.height"></input-number>
+                                    <input-number v-model:model-value="custom_config.width" :min="1" :max="1000"></input-number>~<input-number v-model:model-value="custom_config.height" :min="1" :max="3000"></input-number>
                                     <el-button type="primary" @click="submit">确定</el-button>
                                 </div>
                             </div>
@@ -146,7 +142,7 @@
 
 <script setup lang="ts">
 import { layout_settings, style_settings } from '@/utils/common';
-import { isEqual } from "lodash";
+import { isEqual, cloneDeep } from "lodash";
 const props = defineProps({
     value: {
         type: Object,
@@ -196,9 +192,38 @@ const option_list = [
     { name: 'B4', width: 250, height: 353 },
     { name: 'B5', width: 176, height: 250 },
 ];
-const submit = () => { 
+// 初始化自定义配置对象，用于存储纸张类型、宽度和高度
+const custom_config = reactive({ type: 'A3', width: 297, height: 420 });
 
+// 监听props.value的变化，当发生变化时，更新自定义配置对象的属性
+watch(() => props.value, (val) => {
+    custom_config.type = cloneDeep(val.custom_size_type);
+    custom_config.width = cloneDeep(val.custom_width);
+    custom_config.height = cloneDeep(val.custom_height);
+});
+
+/**
+ * 提交函数，将当前自定义配置应用到表单对象
+ * 此函数确保在提交时，表单数据与用户最后的配置保持一致
+ */
+const submit = () => {
+    form.value.custom_size_type = cloneDeep(custom_config.type);
+    form.value.custom_width = cloneDeep(custom_config.width);
+    form.value.custom_height = cloneDeep(custom_config.height);
 };
+
+/**
+ * 自定义类型变化处理函数
+ * 当选择不同的纸张类型时，根据选项列表更新自定义配置的宽度和高度
+ * @param {string | number | boolean | undefined} val - 选择的纸张类型值
+ */
+const custom_type_change = (val: string | number | boolean | undefined) => {
+    const data = option_list.filter((item: any) => item.value === val);
+    if (data.length > 0) {
+        custom_config.width = cloneDeep(data[0].width);
+        custom_config.height = cloneDeep(data[0].height);
+    }
+}
 </script>
 
 <style scoped lang="scss">

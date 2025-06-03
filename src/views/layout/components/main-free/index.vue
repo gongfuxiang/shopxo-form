@@ -25,29 +25,75 @@
         <div class="flex-1 drag-container">
             <el-scrollbar>
                 <div class="pa-30">
-                    <div class="drag-content flex-row br-f1 radius-xl pa-16">
+                    <div class="drag-content flex-row">
                         <!-- 拖拽区 -->
-                        <div class="model-drag">
-                            <div class="model-wall">
-                                <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
-                                    <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
-                                        <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
-                                            <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1' }" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
-                                                <div-content custom-class="w h" :diy-data="diy_data" @on_choose="on_choose" @del="on_del" @copy="on_copy"></div-content>
-                                            </Vue3DraggableResizable>
-                                        </DraggableContainer>
-                                        <div ref="areaRef" class="area" :style="init_drag_style"></div>
+                        <div class="model-drag re">
+                            <div class="coordinate flex-col re">
+                                <div class="flex-row gap-9 align-e pl-20">
+                                    <template v-for="(item, index) in horizontalTicks" :key="index">
+                                        <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
+                                            <template v-if="index > 0">
+                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index }}</div>
+                                            </template>
+                                            <template v-else>
+                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
+                                            </template>
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="horizontal_all_line"></div>
+                            </div>
+                            <div class="coordinate flex-row">
+                                <div class="h flex-row">
+                                    <div class="flex-col gap-9 align-e pt-9">
+                                        <template v-for="(item, index) in verticalTicks" :key="index">
+                                            <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
+                                                <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index }}</div>
+                                            </div>
+                                        </template>
                                     </div>
-                                    <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
-                                        <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
-                                        <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
-                                        <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
-                                        <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
-                                        <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
-                                        <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
-                                        <!-- 已完成 -->
-                                        <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
-                                        <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
+                                    <div class="vertical_all_line"></div>
+                                </div>
+                                <div class="model-wall">
+                                    <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
+                                        <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
+                                            <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
+                                                <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
+                                                    <div v-if="item.is_enable == '1'" :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
+                                                        <div v-if="item.show_tabs == '1'" class="oprate">
+                                                            <div class="icon" @click.stop="set_enable(index)">
+                                                                <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
+                                                            </div>
+                                                            <span class="divider"></span>
+                                                            <div class="icon" @click="on_del(index)">
+                                                                <icon name="del" size="10"></icon>
+                                                            </div>
+                                                            <span class="divider"></span>
+                                                            <div class="icon" @click="on_copy(index, item)">
+                                                                <icon name="copy" size="10"></icon>
+                                                            </div>
+                                                        </div>
+                                                        <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+                                                            <div class="main-content">
+                                                                <component-show :value="item"></component-show>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Vue3DraggableResizable>
+                                            </DraggableContainer>
+                                            <div ref="areaRef" class="area" :style="init_drag_style"></div>
+                                        </div>
+                                        <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
+                                            <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
+                                            <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
+                                            <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
+                                            <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
+                                            <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
+                                            <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
+                                            <!-- 已完成 -->
+                                            <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
+                                            <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -60,10 +106,12 @@
 </template>
 
 <script setup lang="ts">
-import { SortableEvent, VueDraggable } from 'vue-draggable-plus';
 import { get_math } from '@/utils';
-import { cloneDeep, isEmpty, keyBy } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import defaultSettings from '../../index';
+import { commonStore } from "@/store";
+const common_store = commonStore();
+
 const app = getCurrentInstance();
 const props = defineProps({
     diyData: {
@@ -146,19 +194,31 @@ const url_computer = (name: string) => {
 
 //#region 组件边线相关
 const is_show_component_line = ref(false);
-const show_computer_line = () => {
-    is_show_component_line.value = !is_show_component_line.value;
-    // set_show_tabs(0);
-    cancel();
-};
 //#endregion
 //#region 拖拽组件的公共方法
 // 是否显示提示用户拖拽位置
-const center_height = defineModel('height', { type: Number, default: 0 });
-const center_width = defineModel('width', { type: Number, default: 390 });
-
-const drag_area_height = computed(() => center_height.value + 'px');
-const drag_area_width = computed(() => center_width.value + 'px');
+// 公共表单配置
+const form_config = computed(() => common_store.form_config);
+// 横轴刻度
+const horizontalTicks = computed(() => coordinate_line(form_config.value.custom_width));
+// 纵轴刻度
+const verticalTicks = computed(() => coordinate_line(form_config.value.custom_height));
+// 刻度处理
+const coordinate_line = (size: number) => {
+    const ticks = [];
+    for (let i = 0; i <= size / 10; i++) {
+        const isMultipleOf10 = i % 10 === 0;
+        ticks.push({
+            value: i,
+            isMultipleOf10: isMultipleOf10,
+        });
+    }
+    return ticks;
+}
+const model_drag_width = computed(() => form_config.value.custom_width + 20 + 'px');
+const model_drag_height = computed(() => form_config.value.custom_height + 20 + 'px');
+const drag_area_height = computed(() => form_config.value.custom_height + 'px');
+const drag_area_width = computed(() => form_config.value.custom_width + 'px');
 
 const draggable_container = ref(true);
 let data = reactive<any[]>([]);
@@ -214,7 +274,7 @@ const drop = (event: any) => {
         let location_x = event.offsetX;
         let location_y = event.offsetY;
         // 使用新函数调整位置
-        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, com_width, com_height, 390, center_height.value);
+        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, com_width, com_height, form_config.value.custom_width, form_config.value.custom_height);
         // 计算存在多少个相同的key
         const list = diy_data.value.filter((item) => item.key == draggedItem.value.key);
         const newItem = {
@@ -573,7 +633,11 @@ const bottom_up = (index: number) => {
         set_show_tabs(old_length);
     }
 };
-
+// 是否启用
+const set_enable = (index: number) => {
+    const old_data = get_diy_index_data(index);
+    old_data.is_enable = old_data.is_enable == '1' ? '0' : '1';
+};
 // 获取当前传递过来的index对应的diy_data中的数据
 const get_diy_index_data = (index: number) => {
     return (<arrayIndex>diy_data.value)[index.toString()];
@@ -693,22 +757,23 @@ const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
         max-height: calc(100vh - 7rem);
         .drag-content {
             min-height: 20rem;
-            max-width: 100rem;
-            background-color: #fff;
+            max-width: 102rem;
             margin: 0 auto;
-
             .model-drag {
-                width: 100%;
+                width: v-bind(model_drag_width);
+                background-color: #fff;
+                margin: 0 auto;
                 .model-wall {
-                    width: 100%;
+                    width: v-bind(drag_area_width);
+                    background-color: #fff;
                     height: 100%;
-                    background-image: linear-gradient(to right, transparent 90%, #eee 10%), linear-gradient(to bottom, transparent 90%, #eee 10%);
+                    background-image: linear-gradient(to right, transparent 9px, #F8F8F8 1px), linear-gradient(to bottom, transparent 9px, #F8F8F8 1px);
                     background-size: 10px 10px; /* 控制网格线的大小 */
                     margin: 0 auto;
                     .drag-area {
-                        height: 100%;
+                        height: v-bind(drag_area_height);
                         width: 100%;
-                        margin: 0.5rem 0; // 用于将上边框和下边框显示出来
+                        // margin: 0.5rem 0; // 用于将上边框和下边框显示出来
                         user-select: none;
                         cursor: crosshair;
                     }
@@ -716,6 +781,29 @@ const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
                         max-width: 100%;
                         height: 100%;
                         overflow: hidden;
+                    }
+                    .oprate {
+                        position: absolute;
+                        right: 0rem;
+                        top: 0rem;
+                        display: flex;
+                        align-items: center;
+                        background-color:#f5fbff;
+                        border-radius: 15px;
+                        color: $cr-primary;
+                        z-index: 2;
+                        .icon {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            cursor: pointer;
+                            padding: 0.6rem 1.2rem;
+                        }
+                        .divider {
+                            width: 1px;
+                            height: 1.2rem;
+                            background-color: #e4e7ec;
+                        }
                     }
                 }
             }
@@ -734,4 +822,46 @@ const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
         color: $cr-primary;
     }
 }
+.coordinate {
+    .horizontal_big_line { 
+        height: 2rem;
+        width: 0.1rem;
+        background: #999;
+    }
+    .horizontal_line { 
+        height: 0.8rem;
+        width: 0.1rem;
+        background: #999;
+    }
+    .horizontal_all_line {
+        width: 100%;
+        height: 0.1rem;
+        background: #999;
+    }
+    .vertical_big_line { 
+        width: 2rem;
+        height: 0.1rem;
+        background: #999;
+    }
+    .vertical_line { 
+        width: 0.8rem;
+        height: 0.1rem;
+        background: #999;
+    }
+    .vertical_all_line { 
+        width: 0.1rem;
+        background: #999;
+    }
+    .coordinate_title {
+        font-size: 1rem;
+        color: #666666;
+        line-height: 1.4rem;
+        text-align: right;
+        font-style: normal;
+    }
+    .coordinate_0_title {
+        left: -0.8rem;
+    }
+}
+
 </style>

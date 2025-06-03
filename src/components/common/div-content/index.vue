@@ -1,5 +1,5 @@
 <template>
-    <div v-for="(item, index) in diy_data" :key="item.id" class="item" :class="[{ 'active': item.show_tabs == '1', 'required-error': item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item.show_tabs)">
+    <div v-for="(item, index) in diy_data" :key="item.id" :class="['item', { 'active': item.show_tabs == '1', 'required-error': item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item.show_tabs)">
         <div v-if="item.show_tabs == '1'" class="oprate">
             <div class="icon" @click.stop="set_enable(index)">
                 <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
@@ -23,11 +23,9 @@
 <script lang="ts" setup>
 interface Props {
     diyData: any[];
-    customClass?: string;
 }
 const props = withDefaults(defineProps<Props>(), {
     diyData: () => [],
-    customClass: '',
 });
 const diy_data = ref(props.diyData);
 watch(() => props.diyData, (val) => {

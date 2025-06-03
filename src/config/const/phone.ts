@@ -28,7 +28,7 @@ const defaultSelect: DefaultSelect = {
     is_img_sms_verification: '0',
     is_desensitization: '0',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

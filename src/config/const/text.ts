@@ -14,7 +14,7 @@ const defaultText: DefaultText = {
     form_value: '',
     text_color: '#666',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

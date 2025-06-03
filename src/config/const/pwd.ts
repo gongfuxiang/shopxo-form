@@ -18,7 +18,7 @@ const defaultSelect: DefaultSelect = {
     icon_name: 'lock',
     is_required: '0',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

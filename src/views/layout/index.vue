@@ -33,6 +33,9 @@ interface diy_data_item {
         type_value: string;
         is_layout_settings: string;
         layout_settings: object,
+        custom_size_type: string,
+        custom_width: number,
+        custom_height: number,
         is_style_settings: string;
         style_settings: object, 
         is_front_end_cache: string,
@@ -54,6 +57,9 @@ const form = ref<diy_data_item>({
     overall_config: {
         type_value: 'default',
         is_layout_settings: '0',
+        custom_size_type: 'A3',
+        custom_width:  297,
+        custom_height:  420,
         layout_settings: cloneDeep(layout_settings),
         is_style_settings: '0',
         style_settings: cloneDeep(style_settings), 

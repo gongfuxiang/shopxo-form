@@ -39,7 +39,7 @@ const defaultSelect: DefaultSelect = {
     format: 'none',
     arrangement: 'horizontal',
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: defaultCommon
 };
 

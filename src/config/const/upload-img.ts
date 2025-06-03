@@ -21,7 +21,7 @@ const defaultInput: DefaultInput = {
     is_limit_size: '1',
     upload_size: 1,
     com_width: 200,
-    com_height: 200,
+    com_height: 56,
     common_config: {
         ...defaultCommon,
         border_type: 'dashed'
