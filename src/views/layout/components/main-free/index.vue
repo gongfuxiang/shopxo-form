@@ -33,7 +33,7 @@
                                     <template v-for="(item, index) in horizontalTicks" :key="index">
                                         <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
                                             <template v-if="index > 0">
-                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index }}</div>
+                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index * 10 }}</div>
                                             </template>
                                             <template v-else>
                                                 <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
@@ -48,7 +48,7 @@
                                     <div class="flex-col gap-9 align-e pt-9">
                                         <template v-for="(item, index) in verticalTicks" :key="index">
                                             <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
-                                                <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index }}</div>
+                                                <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index * 10 }}</div>
                                             </div>
                                         </template>
                                     </div>
@@ -75,7 +75,7 @@
                                                         </div>
                                                         <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
                                                             <div class="main-content">
-                                                                <component-show :value="item"></component-show>
+                                                                <component-show :value="item" :is-custom="true"></component-show>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import { get_math } from '@/utils';
+import { get_math, is_show_message_warning, location_compute } from '@/utils';
 import { cloneDeep, isEmpty } from 'lodash';
 import defaultSettings from '../../index';
 import { commonStore } from "@/store";
@@ -123,10 +123,6 @@ const emits = defineEmits(['update-setting']);
 
 // 拖拽数据
 const diy_data = ref(props.diyData);
-// 监听
-watch(() => props.diyData, (newValue) => {
-    diy_data.value = newValue;
-});
 
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
@@ -148,7 +144,7 @@ const components = ref<componentsData[]>([
             { name: '复选框组', key: 'checkbox', data: [] },
             { name: '下拉框', key: 'select', data: [] },
             { name: '下拉复选框', key: 'select-multi', data: [] },
-            { name: '选项卡', key: 'tabs', data: [] },
+            // { name: '选项卡', key: 'tabs', data: [] },
             { name: '日期时间组', key: 'date-group', data: [] },
         ],
     },
@@ -157,17 +153,18 @@ const components = ref<componentsData[]>([
         key: 'hight-level',
         data: [
             { name: '上传图片', key: 'upload-img', data: [] },
-            { name: '上传附件', key: 'upload-attachments', data: [] },
-            { name: '地址', key: 'address', data: [] },
             { name: '定位', key: 'position', data: [] },
+            { name: '地址', key: 'address', data: [] },
+            // { name: '按钮', key: 'btn', data: [] },
             { name: '表单', key: 'form', data: [] },
-            { name: '手写签名', key: 'sign', data: [] },
-            { name: '手机', key: 'phone', data: [] },
-            { name: '选择数据', key: 'data', data: [] },
-            { name: '富文本', key: 'rich-text', data: [] },
-            { name: '按钮', key: 'btn', data: [] },
-            { name: '评分', key: 'score', data: [] },
             { name: '密码', key: 'pwd', data: [] },
+            { name: '手机', key: 'phone', data: [] },
+            { name: '评分', key: 'score', data: [] },
+            { name: '富文本', key: 'rich-text', data: [] },
+            { name: '上传文件', key: 'upload-attachments', data: [] },
+            { name: '上传视频', key: 'upload-video', data: [] },
+            // { name: '手写签名', key: 'sign', data: [] },
+            // { name: '选择数据', key: 'data', data: [] },
         ],
     },
     {
@@ -199,10 +196,12 @@ const is_show_component_line = ref(false);
 // 是否显示提示用户拖拽位置
 // 公共表单配置
 const form_config = computed(() => common_store.form_config);
+const center_width = computed(() => form_config.value.custom_width);
+const center_height = computed(() => form_config.value.custom_height);
 // 横轴刻度
-const horizontalTicks = computed(() => coordinate_line(form_config.value.custom_width));
+const horizontalTicks = computed(() => coordinate_line(center_width.value));
 // 纵轴刻度
-const verticalTicks = computed(() => coordinate_line(form_config.value.custom_height));
+const verticalTicks = computed(() => coordinate_line(center_height.value));
 // 刻度处理
 const coordinate_line = (size: number) => {
     const ticks = [];
@@ -215,15 +214,51 @@ const coordinate_line = (size: number) => {
     }
     return ticks;
 }
-const model_drag_width = computed(() => form_config.value.custom_width + 20 + 'px');
-const model_drag_height = computed(() => form_config.value.custom_height + 20 + 'px');
-const drag_area_height = computed(() => form_config.value.custom_height + 'px');
-const drag_area_width = computed(() => form_config.value.custom_width + 'px');
+const model_drag_width = computed(() => center_width.value + 20 + 'px');
+const drag_area_height = computed(() => center_height.value + 'px');
+const drag_area_width = computed(() => center_width.value + 'px');
 
 const draggable_container = ref(true);
 let data = reactive<any[]>([]);
 const show_model_border = ref(true);
-
+// 拖拽组件高度变化时数据需要重新赋值，避免拖拽不到新高度的区域
+watch(() => [center_width.value, center_height.value], () => {
+    data = diy_data.value;
+    // 从 DOM 中删除组件
+    draggable_container.value = false;
+    nextTick(() => {
+        // 在 DOM 中添加组件
+        diy_data.value = data.map((item) => ({
+            ...item,
+            show_tabs: '0',
+            location: {
+                x: location_handle(item, item.location.x, 'width'),
+                y: location_handle(item, item.location.staging_y, 'height'),
+                record_x: location_handle(item, item.location.x, 'width'),
+                record_y: location_handle(item, item.location.staging_y, 'height'),
+                staging_y: location_handle(item, item.location.staging_y, 'height'),
+            },
+            com_data: item.com_data,
+        }));
+        // 容器高度变化时，组件不绑定右侧数据
+        emits('update-setting', {}, diy_data.value, true);
+        draggable_container.value = true;
+    });
+},{ immediate:true, deep: true });
+// 跟随的x，y重新计算
+const location_handle = (item: any, location: number, type: string) => {
+    if (item?.com_data?.data_follow?.id != '') {
+        let size = item.com_data.com_height;
+        let max_size = center_height.value;
+        if (type == 'width') {
+            size = item.com_data.com_width;
+            max_size = center_width.value;
+        }
+        return location_compute(size, location, max_size);
+    } else {
+        return location;
+    }
+};
 //#region 左侧拖拽过来的处理
 const hot_list = reactive({ data: [] as hotListData[] });
 const hot_list_index = ref(0);
@@ -274,7 +309,7 @@ const drop = (event: any) => {
         let location_x = event.offsetX;
         let location_y = event.offsetY;
         // 使用新函数调整位置
-        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, com_width, com_height, form_config.value.custom_width, form_config.value.custom_height);
+        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, com_width, com_height, center_width.value, center_height.value);
         // 计算存在多少个相同的key
         const list = diy_data.value.filter((item) => item.key == draggedItem.value.key);
         const newItem = {
@@ -616,7 +651,7 @@ const set_show_tabs = (index: number) => {
         item.show_tabs = '0';
         if (for_index == index) {
             item.show_tabs = '1';
-            emits('update-setting', diy_data.value[index]);
+            emits('update-setting', diy_data.value[index], diy_data.value, true);
         }
     });
 };
@@ -650,14 +685,6 @@ const on_choose = (index: number, show_tabs: string) => {
         set_show_tabs(index);
     }
 };
-// 清除选中
-const cancel = () => {
-    diy_data.value.forEach((item) => {
-        item.show_tabs = '0';
-    });
-    select_index.value = null;
-    // emits('rightUpdate', {});
-};
 //#endregion
 
 //#region 区域内拖拽显示
@@ -675,33 +702,120 @@ const resizingHandle = (new_location: any, key: string, index: number) => {
     com_data.com_width = w;
     com_data.com_height = h;
     com_data.staging_height = h;
-    // 图片和线的宽高需要重新计算
-    if (key == 'img') {
-        const { img_width, img_height } = handleImg(com_data, w, h);
-        com_data.img_width = img_width;
-        com_data.img_height = img_height;
-    } else if (key == 'auxiliary-line') {
-        const { line_width, line_size } = handleAuxiliaryLine(com_data, w, h);
-        com_data.line_width = line_width;
-        com_data.line_size = line_size;
+};
+//#endregion
+//#region 键盘操作事件
+const handleKeyUp = (e: KeyboardEvent) => {
+    // 排除默认事件
+    const default_list = ['textarea', 'input'];
+    // 判断是否是用户手动输入框之内操作的
+    if (e.target instanceof HTMLElement && default_list.includes(e.target?.localName)) {
+        return;
+    }
+    let key_code = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+    let x = 0;
+    let y = 0;
+    // 键盘控制
+    if (e.key === 'ArrowUp') { //上键
+        y = -1;
+    } else if (e.key === 'ArrowDown') { // 下键
+        y = 1;
+    } else if (e.key === 'ArrowLeft') { //左键
+        x = -1;
+    } else if (e.key === 'ArrowRight') { //右键
+        x = 1;
+    }
+    // 监听开启的是全局监听，为了避免全局监听的同时也监听了子组件的回退事件，所以需要判断当前是全局监听还是子组件监听
+    // 阻止默认事件
+    e.preventDefault();
+    // 只有是点击上下左右的时候才会生效
+    if (key_code.includes(e.key)) {
+        data_handling(x, y);
     }
 };
-// 图片大小的计算
-const handleImg = (com_data: any, w: number, h: number) => {
-    if (com_data.border_show == '1') {
-        return { img_width: w - com_data.border_size * 2, img_height: h - com_data.border_size * 2 };
+/**
+ * 数据处理函数，用于处理操作键盘上下左右操作后的数据更新
+ * 判断是否生成了多个组件同时拖拽的盒子，如果有则更新盒子和盒子有交集的组件, 如果内容没有盒子则只更新当前选中的
+ * hot_list: 存放盒子的数组，因为目前最多只能生成一个盒子，所以直接取第一个盒子即可
+ * @param {number} x 键盘上下左右操作在x轴上的变化量
+ * @param {number} y 键盘上下左右操作在y轴上的变化量
+ */
+ const data_handling = (x: number, y: number) => {
+    // 遍历对象,内部容器更新,
+    if (hot_list.data.length > 0) {
+        // 更新热区位置
+        const { drag_start, drag_end } = hot_list.data[0];
+        // 检查热区在x轴上的新位置是否在有效范围内
+        if (isWithinBounds(drag_start.x + x, drag_end.width, 390)) {
+            hot_list.data[0].drag_start.x += x;
+        }
+        // 检查热区在y轴上的新位置是否在有效范围内
+        if (isWithinBounds(drag_start.y + y, drag_end.height, center_height.value)) {
+            hot_list.data[0].drag_start.y += y;
+        }
+        // 按下按钮的时候判断当前包含哪些组件, 避免后续包裹的或者没有手动拖拽过的无法更新其中组件的内容
+        const rect1 = { x: drag_start.x, y: drag_start.y, width: drag_end.width, height: drag_end.height }
+        // 遍历自定义数据，更新组件位置
+        diy_data.value.forEach(item => {
+            const rect2 = { x: item.location.x, y: item.location.y, width: item.com_data.com_width, height: item.com_data.com_height };
+            const { id = '', type = 'left' } = item.com_data?.data_follow || { id: '', type: 'left' };
+            // 如果交集或者包裹，返回为1，否则为0
+            if (isRectangleIntersecting(rect1, rect2) == '1' && item.is_enable == '1') {
+                // x 轴不小于0 并且不大于容器宽度
+                if (isWithinBounds(item.location.x + x, item.com_data.com_width, 390) && (id === '' || (id != '' && type == 'top'))) {
+                    item.location.x += x;
+                } else if (id != '' && type == 'left' && x !== 0) {
+                    is_show_message_warning('当前组件已经左跟随其他组件，x轴不允许修改');
+                }
+                // Y轴不小于0 并且不大于容器高度
+                if (isWithinBounds(item.location.y + y, item.com_data.com_height, center_height.value) && (id === '' || (id != '' && type == 'left'))) {
+                    item.location.y += y;
+                    item.location.staging_y += y;
+                } else if (id != '' && type == 'top' && y !== 0) {
+                    is_show_message_warning('当前组件已经上跟随其他组件，y轴不允许修改');
+                }
+            }
+        });
+        // operation_end('多选');
     } else {
-        return { img_width: w, img_height: h };
+        // 如果没有热区数据，则直接更新自定义数据中选中组件的位置
+        diy_data.value.forEach(item => {
+            // 只更新选中的数据和显示的组件
+            if (item.show_tabs == '1' && item.is_enable == '1') {
+                const { id = '', type = 'left' } = item.com_data?.data_follow || { id: '', type: 'left' };
+                // x 轴不小于0 并且不大于容器宽度
+                if (isWithinBounds(item.location.x + x, item.com_data.com_width, 390) && (id === '' || (id != '' && type == 'top'))) {
+                    item.location.x += x;
+                } else if (id != '' && type == 'left' && x !== 0) {
+                    is_show_message_warning('当前组件已经左跟随其他组件，x轴不允许修改');
+                }
+                // Y轴不小于0 并且不大于容器高度
+                if (isWithinBounds(item.location.y + y, item.com_data.com_height, center_height.value) && (id === '' || (id != '' && type == 'left'))) {
+                    item.location.y += y;
+                    item.location.staging_y += y;
+                } else if (id != '' && type == 'top' && y !== 0) {
+                    is_show_message_warning('当前组件已经上跟随其他组件，y轴不允许修改');
+                }
+                // operation_end(get_history_name(item));
+            }
+        });
     }
 };
-// 线条的计算
-const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
-    if (com_data.line_settings === 'horizontal') {
-        return { line_width: com_data.com_width, line_size: com_data.com_height - 10 };
-    } else {
-        return { line_width: com_data.com_height, line_size: com_data.com_width - 10 };
-    }
-};
+// coordinate 新的坐标 current_size 当前坐标对应的组件大小(指的是组件的宽高) max_size 容器的最大大小
+const isWithinBounds = (coordinate:number, current_size: number, max_size: number) => coordinate >= 0 && coordinate + current_size <= max_size;
+
+// 键盘控制
+onMounted(() => {
+    // document.addEventListener('keydown', handle_keydown);
+    // 监听键盘事件
+    document.addEventListener('keyup', handleKeyUp);
+});
+
+onUnmounted(() => {
+    // document.removeEventListener('keydown', handle_keydown);
+    // 移除监听事件
+    document.removeEventListener('keyup', handleKeyUp);
+});
 //#endregion
 </script>
 
@@ -757,8 +871,10 @@ const handleAuxiliaryLine = (com_data: any, w: number, h: number) => {
         max-height: calc(100vh - 7rem);
         .drag-content {
             min-height: 20rem;
-            max-width: 102rem;
+            max-width: 80rem;
             margin: 0 auto;
+            overflow: hidden;
+            overflow-x: auto;
             .model-drag {
                 width: v-bind(model_drag_width);
                 background-color: #fff;

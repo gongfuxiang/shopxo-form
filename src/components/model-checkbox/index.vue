@@ -29,7 +29,7 @@
                 </template>
                 <template v-else-if="form.type == 'select-multi'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="common_store.frame_style + style_container" @change="data_check" @visible-change="input_value = ''">
+                        <el-select v-model="form.form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="frame_style + style_container" @change="data_check" @visible-change="input_value = ''">
                             <template #header>
                                 <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                             </template>
@@ -79,7 +79,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { common_styles_computer, get_format_checks, get_math } from "@/utils";
+import { common_styles_computer, get_border_left_right_size, get_format_checks, get_math } from "@/utils";
 import { commonStore } from "@/store";
 import { isEmpty, cloneDeep } from "lodash";
 import { FormInstance, FormRules } from "element-plus/es/components/form";
@@ -91,12 +91,17 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
 
 const data_check = () => {
     get_format_checks(form.value, true, 'checkbox');
 };
+const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 // #region 添加选项相关
 type popoverForm = {
     popover_option: string;

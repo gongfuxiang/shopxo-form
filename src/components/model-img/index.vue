@@ -16,6 +16,10 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
 

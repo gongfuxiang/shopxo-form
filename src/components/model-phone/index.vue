@@ -3,15 +3,15 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <div class="flex-col gap-10" :style="common_store.frame_style + 'height: 100%;'">
-                    <el-input v-model="form.form_value" :style="common_store.frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
+                <div class="flex-col gap-10" :style="frame_style + 'height: 100%;'">
+                    <el-input v-model="form.form_value" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                         <template #prefix>
                             <icon :name="form.icon_name" color="#999"></icon>
                         </template>
                     </el-input>
                     <div v-if="form.is_sms_verification == '1'" class="flex-row gap-10 align-c">
-                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" :style="common_store.frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
-                        <el-button :style="common_store.frame_style + 'width:100px;'" :disabled="isEmpty(form.form_value)" @click="open_dialog">获取验证码</el-button>
+                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
+                        <el-button :style="frame_style + 'width:100px;'" :disabled="isEmpty(form.form_value)" @click="open_dialog">获取验证码</el-button>
                     </div>
                 </div>
                 <!-- 默认内容设置 -->
@@ -36,7 +36,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { common_styles_computer, get_format_checks } from "@/utils";
+import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
 import PhoneAPI from '@/api/phone';
 import { isEmpty } from "lodash";
@@ -46,8 +46,13 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
+const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 //#region 图片验证码内容
 const dialogVisible = ref(false);
 const dialog_value  = ref('');

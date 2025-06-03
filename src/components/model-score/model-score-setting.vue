@@ -13,9 +13,9 @@
                 <div class="flex-row align-b gap-10">
                     <span class="desc-title">评分样式</span>
                     <el-radio-group v-model="form.score_type" class="flex-col gap-10 align-s">
-                        <el-radio value="0"><custom-rate v-model="form.select_quantity" :max="5" disaled :select-color="form.select_color" type="0" /></el-radio>
-                        <el-radio value="1"><custom-rate v-model="form.select_quantity" :max="5" disaled :select-color="form.select_color" type="1" /></el-radio>
-                        <el-radio value="2"><custom-rate v-model="form.select_quantity" :max="5" disaled :select-color="form.select_color" type="2" /></el-radio>
+                        <el-radio value="0"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="0" /></el-radio>
+                        <el-radio value="1"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="1" /></el-radio>
+                        <el-radio value="2"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="2" /></el-radio>
                     </el-radio-group>
                 </div>
                 <div class="flex-row align-c gap-10">
@@ -73,18 +73,18 @@ const form = ref(props.value);// 判断配置项是否有误
  */
  const handle_min_max_blur = (triggerField: 'min_num' | 'max_num') => {
     // 从表单中提取当前的最小值、最大值和小数位数
-    const { select_quantity, total } = form.value;
+    const { form_value, total } = form.value;
 
     // 解析并格式化最小值和最大值
-    const min = parse_and_format(select_quantity, 0);
+    const min = parse_and_format(form_value, 0);
     const max = parse_and_format(total, 0);
 
     // 确保最小值不大于最大值，如果违反，则将两个值设置为相等
     if (min !== null && max !== null && min > max) {
         if (triggerField === 'min_num') {
-            form.value.total = form.value.select_quantity;
+            form.value.total = form.value.form_value;
         } else {
-            form.value.select_quantity = form.value.total;
+            form.value.form_value = form.value.total;
         }
     }
 };

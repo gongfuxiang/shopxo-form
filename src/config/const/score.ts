@@ -20,7 +20,7 @@ const defaultSelect: DefaultSelect = {
     total: 5,
     is_required: '0',
     com_width: 200,
-    com_height: 56,
+    com_height: 66,
     common_config: defaultCommon
 };
 

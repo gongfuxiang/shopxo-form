@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <el-input v-model="form.form_value" :type="is_show ? 'password' : ''" :style="common_store.frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
+                <el-input v-model="form.form_value" :type="is_show ? 'password' : ''" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                     <template #prefix>
                         <icon :name="form.icon_name" color="#999"></icon>
                     </template>
@@ -17,7 +17,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { common_styles_computer, get_format_checks } from "@/utils";
+import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
 import { cloneDeep } from "lodash"
 const common_store = commonStore();
@@ -26,8 +26,13 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
+const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 // 手机号校验逻辑
 const data_check = () => {
     get_format_checks(form.value, false);

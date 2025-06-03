@@ -38,7 +38,7 @@ const defaultInput: DefaultInput = {
     max_num: '',
     arrangement: 'horizontal',
     com_width: 200,
-    com_height: 56,
+    com_height: 66,
     common_config: defaultCommon
 };
 

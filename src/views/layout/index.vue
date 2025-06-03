@@ -8,7 +8,7 @@
             <view v-else class="flex-1">
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
-            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
+            <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :is-custom="selected_is_custom" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
             <preview v-model:visible="previewVisible" :value="form.diy_data"></preview>
         </div>
     </div>
@@ -78,11 +78,12 @@ common_store.set_model_config(form.value.model);
 
 const diy_data_item = ref({});
 const key = ref('');
-
+const selected_is_custom = ref(false);
 // 更新设置
-const update_setting = (data: any, diy: any[]) => {
+const update_setting = (data: any, diy: any[], is_custom: boolean = false) => {
     diy_data_item.value = data;
     form.value.diy_data = diy;
+    selected_is_custom.value = is_custom;
     is_show_form_model.value = false;
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);

@@ -28,6 +28,10 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
 const video_src = ref(common_store.common.config.attachment_host + `/static/diy/images/components/model-video/video.png`);

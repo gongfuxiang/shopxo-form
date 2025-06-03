@@ -4,14 +4,14 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <template v-if="['option1', 'option2'].includes(form.date_type)">
-                    <div class="re w h" :style="common_store.frame_style + style_container + 'height: 100%'">
-                        <el-time-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                        <el-time-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                         <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                     </div>
                 </template>
                 <template v-else>
-                    <div class="re w h" :style="common_store.frame_style + style_container + 'height: 100%'">
-                        <el-date-picker v-model="form.form_value" class="model-date" :style="common_store.frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'monthrange' : form.date_type == 'option4' ? 'daterange' : 'datetimerange'" clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                        <el-date-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'monthrange' : form.date_type == 'option4' ? 'daterange' : 'datetimerange'" clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                         <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                     </div>
                 </template>
@@ -21,7 +21,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { common_styles_computer, date_style_options, get_format_checks } from "@/utils";
+import { common_styles_computer, date_style_options, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
 import { isEmpty } from "lodash";
 const common_store = commonStore();
@@ -30,9 +30,13 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    isCustom: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = computed(() => props.value);
-
+const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 const date_style_format = computed(() => {
     const data = new Map(date_style_options(form.value.date_style).map(item => [item.value, item]));
     return data.get(form.value.date_type)?.label || 'YYYY-MM-DD HH:mm:ss';

@@ -39,7 +39,7 @@ const defaultInput: DefaultInput = {
     is_desensitization: '0',
     desensitization_value: [],
     com_width: 200,
-    com_height: 56,
+    com_height: 66,
     common_config: defaultCommon
 };
 

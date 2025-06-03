@@ -18,7 +18,7 @@ const defaultSelect: DefaultSelect = {
     is_required: '0',
     is_longitude_and_latitude: '0',
     com_width: 200,
-    com_height: 56,
+    com_height: 66,
     common_config: defaultCommon
 };
 

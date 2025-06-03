@@ -16,7 +16,6 @@
                             <div class="flex-col jc-c gap-10">
                                 <el-radio-group v-model="custom_config.type" class="radio_form_size w h" is-button @change="custom_type_change">
                                     <el-radio-button v-for="(item, index) in option_list" :key="index" :value="item.name">{{ item.name }}</el-radio-button>
-
                                 </el-radio-group>
                                 <div class="flex-row gap-10 align-c">
                                     <input-number v-model:model-value="custom_config.width" :min="1" :max="1000"></input-number>~<input-number v-model:model-value="custom_config.height" :min="1" :max="3000"></input-number>
@@ -218,7 +217,7 @@ const submit = () => {
  * @param {string | number | boolean | undefined} val - 选择的纸张类型值
  */
 const custom_type_change = (val: string | number | boolean | undefined) => {
-    const data = option_list.filter((item: any) => item.value === val);
+    const data = option_list.filter((item: any) => item.name === val);
     if (data.length > 0) {
         custom_config.width = cloneDeep(data[0].width);
         custom_config.height = cloneDeep(data[0].height);

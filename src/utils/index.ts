@@ -867,3 +867,19 @@ export const get_desensitization = (value: string, type: string): string => {
             return value.replace(/./g, '*');
     }
 };
+
+
+export const get_border_left_right_size = (new_style: border_style) => { 
+    const { border_is_show = '0', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
+    if (border_is_show == '1') {
+        return border_size.padding_left + border_size.padding_right;
+    }
+    return 0;
+};
+
+// 只有没有其他提示warning的时候才提示
+export const is_show_message_warning = (message: string) => {
+    if (document.querySelectorAll(".el-message.el-message--warning").length < 3) {
+        ElMessage.warning(message);
+    }
+};
