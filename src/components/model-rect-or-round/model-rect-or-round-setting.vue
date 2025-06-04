@@ -31,7 +31,10 @@
     </el-form>
 </template>
 <script setup lang="ts">
+import { location_compute } from '@/utils';
 import { cloneDeep } from 'lodash'
+import { commonStore } from "@/store";
+const common_store = commonStore();
 const props = defineProps({
     value: {
         type: Object,
@@ -42,7 +45,7 @@ const props = defineProps({
         default: false,
     }
 });
-const form = ref(props.value);// 判断配置项是否有误
+const form = ref(props.value);
 
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

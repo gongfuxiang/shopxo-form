@@ -26,8 +26,8 @@
                                     </template>
                                     <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="`color:${ config_value.heading_title_color };font-size:${ config_value.heading_title_size }px;font-weight:${ config_value.heading_title_font_weight };`">{{ common_store.form_model_config.name }}</div>
                                 </div>
-                                <div class="re bg-f" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
-                                    <div v-for="item in diy_data" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };`">
+                                <div class="re bg-f oh" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
+                                    <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index) : -999};`">
                                         <component-show :value="item" :is-custom="true"></component-show>
                                     </div>
                                 </div>
@@ -45,7 +45,7 @@
                                     <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="`color:${ config_value.heading_title_color };font-size:${ config_value.heading_title_size }px;font-weight:${ config_value.heading_title_font_weight };`">{{ common_store.form_model_config.name }}</div>
                                 </div>
                                 <div class="pa-16">
-                                    <div v-for="item in diy_data" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
+                                    <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
                                         <component-show :value="item"></component-show>
                                     </div>
                                 </div>
@@ -79,6 +79,13 @@
 <script lang="ts" setup>
 import { commonStore } from "@/store";
 const common_store = commonStore();
+interface DiyItem {
+    id: number | string;
+    key: string;
+    is_enable: string;
+    com_data: any;
+}
+
 const props = defineProps({
     configType: {
         type: String,
@@ -95,6 +102,35 @@ const props = defineProps({
 });
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
+// 计算属性：根据显隐规则过滤出需要显示的组件
+const filteredDiyData = computed(() => {
+    const componentMap = new Map(diy_data.value.map((item: any) => [item.id, item])) as any;
+
+    // 取出所有设置显隐规则的组件
+    const list = diy_data.value.filter((item: any) => ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    const list_map = list.map((item: DiyItem) => ({ id: item.id, list: item.com_data.show_hidden_list }));
+    return diy_data.value.filter((item: DiyItem) => {
+        // 优先判断是否启用
+        if (item.is_enable !== '1') return false;
+
+        if (list_map.length === 0) return true;
+        // 将所有的内容的组件进行筛选
+        const isShownByRule = list_map.some((list_item: any) => {
+            const targetComponent = componentMap.get(list_item.id);
+            // 判断显隐规则对应的组件是否存在
+            if (!targetComponent) return false;
+            return list_item.list.some((hidden_item: any) => {
+                // 判断当前组件是否在显隐规则中，如果不在，直接显示，否则的话判断值是否存在
+                if (hidden_item.is_show.includes(item.id)) {
+                    return targetComponent.com_data.form_value.includes(hidden_item.value);
+                } else {
+                    return true;
+                }
+            });
+        });
+        return isShownByRule;
+    });
+});
 // 公共配置信息
 const form_config = computed(() => common_store.form_config);
 // 配置信息，区分是手机端数据还是电脑端数据
@@ -204,6 +240,10 @@ const handleClose = () => {
     :deep(.rendering-area .content) {
         pointer-events: none;
     }
+}
+.free-main-content {
+    position: absolute;
+    overflow: hidden;
 }
 .head-title { 
     word-wrap: break-word;

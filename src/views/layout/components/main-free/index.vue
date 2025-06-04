@@ -24,7 +24,7 @@
         </div>
         <div class="flex-1 drag-container">
             <div class="drag-content h flex-row">
-                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"></right-side-operation>
+                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"  @previous_layer="previous_layer" @underlying_layer="underlying_layer" @top_up="top_up" @bottom_up="bottom_up"></right-side-operation>
                 <!-- 拖拽区 -->
                 <div class="model-content">
                     <div class="model-drag re">
@@ -58,7 +58,7 @@
                                 <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
                                     <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
                                         <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
-                                            <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': diy_data.length - 1 - index }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
+                                            <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': item.is_enable == '1' ? (diy_data.length - 1) - index : -999 }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
                                                 <div :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
                                                     <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
                                                         <div class="main-content">
@@ -603,7 +603,7 @@ const isRectangleIntersecting = (rect1: react1, rect2: react1) => {
     return '0'; // 无交集
 };
 //#endregion 左侧拖拽过来的处理
-
+//#region 组件操作逻辑
 // 删除
 const on_del = (index: number) => {
     app?.appContext.config.globalProperties.$common.message_box('删除后不可恢复，确定继续吗?', 'warning').then(() => {
@@ -646,6 +646,47 @@ const on_copy = (index: number) => {
         set_show_tabs(index + 1);
     }
 };
+//前置一层 - 1
+const previous_layer = (index: number) => {
+    if (diy_data.value.length > 0 && index > 0) {
+        moveItem(index, index - 1);
+    }
+}
+//后置一层 + 1
+const underlying_layer = (index: number) => {
+    if (diy_data.value.length > 0 && index < diy_data.value.length - 1) {
+        moveItem(index, index + 1);
+    }
+}
+//组件置顶
+const top_up = (index: number) => {
+    if (!isEmpty(diy_data.value[index])) {
+        moveItem(index, 0);
+    }
+}
+//组件置底
+const bottom_up = (index: number) => {
+    if (!isEmpty(diy_data.value[index])) {
+        const old_length = diy_data.value.length - 1;
+        moveItem(index, old_length);
+    }
+}
+const moveItem = (index: number, newIndex: number) => {
+    if (index < 0 || index >= diy_data.value.length || newIndex < 0 || newIndex >= diy_data.value.length) {
+        return;
+    }
+    try {
+        const old_data = get_diy_index_data(index);
+        // 删除当前位置信息
+        diy_data.value.splice(index, 1);
+        // 将数据插入新位置
+        diy_data.value.splice(newIndex, 0, old_data);
+        set_show_tabs(newIndex);
+        // operation_end(get_history_name(old_data));
+    } catch (error) {
+        console.error('Error moving item:', error);
+    }
+}
 // 设置当前选中的是那个
 const set_show_tabs = (index: number) => {
     diy_data.value.forEach((item, for_index) => {

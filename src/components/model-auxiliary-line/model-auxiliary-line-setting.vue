@@ -51,7 +51,10 @@
     </el-form>
 </template>
 <script setup lang="ts">
+import { get_container_location, location_compute } from '@/utils';
 import { cloneDeep } from 'lodash'
+import { commonStore } from "@/store";
+const common_store = commonStore();
 const props = defineProps({
     value: {
         type: Object,
@@ -62,7 +65,39 @@ const props = defineProps({
         default: false,
     }
 });
-const form = ref(props.value);// 判断配置项是否有误
+// 默认值
+const state = reactive({
+    diy_data: props.value
+});
+// 如果需要解构，确保使用toRefs
+const { diy_data } = toRefs(state);
+const form = ref(diy_data.value.com_data);
+
+const size_location_change = (location: { x: number, y: number, record_x: number, record_y: number, staging_y: number }) => {
+    const { custom_width, custom_height} = common_store.form_config;
+    let width = 0;
+    let height = 0;
+    if (form.value.line_type === 'horizontal') {
+        height = form.value.line_size + 10;
+    } else {
+        width = form.value.line_size + 10;
+    }
+
+    diy_data.value.location.x = location_compute(width, location.x, custom_width);
+    diy_data.value.location.y = location_compute(height, location.y, custom_height);
+
+    diy_data.value.location.record_x = location_compute(width, location.record_x, custom_width);
+    diy_data.value.location.record_y = location_compute(height, location.record_y, custom_height);
+    diy_data.value.location.staging_y = location_compute(height, location.staging_y, custom_height);
+    
+    form.value.com_width = width == 0 ? form.value.com_width : width;
+    form.value.com_height = height == 0 ? form.value.com_height : height;
+}
+
+// 监听数据变化
+watch(() => diy_data.value, (val) => {
+    size_location_change(val.location);
+},{ immediate: true, deep: true });
 
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

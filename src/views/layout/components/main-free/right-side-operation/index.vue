@@ -1,7 +1,7 @@
 <template>
     <div v-if="typeof index === 'number' && !isNaN(index)" class="acticons">
         <div class="plug-in-right" chosenClass="close">
-            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="删除组件" placement="right">
+            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="隐藏组件" placement="right">
                 <el-icon :class="`iconfont ${ is_enable == '1' ? 'icon-eye' : 'icon-eye-close'}`" @click.stop="set_enable(index)" />
             </el-tooltip>
             <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="删除组件" placement="right">
@@ -10,6 +10,18 @@
             <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="复制组件" placement="right">
                 <el-icon class="iconfont icon-copy" @click.stop="copy(index)" />
             </el-tooltip>
+            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="前置一层" placement="right">
+                <el-icon :class="['iconfont icon-arrow-top', { 'disabled': index === 0 }]" @click.stop="previous_layer(index, index === 0)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="后置一层" placement="right">
+                <el-icon :class="['iconfont icon-arrow-bottom', { 'disabled': index === dataLength - 1 }]" @click.stop="underlying_layer(index, index === dataLength - 1)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="组件置顶" placement="right">
+                <el-icon :class="['iconfont icon-top-up', { 'disabled': index === 0 }]" @click.stop="top_up(index, index === 0)" />
+            </el-tooltip>
+            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="组件置底" placement="right">
+                <el-icon :class="['iconfont icon-bottom-up', { 'disabled': index === dataLength - 1 }]" @click.stop="bottom_up(index, index === dataLength - 1)" />
+            </el-tooltip>
         </div>
     </div>
 </template>
@@ -17,7 +29,7 @@
 const index = defineModel('index', { type: Number , default: null });
 const dataLength = defineModel('dataLength', { type: Number , default: 0 });
 const is_enable = defineModel('is_enable', { type: String , default: '1' });
-const emits = defineEmits(['del', 'copy', 'set_enable' ]);
+const emits = defineEmits(['del', 'copy', 'set_enable', 'previous_layer', 'underlying_layer', 'top_up', 'bottom_up' ]);
 // 删除
 const del = (index: number) => {
     emits('del', index)
@@ -28,6 +40,30 @@ const copy = (index: number) => {
 }
 const set_enable = (index: number) => {
     emits('set_enable', index)
+}
+//前置一层
+const previous_layer = (index: number, flag: boolean) => {
+    if (!flag) {
+        emits('previous_layer', index);
+    }
+}
+//后置一层
+const underlying_layer = (index: number, flag: boolean) => {
+    if (!flag) {
+        emits('underlying_layer', index)
+    }
+}
+//组件置顶
+const top_up = (index: number, flag: boolean) => {
+    if (!flag) {
+        emits('top_up', index)
+    }
+}
+//组件置底
+const bottom_up = (index: number, flag: boolean) => {
+    if (!flag) {
+        emits('bottom_up', index)
+    }
 }
 </script>
 
