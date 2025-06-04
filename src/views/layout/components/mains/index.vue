@@ -267,6 +267,7 @@ const set_show_tabs = (index: number) => {
         }
     }
     .drag-container {
+        max-width: calc(100% - 23.4rem);
         max-height: calc(100vh - 7rem);
         .drag-content {
             min-height: 20rem;

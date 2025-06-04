@@ -2,10 +2,10 @@
     <div class="layout">
         <navbar v-model="form.model" @form-config="form_config_event" @preview="preview_event" />
         <div class="content flex-1 flex-row">
-            <div v-if="form.overall_config.type_value == 'default'" class="flex-1">
+            <div v-if="form.overall_config.type_value == 'default'" class="flex-1 main-style">
                 <mains :diy-data="form.diy_data" @update-setting="update_setting"></mains>
             </div>
-            <view v-else class="flex-1">
+            <view v-else class="flex-1 main-style">
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
             <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :is-custom="selected_is_custom" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
@@ -187,5 +187,8 @@ const type_change = () => {
     .el-dialog__header {
         padding: 1.3rem 2rem;
     }
+}
+.main-style {
+    max-width: calc(100% - 30rem);
 }
 </style>

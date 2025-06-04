@@ -23,8 +23,7 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <div class="drag-content h flex-row">
-                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"  @previous_layer="previous_layer" @underlying_layer="underlying_layer" @top_up="top_up" @bottom_up="bottom_up"></right-side-operation>
+            <div class="drag-content h flex-row re">
                 <!-- 拖拽区 -->
                 <div class="model-content">
                     <div class="model-drag re">
@@ -86,6 +85,7 @@
                         </div>
                     </div>
                 </div>
+                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"  @previous_layer="previous_layer" @underlying_layer="underlying_layer" @top_up="top_up" @bottom_up="bottom_up"></right-side-operation>
             </div>
         </div>
     </div>
@@ -899,16 +899,16 @@ onUnmounted(() => {
         }
     }
     .drag-container {
+        max-width: calc(100% - 23.4rem);
         max-height: calc(100vh - 7rem);
         .drag-content {
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            overflow: hidden;
+            max-width: 80%;
+            margin: 0 auto;
             height: 100%;
             .model-content {
-                max-width: 80rem;
-                margin: 0 auto;
                 padding: 2rem 0;
                 overflow: scroll;
             }

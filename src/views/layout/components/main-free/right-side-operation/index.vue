@@ -70,14 +70,14 @@ const bottom_up = (index: number, flag: boolean) => {
 <style scoped lang="scss">
 .acticons {
     position: absolute;
-    left: 50%;
-    margin-left: 40rem;
+    right: 0;
+    margin-right: -4rem;
     top: 50%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     z-index: 1;
-    transform: translate(-50%, -50%);
+    transform: translateY(-50%);
 }
 .plug-in-right {
     cursor: default;

@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
+        <div v-if="portType == 'computer' && common_store.form_config.type_value !== 'free'" class="flex-col gap-10 w h">
             <div class="new_title flex-row align-c gap-10">输入框宽度<tooltip content="控制字段输入框的宽度，标准模式下宽度固定，自动模式下宽度占满整列" placement="top" /></div>
             <el-radio-group v-model="form.input_width_type" class="two-copies-group w h" is-button>
                 <el-radio-button value="default">标准</el-radio-button>
@@ -128,6 +128,8 @@
 </template>
 
 <script lang="ts" setup>
+import { commonStore } from "@/store";
+const common_store = commonStore();
 const props = defineProps({
     // 配置类型，layout：表单布局，style：表单样式
     configType: {
