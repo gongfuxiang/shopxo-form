@@ -17,8 +17,8 @@ const defaultText: DefaultText = {
     video_img: [],
     video_width: 200,
     video_scale_type: '1',
-    com_width: 200,
-    com_height: 66,
+    com_width: 100,
+    com_height: 100,
     common_config: defaultCommon
 };
 

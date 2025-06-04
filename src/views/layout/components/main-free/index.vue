@@ -110,6 +110,9 @@ const emits = defineEmits(['update-setting']);
 // 拖拽数据
 const diy_data = ref(props.diyData);
 
+watchEffect(() => {
+    diy_data.value = props.diyData;
+})
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
 interface componentsData {
@@ -206,7 +209,6 @@ const drag_area_width = computed(() => center_width.value + 'px');
 
 const draggable_container = ref(true);
 let data = reactive<any[]>([]);
-const show_model_border = ref(true);
 // 拖拽组件高度变化时数据需要重新赋值，避免拖拽不到新高度的区域
 watch(() => [center_width.value, center_height.value], () => {
     data = diy_data.value;
@@ -230,7 +232,7 @@ watch(() => [center_width.value, center_height.value], () => {
         emits('update-setting', {}, diy_data.value, true);
         draggable_container.value = true;
     });
-},{ immediate:true, deep: true });
+},{ deep: true });
 // 跟随的x，y重新计算
 const location_handle = (item: any, location: number, type: string) => {
     if (item?.com_data?.data_follow?.id != '') {

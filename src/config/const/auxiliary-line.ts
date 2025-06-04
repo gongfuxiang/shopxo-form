@@ -22,7 +22,7 @@ const defaultAuxiliary: DefaultAuxiliary = {
     line_size: 1,
     line_color: '#eee',
     com_width: 200,
-    com_height: 66,
+    com_height: 17,
     common_config: defaultCommon
 };
 

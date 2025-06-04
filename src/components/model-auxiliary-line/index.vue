@@ -1,5 +1,5 @@
 <template>
-    <div class="rendering-area">
+    <div class="rendering-area w">
         <div class="form-group" :style="common_store.layout_style">
             <div class="content w flex-row" :style="frame_style + 'height: 100%;' + line_location">
                 <div :style="border_style"></div>
@@ -21,7 +21,7 @@ const props = defineProps({
         default: false,
     }
 });
-const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
+const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `padding:6px 0;max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 const form = computed(() => props.value);
 const line_location = computed(() => `justify-content: ${ form.value.line_location };`);
 // 用于样式显示

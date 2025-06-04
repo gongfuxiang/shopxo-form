@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">图片</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-if="!isCustom" v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -30,8 +30,8 @@
                     </el-radio-group>
                 </div>
             </el-form-item>
+            <help-config :value="form.common_config" />
         </template>
-        <help-config :value="form.common_config" />
     </el-form>
 </template>
 <script setup lang="ts">

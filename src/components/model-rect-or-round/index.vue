@@ -1,5 +1,5 @@
 <template>
-    <div class="rendering-area w h">
+    <div class="rendering-area w h pa-3">
         <div class="w h" :style="border_style"></div>
     </div>
 </template>
