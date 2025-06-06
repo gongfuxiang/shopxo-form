@@ -22,7 +22,7 @@ const defaultInput: DefaultInput = {
     date_style: 'horizontal',
     date_type: 'option6',
     icon_name: 'date',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };

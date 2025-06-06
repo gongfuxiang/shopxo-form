@@ -47,13 +47,17 @@
     <template v-if="form.key == 'score'">
         <model-score :value="form.com_data" :is-custom="isCustom"></model-score>
     </template>
-    <!-- 辅助线 -->
-    <template v-if="form.key == 'auxiliary-line'">
-        <model-auxiliary-line :value="form.com_data" :is-custom="isCustom"></model-auxiliary-line>
+    <!-- 子表单 -->
+    <template v-if="form.key == 'subform'">
+        <model-subform :value="form.com_data" :is-custom="isCustom"></model-subform>
     </template>
     <!-- 上传图片｜上传视频 ｜ 上传文件 -->
     <template v-if="['upload-img', 'upload-video', 'upload-attachments'].includes(form.key)">
         <model-upload :value="form.com_data" :is-custom="isCustom" :accept-type="form.key == 'upload-img' ? 'img' : form.key == 'upload-video' ? 'video' : 'file'"></model-upload>
+    </template>
+    <!-- 辅助线 -->
+    <template v-if="form.key == 'auxiliary-line'">
+        <model-auxiliary-line :value="form.com_data" :is-custom="isCustom"></model-auxiliary-line>
     </template>
     <!-- 文本 -->
     <template v-if="form.key == 'text'">

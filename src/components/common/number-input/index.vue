@@ -121,6 +121,9 @@ watchEffect(() => {
 </script>
 
 <style scoped lang="scss">
+.percent-input-wrapper {
+    border-radius: 4px;
+}
 .percent-input {
     width: 100%;
     display: flex;

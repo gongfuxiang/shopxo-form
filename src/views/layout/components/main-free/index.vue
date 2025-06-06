@@ -145,7 +145,7 @@ const components = ref<componentsData[]>([
             { name: '定位', key: 'position', data: [] },
             { name: '地址', key: 'address', data: [] },
             // { name: '按钮', key: 'btn', data: [] },
-            { name: '表单', key: 'form', data: [] },
+            { name: '子表单', key: 'subform', data: [] },
             { name: '密码', key: 'pwd', data: [] },
             { name: '手机', key: 'phone', data: [] },
             { name: '评分', key: 'score', data: [] },
@@ -905,7 +905,7 @@ onUnmounted(() => {
             display: flex;
             align-items: center;
             justify-content: center;
-            max-width: 80%;
+            max-width: 90%;
             margin: 0 auto;
             height: 100%;
             .model-content {

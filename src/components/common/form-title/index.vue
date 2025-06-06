@@ -18,9 +18,4 @@ const form = computed(() => props.value);
 </script>
 
 <style lang="scss" scoped>
-.required {
-    color: #FF5353;
-    font-weight: 700;
-    padding-left: 0.3rem;
-}
 </style>

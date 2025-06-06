@@ -13,7 +13,7 @@ const defaultText: DefaultText = {
     title: '文本',
     form_value: '',
     text_color: '#666',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };

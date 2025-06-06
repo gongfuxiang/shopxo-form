@@ -17,7 +17,7 @@ const defaultSelect: DefaultSelect = {
     placeholder: '请输入密码',
     icon_name: 'lock',
     is_required: '0',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };

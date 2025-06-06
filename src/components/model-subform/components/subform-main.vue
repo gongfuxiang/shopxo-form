@@ -23,15 +23,51 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <el-scrollbar>
-                <div class="pa-30">
-                    <div class="drag-content flex-row br-f1 radius-xl pa-16">
-                        <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" class="drag-area w re flex-1" ghost-class="ghost" :on-sort="on_sort" :on-start="on_start" :on-end="on_end">
-                            <div-content :diy-data="diy_data"  @on_choose="on_choose" @del="on_del" @copy="on_copy"></div-content>
-                        </VueDraggable>
-                    </div>
+            <div class="subform flex-row oh pa-16">
+                <div class="row-header flex-col">
+                    <div class="head-label"></div>
+                    <template v-if="table_list.length > 0">
+                        <div v-for="(item, index) in table_list" :key="index" class="flex-1 row-num flex-row align-c jc-c">{{ index + 1 }}</div>
+                    </template>
+                    <template v-else>
+                        <div class="flex-1 row-num">1</div>
+                    </template>
                 </div>
-            </el-scrollbar>
+                <div class="scroll-area flex-row">
+                    <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" :invert-swap="false" class="subform-container drag-area flex-row re" ghost-class="ghost" :on-sort="on_sort">
+                        <template v-if="diy_data.length > 0">
+                            <div v-for="(item, index) in diy_data" :key="item.id" :class="['subform-item re', { 'active': item.show_tabs == '1' }]" :style="`width: ${ item.com_data.com_width }px;`" @click.stop="on_choose(index, item.show_tabs)">
+                                <div v-if="item.show_tabs == '1'" class="oprate">
+                                    <div class="icon" @click.stop="set_enable(index)">
+                                        <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
+                                    </div>
+                                    <div class="icon" @click="on_del(index)">
+                                        <icon name="del" size="10"></icon>
+                                    </div>
+                                    <span class="divider"></span>
+                                    <div class="icon" @click="on_copy(index)">
+                                        <icon name="copy" size="10"></icon>
+                                    </div>
+                                </div>
+                                <div :class="['flex-col jc-c w h', { 'plug-in-close': item.is_enable != '1' }]">
+                                    <!-- 头部操作逻辑 -->
+                                    <div class="item-label flex-row align-c">
+                                        <span v-if="item.com_data.is_required == '1'" class="required">*</span>
+                                        {{ item.com_data.title }}
+                                        <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
+                                    </div>
+                                    <div v-for="(item1, index1) in table_list" :key="index1" class="flex-1 item-row rendering-area flex-row align-c jc-c">
+                                       <subform-rendering v-model="item.com_data" v-model:type="item.key"></subform-rendering>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="empty-title">从左侧拖拽来添加字段</div>
+                        </template>
+                    </VueDraggable>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -40,10 +76,16 @@
 import { SortableEvent, VueDraggable } from 'vue-draggable-plus';
 import { get_math } from '@/utils';
 import { cloneDeep, isEmpty } from 'lodash';
-import defaultSettings from '../../index';
+import { commonStore } from "@/store";
+const common_store = commonStore();
+import defaultSettings from '@/views/layout/index';
 const app = getCurrentInstance();
 const props = defineProps({
     diyData: {
+        type: Array<any>,
+        default: () => [],
+    },
+    value: {
         type: Array<any>,
         default: () => [],
     },
@@ -57,6 +99,31 @@ watch(() => props.diyData, (newValue) => {
     diy_data.value = newValue;
 });
 
+const table_list = ref(props.value);
+watch(() => props.value, (newValue) => {
+    table_list.value = newValue;
+});
+watch(() => diy_data.value, (new_val) => {
+	if (new_val.length > 0) {
+		if (table_list.value.length > 0) {
+			new_val.forEach((item: any) => {
+				table_list.value.forEach((item1: any) => {
+					if (isEmpty(item1[item.id])) {
+						item1[item.id] = item.form_value;
+					}
+				});
+			});
+		} else {
+			const data = new_val.map((item: any) => {
+				const obj = {
+					[item.id]: item.form_value
+				};
+				return obj;
+			});
+			table_list.value = [data];
+		}
+	}
+});
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
 interface componentsData {
@@ -77,7 +144,6 @@ const components = ref<componentsData[]>([
             { name: '复选框组', key: 'checkbox', data: [] },
             { name: '下拉框', key: 'select', data: [] },
             { name: '下拉复选框', key: 'select-multi', data: [] },
-            // { name: '选项卡', key: 'tabs', data: [] },
             { name: '日期时间组', key: 'date-group', data: [] },
         ],
     },
@@ -88,23 +154,17 @@ const components = ref<componentsData[]>([
             { name: '上传图片', key: 'upload-img', data: [] },
             { name: '定位', key: 'position', data: [] },
             { name: '地址', key: 'address', data: [] },
-            // { name: '按钮', key: 'btn', data: [] },
-            { name: '子表单', key: 'subform', data: [] },
             { name: '密码', key: 'pwd', data: [] },
             { name: '手机', key: 'phone', data: [] },
             { name: '评分', key: 'score', data: [] },
-            { name: '富文本', key: 'rich-text', data: [] },
             { name: '上传文件', key: 'upload-attachments', data: [] },
             { name: '上传视频', key: 'upload-video', data: [] },
-            // { name: '手写签名', key: 'sign', data: [] },
-            // { name: '选择数据', key: 'data', data: [] },
         ],
     },
     {
         name: '扩展',
         key: 'extend',
         data: [
-            { name: '辅助线', key: 'auxiliary-line', data: [] },
             { name: '文本', key: 'text', data: [] },
             { name: '图片', key: 'img', data: [] },
             { name: '视频', key: 'video', data: [] },
@@ -115,7 +175,6 @@ const components = ref<componentsData[]>([
 
 // computer
 const url_computer = (name: string) => {
-    // const new_url = common_store.common.config.attachment_host + `/static/diy/images/layout/siderbar/${name}.png`;
     const new_url = `/src/assets/img/${name}.png`;
     return new_url;
 };
@@ -130,14 +189,11 @@ const clone_item_com_data = (item: commonComponentData) => {
         show_tabs: '1',
         is_enable: '1',
         key: item.key,
-        children: [],
         com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
     };
 };
 
 //#region 拖拽组件的公共方法
-// 是否显示提示用户拖拽位置
-const show_model_border = ref(true);
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
     const new_item = {
@@ -154,14 +210,6 @@ const draggable_click = (item: componentsData) => {
     // 设置当前选中的是那个
     set_show_tabs(diy_data.value.length - 1);
 };
-// 拖拽开始
-const on_start = () => {
-    show_model_border.value = false;
-};
-// 拖拽结束
-const on_end = () => {
-    show_model_border.value = true;
-};
 // 拖拽排序
 const on_sort = (event: SortableEvent) => {
     set_show_tabs(event.newIndex || 0);
@@ -173,6 +221,11 @@ const on_choose = (index: number, show_tabs: string) => {
         // 设置对应的位置为显示
         set_show_tabs(index);
     }
+};
+// 是否启用
+const set_enable = (index: number) => {
+    const old_data = get_diy_index_data(index);
+    old_data.is_enable = old_data.is_enable == '1' ? '0' : '1';
 };
 // 删除
 const on_del = (index: number) => {
@@ -273,34 +326,91 @@ const set_show_tabs = (index: number) => {
     .drag-container {
         max-width: calc(100% - 23.4rem);
         max-height: calc(100vh - 7rem);
-        .drag-content {
-            min-height: 20rem;
-            max-width: 100rem;
-            background-color: #fff;
-            margin: 0 auto;
-            .item {
-                position: relative;
-                padding: 1.8rem 2rem;
-                cursor: all-scroll;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .subform {
+            max-width: 90%;
+            width: 100%;
+            // height: 100%;
+            background: #fff;
+            overflow: hidden;
+            .row-header {
+                padding-bottom: 1rem;
+                .head-label {
+                    background: #f0f1f4;
+                    border: 0.1rem solid #e6e8ed;
+                    border-top-left-radius: 0.3rem;
+                    width: 7.8rem;
+                    height: 3.5rem;
+                }
+                .row-num {
+                    text-align: center;
+                    background: #fff;
+                    border: 0.1rem solid #e6e8ed;
+                    border-top: 0;
+                    width: 7.8rem;
+                    min-height: 4rem;
+                    line-height: 4rem;
+                    position: relative;
+                }
+                .row-num:last-child {
+                    border-bottom-left-radius: 0.3rem;
+                }
+            }
+            .subform-item {
                 &.active {
                     position: relative;
                     z-index: 1;
-                    box-sizing: border-box;
                 }
-                &.active::before {
-                    content: '';
-                    width: calc(100% + 0.4rem);
+                &.active::before { 
+                    content: "";
+                    width: 100%;
                     height: 100%;
                     position: absolute;
                     top: 0;
-                    left: -0.2rem;
-                    border: 0.2rem solid $cr-main;
-                    z-index: 1;
+                    left: 0;
+                    border: 0.1rem dotted var(--color-main);
+                    z-index: 2;
                 }
+                .item-label {
+                    height: 3.5rem;
+                    padding: 0.5rem;
+                    background: #f0f1f4;
+                    font-size: 1.4rem;
+                    color: #141E31;
+                    border: 0.1rem solid #e6e8ed;
+                    border-left: 0;
+                }
+                .item-row { 
+                    padding: 0.5rem;
+                    min-height: 4rem;
+                    border: 0.1rem solid #e6e8ed;
+                    border-left: 0;
+                    border-top: 0;
+                }
+            }
+            .empty-title {
+                width: 16rem;
+                height: 100%;
+                font-size: 1.4rem;
+                color: #838892;
+                background: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 0.1rem solid #e6e8ed;
+                border-left: 0;
+                border-top-right-radius: 0.3rem;
+                border-bottom-right-radius: 0.3rem;
+            }
+            .scroll-area {
+                padding-bottom: 1rem;
+                overflow-x: auto;
                 .oprate {
                     position: absolute;
-                    right: 2rem;
-                    top: 0.8rem;
+                    right: 0.5rem;
+                    top: 0.5rem;
                     display: flex;
                     align-items: center;
                     background-color:#f5fbff;
@@ -312,7 +422,7 @@ const set_show_tabs = (index: number) => {
                         justify-content: center;
                         align-items: center;
                         cursor: pointer;
-                        padding: 0.6rem 1.2rem;
+                        padding: 0.3rem 0.6rem;
                     }
                     .divider {
                         width: 1px;
@@ -323,17 +433,34 @@ const set_show_tabs = (index: number) => {
             }
         }
         .drag-seat {
-            display: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .drag-hide {
             display: none;
         }
     }
     .drag-seat {
+        min-width: 18rem;
+        height: 100%;
+        padding: 0;
+        padding-bottom: 1rem;
+        border-radius: 4px;
         background: #f5fbff;
-        padding: 1.8rem 2rem;
-        border-radius: 12px;
         color: $cr-primary;
     }
+}
+.plug-in-close::before {
+    position: absolute;
+    content: '\5DF2\9690\85CF';
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

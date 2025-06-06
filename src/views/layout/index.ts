@@ -23,6 +23,7 @@ import defaultUploadAttachments from '@/config/const/upload-attachments';
 import defaultAttachments from '@/config/const/attachments';
 import defaultRect from '@/config/const/rect';
 import defaultRound from '@/config/const/round';
+import defaultSubform from '@/config/const/subform';
 // 系统设置
 interface DefaultSettings {
     single_text: object;
@@ -50,6 +51,7 @@ interface DefaultSettings {
     attachments: object;
     rect: object;
     round: object;
+    subform: object;
 }
 
 const defaultSettings: DefaultSettings = {
@@ -78,6 +80,7 @@ const defaultSettings: DefaultSettings = {
     upload_attachments: defaultUploadAttachments,
     rect: defaultRect,
     round: defaultRound,
+    subform: defaultSubform,
 };
 
 export default defaultSettings;

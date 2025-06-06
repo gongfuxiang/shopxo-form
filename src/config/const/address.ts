@@ -19,7 +19,7 @@ const defaultSelect: DefaultSelect = {
     detailed_value: '',
     placeholder: '请选择内容',
     is_required: '0',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };

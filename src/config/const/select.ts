@@ -38,7 +38,7 @@ const defaultSelect: DefaultSelect = {
     is_multicolour: '0',
     format: 'none',
     arrangement: 'horizontal',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };

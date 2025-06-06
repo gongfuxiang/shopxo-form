@@ -17,7 +17,7 @@ const defaultSelect: DefaultSelect = {
     placeholder: '请输入内容',
     is_required: '0',
     is_longitude_and_latitude: '0',
-    com_width: 200,
+    com_width: 150,
     com_height: 66,
     common_config: defaultCommon
 };
