@@ -4,7 +4,7 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="pc-disable flex-row align-c jc-c w h" :style="frame_style + style_container">
-                    <div class="flex-row align-c jc-c gap-10">
+                    <div class="flex-row align-c jc-c gap-10 plr-5">
                         <icon name="latitude-location" color="#000"></icon>
                         请在移动端打开表单进行定位
                     </div>

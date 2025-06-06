@@ -33,7 +33,7 @@
                         <div class="flex-1 row-num">1</div>
                     </template>
                 </div>
-                <div class="scroll-area flex-row">
+                <div class="flex-1 scroll-area flex-row">
                     <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" :invert-swap="false" class="subform-container drag-area flex-row re" ghost-class="ghost" :on-sort="on_sort">
                         <template v-if="diy_data.length > 0">
                             <div v-for="(item, index) in diy_data" :key="item.id" :class="['subform-item re', { 'active': item.show_tabs == '1' }]" :style="`width: ${ item.com_data.com_width }px;`" @click.stop="on_choose(index, item.show_tabs)">
@@ -41,6 +41,7 @@
                                     <div class="icon" @click.stop="set_enable(index)">
                                         <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
                                     </div>
+                                    <span class="divider"></span>
                                     <div class="icon" @click="on_del(index)">
                                         <icon name="del" size="10"></icon>
                                     </div>
@@ -155,7 +156,6 @@ const components = ref<componentsData[]>([
             { name: '定位', key: 'position', data: [] },
             { name: '地址', key: 'address', data: [] },
             { name: '密码', key: 'pwd', data: [] },
-            { name: '手机', key: 'phone', data: [] },
             { name: '评分', key: 'score', data: [] },
             { name: '上传文件', key: 'upload-attachments', data: [] },
             { name: '上传视频', key: 'upload-video', data: [] },
@@ -337,6 +337,7 @@ const set_show_tabs = (index: number) => {
             overflow: hidden;
             .row-header {
                 padding-bottom: 1rem;
+                overflow-x: scroll;
                 .head-label {
                     background: #f0f1f4;
                     border: 0.1rem solid #e6e8ed;
@@ -406,7 +407,7 @@ const set_show_tabs = (index: number) => {
             }
             .scroll-area {
                 padding-bottom: 1rem;
-                overflow-x: auto;
+                overflow-x: scroll;
                 .oprate {
                     position: absolute;
                     right: 0.5rem;

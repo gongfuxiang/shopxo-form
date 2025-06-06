@@ -14,7 +14,7 @@ declare module 'vue' {
     ComponentShow: typeof import('./../components/common/component-show/index.vue')['default']
     ComponentSwitchSelect: typeof import('./../components/common/component-switch-select/index.vue')['default']
     copy: typeof import('./../components/model-text copy/index.vue')['default']
-    CustomRate: typeof import('./../components/model-score/components/custom-rate.vue')['default']
+    CustomRate: typeof import('./../components/common/custom-rate/index.vue')['default']
     CustomTable: typeof import('./../components/common/custom-table/index.vue')['default']
     Desensitization: typeof import('./../components/common/desensitization/index.vue')['default']
     DivContent: typeof import('./../components/common/div-content/index.vue')['default']

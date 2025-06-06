@@ -37,7 +37,6 @@ const img_style = computed(() => {
             height: '100%;',
         };
     }
-    
 });
 </script>
 <style lang="scss" scoped>

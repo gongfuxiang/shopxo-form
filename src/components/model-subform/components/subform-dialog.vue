@@ -1,7 +1,7 @@
 <template>
     <el-dialog v-model="dialogVisible" :title="title" :fullscreen="true" :close-on-press-escape="false" :close-on-click-modal="false" :append-to-body="false" :before-close="handleClose">
         <div class="flex-row w h">
-            <subform-main class="flex-1" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
+            <subform-main class="flex-1 main-style" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
             <div class="setting ptb-20 plr-12">
                 <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true"></right-side-parameter-config>
             </div>
@@ -52,5 +52,8 @@ const accomplish = () => {
     background-color: #fff;
     max-height: calc(100vh - 7rem);
     overflow-y: auto;
+}
+.main-style {
+    max-width: calc(100% - 30rem);
 }
 </style>
