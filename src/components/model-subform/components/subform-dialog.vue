@@ -1,7 +1,7 @@
 <template>
-    <el-dialog v-model="dialogVisible" :title="title" :fullscreen="true" :close-on-press-escape="false" :close-on-click-modal="false" :append-to-body="false" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" :title="title" :fullscreen="true" :close-on-press-escape="false" :close-on-click-modal="false" :append-to-body="false" destroy-on-close :before-close="handleClose">
         <div class="flex-row w h">
-            <subform-main class="flex-1 main-style" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
+            <subform-main ref="draglist" class="flex-1 main-style" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
             <div class="setting ptb-20 plr-12">
                 <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true" :is-subform="true"></right-side-parameter-config>
             </div>
@@ -26,6 +26,9 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);
+watch(() => props.value, (val) => {
+    form.value = val;
+}, {immediate: true, deep: true});
 
 const diy_data_item = ref({});
 const key = ref('');
@@ -40,8 +43,14 @@ const handleClose = () => {
     dialogVisible.value = false;
 };
 const emits = defineEmits(['accomplish']);
+const draglist = ref<any | null>(null);
 const accomplish = () => {
-    emits('accomplish');
+    // 如果没有数据，直接返回
+    if (!draglist.value) {
+        return;
+    } else {
+        emits('accomplish', draglist.value.diy_data, draglist.value.table_list);    
+    }
     dialogVisible.value = false;
 };
 </script>

@@ -17,7 +17,7 @@
             <div class="flex-col gap-10 w h">
                 <div class="new_title">类型</div>
                 <el-select v-model="form.address_type" value-key="id" filterable placeholder="请选择类型" @change="address_type_change">
-                    <el-option v-for="item in format_option" :key="item.value" :label="item.name" :value="item.value" />
+                    <el-option v-for="item in format_option.filter(item => !isSubform || (isSubform && item.value == 'noDetailed'))" :key="item.value" :label="item.name" :value="item.value" />
                 </el-select>
             </div>
         </el-form-item>

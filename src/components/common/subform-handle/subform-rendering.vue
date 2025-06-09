@@ -4,45 +4,45 @@
         <template v-if="['single-text', 'select', 'radio-btns'].includes(model_type)">
             <template v-if="['radio-btns', 'select'].includes(form.type)">
                 <div class="flex-col gap-10">
-                    <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="frame_style + style_container" @change="select_change">
-                        <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form.form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form.form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
+                    <el-select ref="selectRef" v-model="form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="frame_style + style_container" @change="select_change">
+                        <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                         <template #tag>
-                            <template v-if="isEmpty(form.form_value)">
+                            <template v-if="isEmpty(form_value)">
                                 <div class="select-tag" :style="common_styles">{{ form.placeholder }}</div>
                             </template>
                             <template v-else>
-                                <div v-for="item in form.option_list.filter((item1: any) => form.form_value.includes(item1.value))" :key="item.value" :style="option_style(item)">{{ item.name }}</div>
+                                <div v-for="item in form.option_list.filter((item1: any) => form_value.includes(item1.value))" :key="item.value" :style="option_style(item)">{{ item.name }}</div>
                             </template>
                         </template>
                     </el-select>
-                    <template v-if="form.form_value == 'outer'">
+                    <template v-if="form_value == 'outer'">
                         <el-input v-model="form.outer_value" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                     </template>
                 </div>
             </template>
             <template v-else>
-                <el-input v-model="form.form_value" :style="frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
+                <el-input v-model="form_value" :style="frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
             </template>
         </template>
         <!-- 多行文本 -->
         <template v-else-if="model_type == 'multi-text'">
-            <el-input v-model="form.form_value" type="textarea" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
+            <el-input v-model="form_value" type="textarea" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
         </template>
         <!-- 数字 -->
         <template v-else-if="model_type == 'number'">
-            <number-input v-model="form.form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :placeholder="form.placeholder" :style="frame_style + style_container" @blur="data_check(true, 'number')" @change="data_check(true, 'number')"></number-input>
+            <number-input v-model="form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :placeholder="form.placeholder" :style="frame_style + style_container" @blur="data_check(true, 'number')" @change="data_check(true, 'number')"></number-input>
         </template>
         <!-- 日期时间 -->
         <template v-else-if="model_type == 'date'">
             <template v-if="['option1', 'option2'].includes(form.date_type)">
                 <div class="re w h" :style="frame_style + style_container + 'height: 100%;'">
-                    <el-time-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" clearable :placeholder="form.placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <el-time-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" clearable :placeholder="form.placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
             </template>
             <template v-else>
                 <div class="re w h" :style="frame_style + style_container + 'height: 100%;'">
-                    <el-date-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'month' : form.date_type == 'option4' ? 'date' : 'datetime'" clearable :placeholder="form.placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <el-date-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'month' : form.date_type == 'option4' ? 'date' : 'datetime'" clearable :placeholder="form.placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
             </template>
@@ -50,26 +50,26 @@
         <!-- 日期时间组 -->
         <template v-else-if="model_type == 'date-group'">
             <template v-if="['option1', 'option2'].includes(form.date_type)">
-                    <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
-                        <el-time-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
-                        <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
-                    </div>
-                </template>
-                <template v-else>
-                    <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
-                        <el-date-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'monthrange' : form.date_type == 'option4' ? 'daterange' : 'datetimerange'" clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
-                        <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
-                    </div>
-                </template>
+                <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                    <el-time-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
+                </div>
+            </template>
+            <template v-else>
+                <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                    <el-date-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'monthrange' : form.date_type == 'option4' ? 'daterange' : 'datetimerange'" clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
+                    <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
+                </div>
+            </template>
         </template>
         <!-- 多选按钮组 ｜ 下拉复选框 -->
         <template v-else-if="['checkbox', 'select-multi'].includes(model_type)">
-            <el-select v-model="form.form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="frame_style + style_container" @change="data_check(true, 'checkbox')" @visible-change="input_value = ''">
+            <el-select v-model="form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="frame_style + style_container" @change="data_check(true, 'checkbox')" @visible-change="input_value = ''">
                 <template #header>
                     <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                 </template>
                 <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
-                <el-checkbox-group :model-value="form.form_value">
+                <el-checkbox-group :model-value="form_value">
                     <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                         <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
                     </el-option>
@@ -93,12 +93,12 @@
                 </template>
                 <!-- 选中之后的效果 -->
                 <template #tag>
-                    <template v-if="isEmpty(form.form_value)">
+                    <template v-if="isEmpty(form_value)">
                         <div class="select-tag" :style="common_styles">{{ form.placeholder }}</div>
                     </template>
                     <template v-else>
                         <template v-if="form.is_multicolour == '1'">
-                            <div v-for="item in form.option_list.filter((item1: any) => form.form_value.includes(item1.value))" :key="item.value" :style="option_style(item) + 'white-space: nowrap;'">{{ item.name }}</div>
+                            <div v-for="item in form.option_list.filter((item1: any) => form_value.includes(item1.value))" :key="item.value" :style="option_style(item) + 'white-space: nowrap;'">{{ item.name }}</div>
                         </template>
                         <template v-else> 
                             <div class="text-line-1" :style="common_styles">{{ selected_names }}</div>
@@ -119,12 +119,12 @@
         <!-- 地址 -->
         <template v-else-if="model_type == 'address'">
             <div class="flex-col gap-10 align-c" :style="frame_style + 'height: 100%;'">
-                <el-cascader v-model="form.form_value" :options="common_store.address_list" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false)" />
+                <el-cascader v-model="form_value" :options="common_store.address_list" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false)" />
             </div>
         </template>
         <!-- 密码 -->
         <template v-else-if="model_type == 'pwd'">
-            <el-input v-model="form.form_value" :type="pwd_is_show ? 'password' : ''" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check(false)">
+            <el-input v-model="form_value" :type="pwd_is_show ? 'password' : ''" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check(false)">
                 <template #prefix>
                     <icon :name="form.icon_name" color="#999"></icon>
                 </template>
@@ -135,16 +135,16 @@
         </template>
         <!-- 评分 -->
         <template v-else-if="model_type == 'score'">
-            <custom-rate v-model="form.form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" @change="data_check"/>
+            <custom-rate v-model="form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" @change="data_check"/>
         </template>
         <!-- 上传图片｜上传视频 ｜ 上传文件 -->
         <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_type)">
             <el-dropdown trigger="click" max-height="300px" size="large" placement="bottom-start" :hide-on-click="false" popper-class="subform-upload-setting-box" class="subform-upload-setting-box">
-                <div v-if="form.form_value.length < 0" class="w h">
+                <div v-if="!Array.isArray(form_value) || form_value.length < 0" class="w h">
 
                 </div>
                 <template v-else>
-                    <div v-for="(item, index) in form.form_value" :key="index" class="w h flex-row align-c gap-3"> 
+                    <div v-for="(item, index) in form_value" :key="index" class="w h flex-row align-c gap-3"> 
                         <template v-if="model_type === 'upload-img'">
                             <el-image :src="item.url" fit="contain"></el-image>
                         </template>
@@ -159,14 +159,14 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>
-                            <upload-setting :value="form.form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" />
+                            <upload-setting :value="form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" />
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
         </template>
         <!-- 文本 -->
-        <template v-else-if="model_type == 'text'">{{ form.form_value }}</template>
+        <template v-else-if="model_type == 'text'">{{ form_value }}</template>
         <!-- 图片 -->
         <template v-else-if="model_type == 'img'">
             <image-empty v-model="form.img_src[0]" fit="contain" class="w h"></image-empty>
@@ -219,9 +219,22 @@ import { commonStore } from "@/store";
 import type { ElSelect, FormInstance, FormRules } from "element-plus";
 import { Search } from '@element-plus/icons-vue'
 import { cloneDeep } from "lodash";
+import { PropType } from "vue";
 const common_store = commonStore();
 const model_type = defineModel('type', { type: String, default: () => '' });
 const form = defineModel({ type: Object, default: () => ({}) });
+// 定义 form_value 类型
+type FormValueType = string | number | Array<any> | Record<string, any>;
+const props = defineProps({
+    value: {
+        type: [String, Number, Array] as PropType<FormValueType>,
+        default: () => { },
+    }
+});
+const form_value = ref<any>(props.value);
+watch(() => props.value, (val) => {
+    form_value.value = val;
+}, {immediate: true});
 //#region 单行文本 | 下拉框 | 单选按钮组
 // 没有彩色时的公共样式
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
@@ -236,14 +249,14 @@ const data_check = (val: boolean = false, type: string = '') => {
     get_format_checks(form.value, val, type)
 };
 const select_change = (val: any) => {
-    form.value.form_value = Array.isArray(val) ? val[0] : val;
+    form_value.value = Array.isArray(val) ? val[0] : val;
 }
 // 关闭下拉框
 const selectRef = ref<InstanceType<typeof ElSelect> | null>(null);
 // 单选选择框为了兼容颜色设置，清空老数据并赋值新数据
 const select_click = (val: any) => {
-    if (!form.value.form_value.includes(val)) {
-        form.value.form_value = val;
+    if (!form_value.value.includes(val)) {
+        form_value.value = val;
     }
     // 点击之后关闭下拉框的弹出框
     if (selectRef.value) {
@@ -258,7 +271,7 @@ const date_style_format = computed(() => {
 });
 const is_time_icon_show = ref(true);
 const time_focus = () => {
-    if (!isEmpty(form.value.form_value)) {
+    if (!isEmpty(form_value.value)) {
         is_time_icon_show.value = false;
     } else {
         is_time_icon_show.value = true;
@@ -272,7 +285,7 @@ const time_blur = () => {
 const el_time = ref<any>(null);
 const custom_icon_click = () => {
     if (el_time.value) {
-        if (!isEmpty(form.value.form_value)) {
+        if (!isEmpty(form_value.value)) {
             is_time_icon_show.value = false;
         } else {
             is_time_icon_show.value = true;
@@ -309,12 +322,12 @@ watchEffect(() => {
     if (['checkbox', 'select-multi'].includes(model_type.value)) {
         if (!isEmpty(input_value.value)) {
             // 判断符合条件的数据中选中多少个
-            const count = new_option_list.value.reduce((acc : number, item: { value: string }) => form.value.form_value.includes(item.value) ? acc + 1 : acc, 0);
+            const count = new_option_list.value.reduce((acc : number, item: { value: string }) => form_value.value.includes(item.value) ? acc + 1 : acc, 0);
             const flag = count > 0 && count < new_option_list.value.length;
             selectAll.value = count == new_option_list.value.length;
             indeterminate.value = flag;
         } else {
-            const valueSet = new Set(form.value.form_value);
+            const valueSet = new Set(form_value.value);
             const flag = valueSet.size > 0 && valueSet.size < form.value.option_list.length;
             selectAll.value = valueSet.size == form.value.option_list.length;
             indeterminate.value = flag;
@@ -326,9 +339,9 @@ const handleCheckAllChange = () => {
     if (!isEmpty(input_value.value)) {
         // 判断有多少个符合筛选条件的数据
         const option_list_value = new_option_list.value.map((item: { value: any }) => item.value);
-        form.value.form_value = selectAll.value ? cloneDeep(form.value.form_value).concat(option_list_value) : cloneDeep(form.value.form_value).filter((item: any) => !option_list_value.includes(item))
+        form_value.value = selectAll.value ? cloneDeep(form_value.value).concat(option_list_value) : cloneDeep(form_value.value).filter((item: any) => !option_list_value.includes(item))
     } else {
-        form.value.form_value = selectAll.value ? form.value.option_list.map((item: { value: any }) => item.value) : []
+        form_value.value = selectAll.value ? form.value.option_list.map((item: { value: any }) => item.value) : []
     }
 }
 //#endregion
@@ -367,7 +380,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             value: value,
             color: color_change(form.value.option_list.length - 1),
         });
-        form.value.form_value.push(value);
+        form_value.value.push(value);
         popover_visible.value = false;
     }
   })

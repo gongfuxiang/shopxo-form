@@ -9,23 +9,51 @@
         </el-form-item>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title">文本内容</div>
-                <el-input v-model="form.form_value" type="textarea" :rows="6" placeholder="请输入文本内容" clearable></el-input>
+                <div class="new_title">默认值</div>
+                <el-button class="w custom-button size-14 mb-18" @click="set_default"><icon name="edit" size="14"></icon>设置默认值</el-button>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title">字体颜色</div>
-                <color-picker v-model="form.text_color" default-color="#666" @operation_end="operation_end" />
+                <div class="new_title">校验</div>
+                <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
-        <el-button class="w custom-button size-14" size="large" @click="custom_edit"><icon name="edit" size="14"></icon>表单编辑</el-button>
-        <subform-dialog :visible="subform_visible" :value="form.form_value" :subform-list="form.children"></subform-dialog>
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">子字段</div>
+                <template v-if="form.children.length > 0">
+                    <drag class="w" :data="form.children" is-show-copy :space-col="20" @remove="remove" @copy="copy" @on-sort="on_sort">
+                        <template #default="{ row }">
+                            <el-input v-model="row.com_data.title"></el-input>
+                        </template>
+                    </drag>
+                </template>
+                <template v-else>
+                    <span class="size-14 cr-6">暂无数据, 请点击下方添加子字段添加数据或者点击表单编辑配置详细数据</span>
+                </template>
+                <el-dropdown trigger="click" max-height="300px" placement="bottom-start" @visible-change="input_value = ''">
+                    <el-button class="dialog-add"><icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/><span class="ml-5">添加子字段</span></el-button>
+                    <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-input v-model="input_value" class="plr-10 pb-4" placeholder="搜索" :prefix-icon="Search" />
+                            <el-dropdown-item v-for="item in children_List.filter(item => item.name.includes(input_value))" :key="item.key" @click="dropdown_click(item)">{{ item.name }}</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </template>
+                </el-dropdown>
+            </div>
+        </el-form-item>
+        <el-button class="w custom-button size-14 mb-18" @click="custom_edit"><icon name="edit" size="14"></icon>表单编辑</el-button>
         <help-config class="mb-18" :value="form.common_config" />
+        <subform-dialog v-model:visible="subform_visible" :value="form" @accomplish="accomplish"></subform-dialog>
+        <subform-default-dialog v-model:visible="subform_visible" :value="form" @accomplish="accomplish"></subform-default-dialog>
     </el-form>
 </template>
 <script setup lang="ts">
-import { cloneDeep } from 'lodash'
+import { Search } from '@element-plus/icons-vue'
+import { get_math } from '@/utils';
+import { cloneDeep, isEmpty } from 'lodash'
+import defaultSettings from '@/views/layout/index';
 const props = defineProps({
     value: {
         type: Object,
@@ -50,6 +78,102 @@ const subform_visible = ref(false);
 const custom_edit = () => {
     subform_visible.value = true;
 };
+// 点击完成之后将值赋值回来
+const accomplish = (children: any[], value: any[]) => {
+    form.value.children = children;
+    form.value.form_value = value;
+    subform_visible.value = false;
+};
+//#region 子字段数据操作
+const input_value = ref('');
+const children_List = [
+    { name: '单行文本', key: 'single-text', data: [] },
+    { name: '多行文本', key: 'multi-text', data: [] },
+    { name: '数字', key: 'number', data: [] },
+    { name: '日期时间', key: 'date', data: [] },
+    { name: '单选按钮组', key: 'radio-btns', data: [] },
+    { name: '复选框组', key: 'checkbox', data: [] },
+    { name: '下拉框', key: 'select', data: [] },
+    { name: '下拉复选框', key: 'select-multi', data: [] },
+    { name: '日期时间组', key: 'date-group', data: [] },
+    { name: '上传图片', key: 'upload-img', data: [] },
+    { name: '定位', key: 'position', data: [] },
+    { name: '地址', key: 'address', data: [] },
+    { name: '密码', key: 'pwd', data: [] },
+    { name: '评分', key: 'score', data: [] },
+    { name: '上传文件', key: 'upload-attachments', data: [] },
+    { name: '上传视频', key: 'upload-video', data: [] },
+    { name: '文本', key: 'text', data: [] },
+    { name: '图片', key: 'img', data: [] },
+    { name: '视频', key: 'video', data: [] },
+    { name: '文件', key: 'attachments', data: [] },
+]
+const dropdown_click = (item: { name: string; key: string }) => {
+    const new_item = {
+        name: item.name,
+        id: get_math(),
+        mark_name: '',
+        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
+        show_tabs: '0',
+        is_enable: '1',
+        key: item.key,
+        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+    };
+    form.value.children.push(new_item);
+    // 添加新字段后，可填数据也需要更新
+    const new_val = cloneDeep(form.value.children);
+    if (form.value.form_value.length > 0) {
+        const validIds = new Set(new_val.map((item: any) => item.id));
+        // 先将新字段填充进去，再判断历史是否存在多余的字段
+        new_val.forEach((item: any) => {
+            form.value.form_value.forEach((item1: any) => {
+                item1[item.id] = item.com_data.form_value;
+            });
+        });
+        // 清理不在 validIds 中的字段：同样使用 map 创建新对象
+        form.value.form_value = form.value.form_value.map((item1: arrayIndex) => {
+            const newItem: arrayIndex = {};
+            Object.keys(item1).forEach((key) => {
+                if (validIds.has(key)) {
+                    newItem[key] = item1[key];
+                }
+            });
+            return newItem;
+        });
+    } else {
+        const data = new_val.map((item: any) => {
+            const obj = {
+                [item.id]: item.com_data.form_value
+            };
+            return obj;
+        });
+        form.value.form_value = [data];
+    }
+};
+// 删除数据
+const remove = (index: number) => {
+    form.value.children.splice(index, 1);
+};
+// 复制数据
+const copy = (index: number) => {
+    // 获取当前数据, 复制的时候id更换一下
+    const new_data = {
+        ...cloneDeep(form.value.children[index]),
+        id: get_math(),
+    };
+    // 在当前位置下插入数据
+    form.value.children.splice(index, 0, new_data);
+}
+// 拖拽的时候返回的数据
+const on_sort = (val: any) => {
+    form.value.children = val;
+};
+//#endregion
+//#region 设置默认值
+const set_default = () => { 
+
+};
+//#endregion
 </script>
 
 <style scoped lang="scss"> 
@@ -84,6 +208,21 @@ const custom_edit = () => {
     }
     .el-dialog__footer {
         padding: 2.4rem 3rem;
+    }
+}
+.dialog-add {
+    background: #fff;
+    text-align: center;
+    font-size: 1.2rem;
+    height: 2.4rem;
+    width: 10rem;
+    border: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    &:focus-visible {
+        outline: none !important;
     }
 }
 </style>

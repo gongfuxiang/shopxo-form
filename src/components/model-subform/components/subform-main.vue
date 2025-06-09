@@ -58,7 +58,7 @@
                                         <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
                                     </div>
                                     <div v-for="(item1, index1) in table_list" :key="index1" class="flex-1 item-row rendering-area flex-row align-c jc-c">
-                                       <subform-rendering v-model="item.com_data" v-model:type="item.key"></subform-rendering>
+                                       <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]"></subform-rendering>
                                     </div>
                                 </div>
                             </div>
@@ -107,24 +107,34 @@ watch(() => props.value, (newValue) => {
 watch(() => diy_data.value, (new_val) => {
 	if (new_val.length > 0) {
 		if (table_list.value.length > 0) {
-			new_val.forEach((item: any) => {
-				table_list.value.forEach((item1: any) => {
-					if (isEmpty(item1[item.id])) {
-						item1[item.id] = item.form_value;
-					}
-				});
-			});
+            const validIds = new Set(new_val.map((item: any) => item.id));
+            // 先将新字段填充进去，再判断历史是否存在多余的字段
+            new_val.forEach((item: any) => {
+                table_list.value.forEach((item1: any) => {
+                    item1[item.id] = item.com_data.form_value;
+                });
+            });
+            // 清理不在 validIds 中的字段：同样使用 map 创建新对象
+            table_list.value = table_list.value.map((item1: arrayIndex) => {
+                const newItem: arrayIndex = {};
+                Object.keys(item1).forEach((key) => {
+                    if (validIds.has(key)) {
+                        newItem[key] = item1[key];
+                    }
+                });
+                return newItem;
+            });
 		} else {
 			const data = new_val.map((item: any) => {
 				const obj = {
-					[item.id]: item.form_value
+					[item.id]: item.com_data.form_value
 				};
 				return obj;
 			});
 			table_list.value = [data];
 		}
 	}
-});
+}, { immediate:true, deep: true });
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
 interface componentsData {
@@ -274,6 +284,11 @@ const set_show_tabs = (index: number) => {
         }
     });
 };
+// 暴露出去的数据，避免跟外部数据双向绑定，点击保存的时候才会保存数据
+defineExpose({
+    diy_data,
+    table_list,
+});
 </script>
 
 <style scoped lang="scss">

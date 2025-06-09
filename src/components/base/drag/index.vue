@@ -4,6 +4,7 @@
             <li v-for="(item, index) in from" :key="index" class="flex-row alingn-c gap-y-16 re">
                 <slot :row="item" :index="index" />
                 <icon name="drag" size="16" class="cursor-move" />
+                <icon v-if="isShowCopy" name="copy" size="16" color="3" @click="copy(index)"/>
                 <icon name="delete-o" size="18" color="6" @click="remove(index)"/>
             </li>
         </TransitionGroup>
@@ -19,11 +20,13 @@ interface Props {
     modelType?: string;
     modelIndex?: number;
     multipleIcons?: boolean;
+    isShowCopy?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
     modelType: 'outer',
     modelIndex: 0,
     multipleIcons: false,
+    isShowCopy: false,
 });
 const className = ref('');
 watch(
@@ -37,7 +40,9 @@ const from = ref(props.data);
 const on_click = (item: any, index: number) => {
     emits('click', item, index);
 };
-
+const copy = (index: number) => {
+    emits('copy', index);
+};
 // 删除
 const remove = (index: number) => {
     emits('remove', index);
