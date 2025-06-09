@@ -45,7 +45,10 @@
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
-        <help-config :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -60,7 +63,11 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);// 判断配置项是否有误
 

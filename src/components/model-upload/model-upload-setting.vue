@@ -21,8 +21,11 @@
                 </div>
             </div>
         </el-form-item>
-        <border-config :value="form.common_config" />
-        <help-config :value="form.common_config" />
+        <border-config class="mb-18" :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -41,6 +44,10 @@ const props = defineProps({
     acceptType: {
         type: String,
         default: 'img',
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
     },
 });
 const form = ref(props.value);// 判断配置项是否有误

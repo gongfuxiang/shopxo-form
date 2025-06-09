@@ -21,7 +21,7 @@
         </el-form-item>
         <el-button class="w custom-button size-14" size="large" @click="custom_edit"><icon name="edit" size="14"></icon>表单编辑</el-button>
         <subform-dialog :visible="subform_visible" :value="form.form_value" :subform-list="form.children"></subform-dialog>
-        <help-config :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
     </el-form>
 </template>
 <script setup lang="ts">

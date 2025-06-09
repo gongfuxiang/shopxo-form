@@ -28,8 +28,8 @@
                 <div v-if="form.is_sms_verification == '1'"><el-checkbox v-model="form.is_img_sms_verification" label="图片验证码" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
-        <border-config :value="form.common_config" />
-        <help-config :value="form.common_config" />
+        <border-config class="mb-18" :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
     </el-form>
 </template>
 <script setup lang="ts">

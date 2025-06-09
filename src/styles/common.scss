@@ -387,6 +387,13 @@
     }
 }
 
+.four-copies-group { 
+    .el-radio-button {
+        overflow: hidden;
+        width: 25%;
+    }
+}
+
 .vertical-group {
     display: flex;
     flex-direction: column;
@@ -424,6 +431,13 @@
     }
     .el-dropdown-menu__item:hover {
         background-color: #F7F7F7;
+        color: #333;
+    }
+}
+
+.subform-upload-setting-box {
+    .el-dropdown-menu__item:hover {
+        background-color: #fff;
         color: #333;
     }
 }

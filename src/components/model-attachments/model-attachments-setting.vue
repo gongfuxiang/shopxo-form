@@ -13,7 +13,10 @@
                 <upload v-model="form.file" :limit="1" type="file" @update:model-value="operation_end"></upload>
             </div>
         </el-form-item>
-        <help-config :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -30,7 +33,11 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false,
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);// 判断配置项是否有误
 

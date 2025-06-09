@@ -64,7 +64,7 @@
             </el-form-item>
         </template>
         <template v-if="form.type !== 'radio-btns'">
-            <border-config :value="form.common_config" />
+            <border-config class="mb-18" :value="form.common_config" />
         </template>
         <template v-else>
             <el-form-item label-width="0">
@@ -77,7 +77,10 @@
                 </div>
             </el-form-item>
         </template>
-        <help-config :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
         <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :model-id="modelId" @submit="submit"></show-hidden>
     </el-form>
 </template>
@@ -92,7 +95,11 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);
 // 切换组件选项

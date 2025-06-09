@@ -3,7 +3,7 @@
         <div class="flex-row w h">
             <subform-main class="flex-1 main-style" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
             <div class="setting ptb-20 plr-12">
-                <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true"></right-side-parameter-config>
+                <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true" :is-subform="true"></right-side-parameter-config>
             </div>
         </div>
         <template #footer>

@@ -25,8 +25,11 @@
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
             </div>
         </el-form-item>
-        <border-config :value="form.common_config" />
-        <help-config :value="form.common_config" />
+        <border-config class="mb-18" :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
         <!-- 默认内容设置 -->
         <el-dialog v-model="dialogVisible" title="编辑" width="800px" style="height: 610px" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body draggable @close="cancel"> 
             <div class="w h ptb-20 oh">
@@ -51,7 +54,11 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);// 判断配置项是否有误
 //#region 关于编辑弹窗的操作

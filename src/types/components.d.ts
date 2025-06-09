@@ -141,6 +141,7 @@ declare module 'vue' {
     SubformMain: typeof import('./../components/model-subform/components/subform-main.vue')['default']
     SubformModule: typeof import('./../components/common/subform-module/index.vue')['default']
     SubformRendering: typeof import('./../components/common/subform-rendering/index.vue')['default']
+    SubformWidth: typeof import('./../components/common/subform-width/index.vue')['default']
     Tooltip: typeof import('./../components/base/tooltip/index.vue')['default']
     TransformCategory: typeof import('./../components/common/upload/transform-category.vue')['default']
     Upload: typeof import('./../components/common/upload/index.vue')['default']

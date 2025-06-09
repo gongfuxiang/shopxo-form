@@ -28,6 +28,9 @@
                 <color-picker v-model="form.border_color" @operation_end="operation_end" />
             </div>
         </el-form-item>
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -43,7 +46,11 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false,
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);
 

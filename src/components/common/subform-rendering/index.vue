@@ -139,13 +139,37 @@
         </template>
         <!-- 上传图片｜上传视频 ｜ 上传文件 -->
         <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_type)">
-            
+            <el-dropdown trigger="click" max-height="300px" size="large" placement="bottom-start" :hide-on-click="false" popper-class="subform-upload-setting-box" class="subform-upload-setting-box">
+                <div v-if="form.form_value.length < 0" class="w h">
+
+                </div>
+                <template v-else>
+                    <div v-for="(item, index) in form.form_value" :key="index" class="w h flex-row align-c gap-3"> 
+                        <template v-if="model_type === 'upload-img'">
+                            <el-image :src="item.url" fit="contain"></el-image>
+                        </template>
+                        <template v-if="model_type === 'upload-video'">
+
+                        </template>
+                        <template v-else>
+
+                        </template>
+                    </div>
+                </template>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                        <el-dropdown-item>
+                            <upload-setting :value="form.form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" />
+                        </el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
         </template>
         <!-- 文本 -->
         <template v-else-if="model_type == 'text'">{{ form.form_value }}</template>
         <!-- 图片 -->
         <template v-else-if="model_type == 'img'">
-            <image-empty v-model="form.img_src[0]" class="w h"></image-empty>
+            <image-empty v-model="form.img_src[0]" fit="contain" class="w h"></image-empty>
         </template>
         <!-- 视频 -->
         <template v-else-if="model_type == 'video'">
@@ -457,6 +481,14 @@ const frame_style = computed(() => common_store.frame_style + `max-width:100%;wi
         align-items: center;
         cursor: pointer;
         padding: 0.3rem 0.6rem;
+    }
+}
+.subform-upload-setting-box {
+    border-radius: 0.4rem;
+    border: 0.1rem solid #ccc;
+    height: 3.2rem;
+    :deep(.el-dropdown-menu__item:not(.is-disabled)):hover{
+        background: #fff;
     }
 }
 </style>

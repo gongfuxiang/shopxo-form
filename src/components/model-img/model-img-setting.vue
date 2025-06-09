@@ -30,7 +30,10 @@
                     </el-radio-group>
                 </div>
             </el-form-item>
-            <help-config :value="form.common_config" />
+            <help-config class="mb-18" :value="form.common_config" />
+        </template>
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
         </template>
     </el-form>
 </template>
@@ -48,7 +51,11 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false,
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);// 判断配置项是否有误
 

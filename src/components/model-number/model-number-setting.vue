@@ -67,8 +67,11 @@
                 <desensitization v-model:value="form.desensitization_value" v-model:show="form.is_desensitization"></desensitization>
             </div>
         </el-form-item>
-        <border-config :value="form.common_config" />
-        <help-config :value="form.common_config" />
+        <border-config class="mb-18" :value="form.common_config" />
+        <help-config class="mb-18" :value="form.common_config" />
+        <template v-if="isSubform">
+            <subform-width v-model="form.com_width"></subform-width>
+        </template>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -82,7 +85,11 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
-    }
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
 });
 const form = ref(props.value);// 判断配置项是否有误
 // 校验类型选项
@@ -100,7 +107,6 @@ const decimal_num_change = () => {
         form.value.form_value = Number(formatNumber(form.value.form_value, false)).toFixed(form.value.decimal_num).toString();
     }
 }
-
 
 /**
  * 处理最小值和最大值输入框失焦事件
