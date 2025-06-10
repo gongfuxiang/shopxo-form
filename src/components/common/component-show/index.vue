@@ -49,7 +49,7 @@
     </template>
     <!-- 子表单 -->
     <template v-if="form.key == 'subform'">
-        <model-subform :value="form.com_data" :is-custom="isCustom"></model-subform>
+        <model-subform :value="form.com_data" :is-custom="isCustom" :is-preview="isPreview"></model-subform>
     </template>
     <!-- 上传图片｜上传视频 ｜ 上传文件 -->
     <template v-if="['upload-img', 'upload-video', 'upload-attachments'].includes(form.key)">
@@ -88,6 +88,10 @@ const props = defineProps({
         default: () => {},
     },
     isCustom: {
+        type: Boolean,
+        default: false,
+    },
+    isPreview: {
         type: Boolean,
         default: false,
     }

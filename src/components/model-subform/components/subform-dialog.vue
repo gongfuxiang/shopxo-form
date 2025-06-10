@@ -28,7 +28,7 @@ const props = defineProps({
 const form = ref(props.value);
 watch(() => props.value, (val) => {
     form.value = val;
-}, {immediate: true, deep: true});
+}, { deep: true});
 
 const diy_data_item = ref({});
 const key = ref('');

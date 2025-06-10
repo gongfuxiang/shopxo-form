@@ -11,7 +11,9 @@
 						<div v-if="item.raw" class="flex-row align-c upload-file-title w h">
 							<span class="text-line-1">{{ new_name(item.raw.name)[0] || '' }}</span><span>.{{ new_name(item.raw.name)[1] || '' }}</span>
 						</div>
-						<icon class="flex-1 c-pointer" name="close" size="10" @click.stop="upload_remove(index)"></icon>
+						<div @click.stop="upload_remove(index)">
+							<icon class="flex-1 c-pointer" name="close" size="10"></icon>
+						</div>
 						<div v-if="item.percentage && item.percentage > 0 && item.percentage < 100" class="progress" :style="`width: ${ item.percentage }%;height:2px;`"></div>
 					</div>
 				</template>
@@ -69,6 +71,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadFile, UploadFiles, UploadUserFile } from 'element-plus'
 import { ext_img_name_list, ext_video_name_list, ext_file_name_list, ext_file_name_list_map } from '@/components/common/upload/index'
 import { annex_size_to_unit, ext_name, get_math, isEmpty, is_number } from '@/utils';
+import { cloneDeep } from "lodash";
 import { commonStore } from "@/store";
 const common_store = commonStore();
 
@@ -180,6 +183,7 @@ const upload_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 				});
 		}
 	});
+
 }
 // 超出数量限制回调
 const handle_exceed = () => {

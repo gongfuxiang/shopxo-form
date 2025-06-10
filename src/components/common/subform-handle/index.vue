@@ -1,23 +1,54 @@
 <template>
-    <div class="flex-col">
-        <div class="flex-row align-c gap-10">
-            <el-button class="custom-button size-14 mb-18"><icon name="xzdz-tianjiabiaoq" size="14" color="f"></icon>添加新行</el-button>
+    <div class="flex-col defalult-setting gap-10">
+        <div class="flex-row align-c">
+            <template v-if="is_remove_selected">
+                <el-button class="custom-button" @click="remove_handle">取消操作</el-button>
+                <el-button class="custom-button" @click="remove_selected">删除选中</el-button>
+            </template>
+            <template v-else>
+                <el-button class="custom-button" type="primary" @click="add"><icon name="xzdz-tianjiabiaoq" size="14"></icon>添加</el-button>
+                <el-button v-if="form.form_value.length > 0" class="custom-button" @click="remove_handle"><icon name="delete" size="14"></icon>删除</el-button>
+            </template>
         </div>
         <div class="subform oh flex-row">
             <div class="row-header flex-col">
-                <div class="head-label"></div>
+                <div class="head-label flex-row align-c jc-c">
+                    <el-checkbox v-if="is_remove_selected" v-model="selectAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
+                </div>
                 <template v-if="form.form_value.length > 0">
-                    <div v-for="(item, index) in form.form_value" :key="index" class="flex-1 flex-row align-c jc-c">
-                        <div class="row-num">{{ index + 1 }}</div>
-                        <div class="operate">
-                            
+                    <template v-if="is_remove_selected">
+                        {{ form.form_error_list }}
+                        <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change">
+                            <el-checkbox v-for="(item, index) in form.form_value" :key="index + get_math()" :value="index" class="flex-1 row-num flex-row align-c jc-c" />
+                        </el-checkbox-group>
+                    </template>
+                    <template v-else>
+                        <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="row-table flex-1 flex-row re">
+                            <div class="row-num flex-row align-c jc-c">{{ index + 1 }}</div>
+                            <div class="operate flex-row align-c gap-10">
+                                <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
+                                    <template #reference>
+                                        <icon name="delete" size="16" color="primary"></icon>
+                                    </template>
+                                    <template #actions="{ confirm, cancel }">
+                                        <el-button size="small" @click="cancel">取消</el-button>
+                                        <el-button type="danger" size="small" @click="confirm">确定</el-button>
+                                    </template>
+                                </el-popconfirm>
+                                <el-dropdown placement="bottom">
+                                    <icon name="more-o" size="16" color="primary"></icon>
+                                    <template #dropdown>
+                                        <el-dropdown-menu>
+                                            <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
+                                            <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
+                                            <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
+                                            <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
+                                        </el-dropdown-menu>
+                                    </template>
+                                </el-dropdown>
+                            </div>
                         </div>
-                    </div>
-                </template>
-                <template v-else>
-                    <div class="flex-1">
-                        <div class="row-num">1</div>
-                    </div>
+                    </template>
                 </template>
             </div>
             <div class="flex-1 scroll-area flex-row">
@@ -30,8 +61,10 @@
                                 {{ item.com_data.title }}
                                 <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
                             </div>
-                            <div v-for="(item1, index1) in form.form_value" :key="index1" class="flex-1 item-row rendering-area flex-row align-c jc-c">
-                                <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]"></subform-rendering>
+                            <div v-for="(item1, index1) in form.form_value" :key="index1" :class="['flex-1 item-row rendering-area flex-row align-c jc-c re', { 'item-row-error': error_list(index1, item.id)[0] == '1' }]">
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index1, item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index1, item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
+                                    <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]" :index="index1" @change="tablist_change($event, index1, item.id)" @data_check="data_check($event, index1, item.id, item.com_data)"></subform-rendering>
+                                </el-tooltip>
                             </div>
                         </div>
                     </div>
@@ -42,25 +75,178 @@
 </template>
 
 <script lang="ts" setup>
+import { cloneDeep, isEmpty } from "lodash";
 import { commonStore } from "@/store";
+import { checkbox_range_handle, get_format_checks_v2, get_math, number_range_handle } from "@/utils";
 const common_store = commonStore();
 const props = defineProps({
     value: {
         type: Object,
         default: () => ({}),
     },
+    isPreview: {
+        type: Boolean,
+        default: false,
+    }
 });
 const form = ref(props.value);
+const form_error_list = ref<any[]>([]);
 watch(() => props.value, (val) => {
-    form.value = val;
+    form.value = cloneDeep(val);
 }, {immediate: true, deep: true});
+// 表单数据发生变化时的处理
+watch(() => form.value.form_value, (val) => {
+    if (props.isPreview) {
+        if (val.length > 0) {
+            val.forEach((item: any, index: number) => {
+                if (isEmpty(form_error_list.value[index])) {
+                    const data: any = {};
+                    form.value.children.forEach((item1: any) => {
+                        if (isEmpty(item[item1.id])) {
+                            data[item1.id] = { common_config: { is_error: '0', error_text: ''} };
+                        }
+                    });
+                    form_error_list.value[index] = data;
+                }
+            });
+        } else {
+            form_error_list.value = [];
+        }
+    }
+}, {immediate: true, deep: true});
+
+const error_list = computed(() => { 
+    return (index: number, id: string) => {
+        if (!isEmpty(form_error_list.value[index]) && !isEmpty(form_error_list.value[index][id])) {
+            const data = form_error_list.value[index][id];
+            return [data.common_config.is_error, data.common_config.error_text];
+        } else {
+            return ['0', '']
+        }
+    }
+});
+const form_data = computed(() => {
+    return form.value.children.reduce((acc: any, item: any) => {
+        acc[item.id] = item.com_data.form_value;
+        return acc;
+    }, {});
+});
+//#region 表格操作
+const remove = (index: number) => {
+    form.value.form_value.splice(index, 1);
+    // 如果没有数据了，就不显示删除按钮·
+    if (form.value.form_value.length <= 0) {
+        is_remove_selected.value = false;
+    }
+};
+const add = () => {
+    form.value.form_value.push(cloneDeep(form_data.value));
+};
+// 复制数据
+const copy = (index: number, type: string) => {
+    const data = cloneDeep(form.value.form_value[index]);
+    if (type == 'last') {
+        form.value.form_value.push(data);
+    } else {
+        form.value.form_value.splice(index, 0, data);
+    }
+};
+const insert = (index: number, type: string) => {
+    if (type == 'top') {
+        // 如果是小于1的时候就将数据放在头部
+        if (index - 1 <= 0) {
+            form.value.form_value.splice(0, 0, cloneDeep(form_data.value));
+        } else {
+            form.value.form_value.splice(index - 1, 0, cloneDeep(form_data.value));
+        }
+    } else {
+        form.value.form_value.splice(index + 1, 0, cloneDeep(form_data.value));
+    }
+};
+// 子表单更新数据传递给父组件
+const tablist_change = (val:any, index: number, id: string) => {
+    form.value.form_value[index][id] = val;
+};
+//#endregion
+//#region 删除操作
+const is_remove_selected = ref(false);
+
+const remove_handle = () => { 
+    is_remove_selected.value = !is_remove_selected.value;
+};
+const remove_selected = () => {
+    const list: any[] = [];
+    // 过滤掉选中的项，直接删除，index为当前项的索引会乱，所以用一个新数组承接
+    form.value.form_value.forEach((item: any, index: number) => {
+        if (!selected_list.value.includes(index)) {
+            list.push(item);
+        }
+    });
+    form.value.form_value = cloneDeep(list);
+    if (form.value.form_value.length <= 0) {
+        is_remove_selected.value = false;
+    }
+    // 删除完成之后，置空选中数据显示
+    selected_list.value = [];
+};
+// 是否全选
+const selectAll = ref(false);
+const indeterminate = ref(true);
+// 选中的内容
+const selected_list = ref<number[]>([]);
+// 选中时的操作
+const checkbox_change = (val: any) => {
+    selected_list.value = val;
+};
+// 全选反选时的操作
+const handleCheckAllChange = () => {
+    selected_list.value = selectAll.value ? form.value.form_value.map((item: any, index: number) => index) : []
+};
+// 监听数据发生变化
+watchEffect(() => {
+    selectAll.value = form.value.form_value.length > 0 && selected_list.value.length === form.value.form_value.length;
+    indeterminate.value = selected_list.value.length > 0 && selected_list.value.length < form.value.form_value.length;
+});
+//#endregion
+
+const data_check = (object: any, index: number, id: string, com_data: any) => {
+    if (props.isPreview) {
+        const data = form_error_list.value[index][id];
+        const form_value = form.value.form_value[index][id];
+        if (isEmpty(data)) {
+            return 
+        }
+        // 判断是否是必填字段,并且没有值
+        if (com_data.is_required == '1' && isEmpty(form_value)) {
+            // 是否报错显示
+            data.common_config.is_error = '1';
+            data.common_config.error_text = '此项为必填项';
+        } else {
+            // 否就清除报错显示
+            data.common_config.is_error = '0';
+            data.common_config.error_text = '';
+            if (object.is_format) {
+                if (object.type == 'number') {
+                    // 数字组件的校验逻辑
+                    number_range_handle(com_data, form_value);
+                } else if (object.type == 'checkbox') {
+                    // 复选框和复选下拉框的校验逻辑
+                    checkbox_range_handle(com_data, form_value);
+                } else {
+                    // 单行文本的校验逻辑
+                    // 对字段进行格式检查
+                    get_format_checks_v2(com_data.common_config, form_value);
+                }
+            }
+        } 
+    }
+};
 </script>
 
 <style lang="scss" scoped>
 .subform {
     max-width: 100%;
     width: 100%;
-    background: #fff;
     overflow: hidden;
     .row-header {
         padding-bottom: 1rem;
@@ -84,6 +270,24 @@ watch(() => props.value, (val) => {
         }
         .row-num:last-child {
             border-bottom-left-radius: 0.3rem;
+        }
+        .row-table:hover {
+            .operate {
+                display: flex;
+            }
+        }
+        .operate:hover {
+            display: flex;
+        }
+        .operate {
+            position: absolute;
+            background: #fff;
+            padding: 1rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            display: none;
         }
     }
     .subform-item {
@@ -131,5 +335,19 @@ watch(() => props.value, (val) => {
             }
         }
     }
+}
+.defalult-setting .content {
+    pointer-events: auto;
+}
+.selected-checkbox {
+    :deep(.el-checkbox) {
+        margin-right: 0;
+        .el-checkbox__label {
+            padding-left: 0;
+        }
+    }
+}
+.item-row-error {
+    background: #fdeeee;
 }
 </style>

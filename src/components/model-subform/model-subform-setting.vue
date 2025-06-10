@@ -10,7 +10,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <el-button class="w custom-button size-14 mb-18" @click="set_default"><icon name="edit" size="14"></icon>设置默认值</el-button>
+                <el-button class="w custom-button size-14" :disabled="form.children.length <= 0" @click="set_default"><icon name="edit" size="14"></icon>设置默认值</el-button>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -30,7 +30,7 @@
                     </drag>
                 </template>
                 <template v-else>
-                    <span class="size-14 cr-6">暂无数据, 请点击下方添加子字段添加数据或者点击表单编辑配置详细数据</span>
+                    <span class="size-12 cr-6">暂无数据, 请点击下方添加子字段添加数据或者点击表单编辑配置详细数据</span>
                 </template>
                 <el-dropdown trigger="click" max-height="300px" placement="bottom-start" @visible-change="input_value = ''">
                     <el-button class="dialog-add"><icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/><span class="ml-5">添加子字段</span></el-button>
@@ -46,7 +46,7 @@
         <el-button class="w custom-button size-14 mb-18" @click="custom_edit"><icon name="edit" size="14"></icon>表单编辑</el-button>
         <help-config class="mb-18" :value="form.common_config" />
         <subform-dialog v-model:visible="subform_visible" :value="form" @accomplish="accomplish"></subform-dialog>
-        <subform-default-dialog v-model:visible="subform_visible" :value="form" @accomplish="accomplish"></subform-default-dialog>
+        <subform-default-dialog v-model:visible="subform_default_visible" :value="form" @submit="submit"></subform-default-dialog>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -83,6 +83,10 @@ const accomplish = (children: any[], value: any[]) => {
     form.value.children = children;
     form.value.form_value = value;
     subform_visible.value = false;
+};
+// 默认值点击确定的时候修改数据
+const submit = (val: any) => {
+    form.value.form_value = val;
 };
 //#region 子字段数据操作
 const input_value = ref('');
@@ -127,7 +131,9 @@ const dropdown_click = (item: { name: string; key: string }) => {
         // 先将新字段填充进去，再判断历史是否存在多余的字段
         new_val.forEach((item: any) => {
             form.value.form_value.forEach((item1: any) => {
-                item1[item.id] = item.com_data.form_value;
+                if (isEmpty(item1[item.id])) {
+                    item1[item.id] = item.com_data.form_value;
+                }
             });
         });
         // 清理不在 validIds 中的字段：同样使用 map 创建新对象
@@ -170,8 +176,9 @@ const on_sort = (val: any) => {
 };
 //#endregion
 //#region 设置默认值
+const subform_default_visible = ref(false);
 const set_default = () => { 
-
+    subform_default_visible.value = true;
 };
 //#endregion
 </script>

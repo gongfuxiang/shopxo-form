@@ -11,7 +11,7 @@ interface DefaultText {
 
 const defaultText: DefaultText = {
     title: '子表单',
-    form_value: [],
+    form_value: [{}],
     children: [],
     com_width: 150,
     com_height: 66,

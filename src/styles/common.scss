@@ -360,7 +360,7 @@
 .custom-error-tooltip {
     margin-bottom: -1rem !important;
     padding: 0 0.5rem; /* 去掉内边距 */
-    background: #FAEEEE !important;
+    background: #fbdbdb !important;
     border: 1px solid #FAEEEE !important;
     color: #DA3E32 !important;
 }
@@ -436,9 +436,9 @@
 }
 
 .subform-upload-setting-box {
-    .el-dropdown-menu__item:hover {
-        background-color: #fff;
-        color: #333;
+    .el-dropdown-menu__item {
+        background-color: #fff !important;
+        color: #333 !important;
     }
 }
 
@@ -462,7 +462,6 @@
     .main-overflow {
         padding-top: 3rem;
         height: calc(100% - 1rem);
-        overflow-y: scroll;
         .main-content {
             width: 100rem;
             min-height: 100%;
@@ -470,7 +469,7 @@
             background: #fff;
             border-top-left-radius: 1.2rem;
             border-top-right-radius: 1.2rem;
-            overflow: hidden;
+            overflow: scroll;
             margin: 0 auto;
         }
     }

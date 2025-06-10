@@ -584,10 +584,10 @@ export const get_format_checks = (data: any, is_format: boolean = false, type: s
         if (is_format) {
             if (type == 'number') {
                 // 数字组件的校验逻辑
-                number_range_handle(data);
+                number_range_handle(data, data.form_value);
             } else if (type == 'checkbox') {
                 // 复选框和复选下拉框的校验逻辑
-                checkbox_range_handle(data);
+                checkbox_range_handle(data, data.form_value);
             } else {
                 // 单行文本的校验逻辑
                 // 对字段进行格式检查
@@ -597,8 +597,8 @@ export const get_format_checks = (data: any, is_format: boolean = false, type: s
     }
 };
 // 复选框和复选下拉框的校验逻辑
-const checkbox_range_handle = (data: any) => {
-    const { form_value, min_num = '', max_num = '' } = data;
+export const checkbox_range_handle = (data: any, form_value: any) => {
+    const { min_num = '', max_num = '' } = data;
     const length = form_value?.length || 0;
     const minNum = Number(min_num);
     const maxNum = Number(max_num);
@@ -613,8 +613,8 @@ const checkbox_range_handle = (data: any) => {
     }
 };
 // 数字组件的校验逻辑
-const number_range_handle = (data: any) => {
-    const { form_value, min_num = '', max_num = '', format = 'num' } = data;
+export const number_range_handle = (data: any, form_value: any) => {
+    const { min_num = '', max_num = '', format = 'num' } = data;
     const num = Number(form_value);
     const minNum = Number(min_num);
     const maxNum = Number(max_num);

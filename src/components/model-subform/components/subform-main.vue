@@ -58,7 +58,7 @@
                                         <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
                                     </div>
                                     <div v-for="(item1, index1) in table_list" :key="index1" class="flex-1 item-row rendering-area flex-row align-c jc-c">
-                                       <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]"></subform-rendering>
+                                       <subform-rendering :key="index1 + get_math()" v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]"></subform-rendering>
                                     </div>
                                 </div>
                             </div>
@@ -101,9 +101,9 @@ watch(() => props.diyData, (newValue) => {
 });
 
 const table_list = ref(props.value);
-watch(() => props.value, (newValue) => {
-    table_list.value = newValue;
-});
+// watch(() => props.value, (newValue) => {
+//     table_list.value = newValue;
+// });
 watch(() => diy_data.value, (new_val) => {
 	if (new_val.length > 0) {
 		if (table_list.value.length > 0) {
@@ -111,7 +111,9 @@ watch(() => diy_data.value, (new_val) => {
             // 先将新字段填充进去，再判断历史是否存在多余的字段
             new_val.forEach((item: any) => {
                 table_list.value.forEach((item1: any) => {
-                    item1[item.id] = item.com_data.form_value;
+                    if (isEmpty(item1[item.id]) || (!isEmpty(item.com_data.form_value) && item1[item.id] !== item.com_data.form_value)) {
+                        item1[item.id] = item.com_data.form_value;
+                    }
                 });
             });
             // 清理不在 validIds 中的字段：同样使用 map 创建新对象
@@ -134,7 +136,7 @@ watch(() => diy_data.value, (new_val) => {
 			table_list.value = [data];
 		}
 	}
-}, { immediate:true, deep: true });
+}, { deep: true });
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
 interface componentsData {

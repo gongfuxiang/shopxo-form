@@ -140,26 +140,36 @@
         <!-- 上传图片｜上传视频 ｜ 上传文件 -->
         <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_type)">
             <el-dropdown trigger="click" max-height="300px" size="large" placement="bottom-start" :hide-on-click="false" popper-class="subform-upload-setting-box" class="subform-upload-setting-box">
-                <div v-if="!Array.isArray(form_value) || form_value.length < 0" class="w h">
-
-                </div>
-                <template v-else>
-                    <div v-for="(item, index) in form_value" :key="index" class="w h flex-row align-c gap-3"> 
-                        <template v-if="model_type === 'upload-img'">
-                            <el-image :src="item.url" fit="contain"></el-image>
-                        </template>
-                        <template v-if="model_type === 'upload-video'">
-
-                        </template>
-                        <template v-else>
-
-                        </template>
+                <template v-if="form_value.length > 0">
+                    <div class="w h flex-row align-s gap-3 oh pa-4">
+                        <div v-for="(item, index) in form_value" :key="index" class="w h flex-row align-c"> 
+                            <template v-if="model_type === 'upload-img'">
+                                <el-image :src="file_to_base64(item.raw)" fit="contain" class="h" @click="preview_event(file_to_base64(item.raw), item.raw.name)">
+                                    <template #error>
+                                        <div class="bg-f5 img flex-row jc-c align-c radius h w">
+                                            <icon name="error-img" size="12"></icon>
+                                        </div>
+                                    </template>
+                                </el-image>
+                            </template>
+                            <template v-else-if="model_type === 'upload-video'">
+                                <video :src="file_to_base64(item.raw)" class="radius-sm w h" @click="preview_event(file_to_base64(item.raw), item.raw.name)"></video>
+                            </template>
+                            <template v-else>
+                                <el-tooltip class="radius-sm w h" effect="dark" :content="item.name">
+                                    <div class="upload-file flex-row align-c jc-c">{{ new_name(item.raw.name)[1].toUpperCase() }}</div>
+                                </el-tooltip>
+                            </template>
+                        </div>
                     </div>
+                </template>
+                <template v-else>
+                    <div class="w h"></div>
                 </template>
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>
-                            <upload-setting :value="form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" />
+                            <upload-setting :key="subformKey" :value="form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" @change="upload_change" />
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -214,7 +224,7 @@
 
 <script setup lang="ts"> 
 import { color_change } from "@/utils/common";
-import { common_styles_computer, date_style_options, get_border_left_right_size, get_format_checks, get_math, isEmpty } from "@/utils";
+import { checkbox_range_handle, common_styles_computer, date_style_options, get_border_left_right_size, get_format_checks, get_format_checks_v2, get_math, isEmpty, number_range_handle } from "@/utils";
 import { commonStore } from "@/store";
 import type { ElSelect, FormInstance, FormRules } from "element-plus";
 import { Search } from '@element-plus/icons-vue'
@@ -228,13 +238,24 @@ type FormValueType = string | number | Array<any> | Record<string, any>;
 const props = defineProps({
     value: {
         type: [String, Number, Array] as PropType<FormValueType>,
-        default: () => { },
+        default: () => {},
+    },
+    subformKey: {
+        type: String,
+        default: '',
     }
 });
 const form_value = ref<any>(props.value);
+const emit = defineEmits(['change', 'data_check']);
 watch(() => props.value, (val) => {
-    form_value.value = val;
-}, {immediate: true});
+    if (val !== form_value.value) {
+      form_value.value = val;
+    }
+}, { immediate: true });
+// 数据发生变化时传递给父组件
+watch(() => form_value.value, (val) => {
+    emit('change', val);
+}, { deep: true });
 //#region 单行文本 | 下拉框 | 单选按钮组
 // 没有彩色时的公共样式
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
@@ -245,8 +266,8 @@ const option_style = (val: any) => {
         return common_styles.value;
     }
 }
-const data_check = (val: boolean = false, type: string = '') => {
-    get_format_checks(form.value, val, type)
+const data_check = (is_format: boolean = false, type: string = '') => {
+    emit('data_check', { is_format, type });
 };
 const select_change = (val: any) => {
     form_value.value = Array.isArray(val) ? val[0] : val;
@@ -297,7 +318,7 @@ const custom_icon_click = () => {
 //#region 多选下拉框全选和反选的处理
 const selected_names = computed(() => {
     const optionList = form.value?.option_list || [];
-    const formValue = form.value?.form_value || [];
+    const formValue = form_value.value || [];
 
     const valueSet = new Set(formValue);
     return optionList
@@ -390,6 +411,42 @@ const confirm = async (formEl: FormInstance | undefined) => {
 const pwd_is_show = ref(true);
 const eye_change = () => {
     pwd_is_show.value = !pwd_is_show.value;
+};
+//#endregion
+//#region 上传
+const upload_change = (value: any) => {
+    form_value.value = value;
+}
+// file转换成base64
+const file_to_base64 = (file: any) => {
+	return URL.createObjectURL(file);
+};
+// 预览开关
+const preview_switch_img = ref(false);
+const preview_switch_video = ref(false);
+// 视频预览的路径
+const preview_url = ref('');
+const preview_name = ref('');
+// 预览图片/视频
+const preview_event = (item: any, name: string) => {
+    preview_url.value = item;
+	preview_name.value = name;
+    if (model_type.value == 'img') {
+        preview_switch_img.value = true;
+    } else if (model_type.value == 'video' || model_type.value == 'file') {
+        preview_switch_video.value = true;
+    }
+};
+// 预览关闭
+const preview_close = () => {
+    preview_switch_img.value = false;
+};
+// 名字和格式拆开显示
+const new_name = (name: string) => {
+    let index = name.lastIndexOf('.'); // 获取最后一个/的位置
+	let lastSegment = name.substring(index + 1); // 截取最后一个/后的值
+	let new_name = name.substring(0, index);
+	return [ new_name, lastSegment]
 };
 //#endregion
 //#region 文件
@@ -498,10 +555,18 @@ const frame_style = computed(() => common_store.frame_style + `max-width:100%;wi
 }
 .subform-upload-setting-box {
     border-radius: 0.4rem;
-    border: 0.1rem solid #ccc;
+    border: 0.1rem solid #e3e3e3;
+    width: 100%;
     height: 3.2rem;
     :deep(.el-dropdown-menu__item:not(.is-disabled)):hover{
         background: #fff;
     }
+}
+.upload-file {
+    width: 2.5rem;
+    height: 100%;
+    border-radius: 0.4rem;
+    color: #fff;
+    background: #96ADA9;
 }
 </style>

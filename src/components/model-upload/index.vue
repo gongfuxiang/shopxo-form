@@ -10,7 +10,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
+import { common_styles_computer, get_border_left_right_size, get_format_checks, get_math } from "@/utils";
 import { commonStore } from "@/store";
 const common_store = commonStore();
 const props = defineProps({
@@ -29,7 +29,7 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
-// 手机号校验逻辑
+// 校验逻辑
 const change = (value: any) => {
     form.value.form_value = value;
     get_format_checks(form.value, false);

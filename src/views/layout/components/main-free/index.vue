@@ -910,6 +910,7 @@ onUnmounted(() => {
             height: 100%;
             .model-content {
                 padding: 2rem 0;
+                height: 100%;
                 overflow: scroll;
             }
             .model-drag {
