@@ -1,5 +1,5 @@
 <template>
-    <div class="mains">
+    <div class="mains re">
         <!-- 左侧模块 -->
         <div class="siderbar flex-col">
             <el-scrollbar>
@@ -23,7 +23,7 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <div class="drag-content h flex-row re">
+            <div class="drag-content h flex-row">
                 <!-- 拖拽区 -->
                 <div class="model-content">
                     <div class="model-drag re">
@@ -901,6 +901,7 @@ onUnmounted(() => {
     .drag-container {
         max-width: calc(100% - 23.4rem);
         max-height: calc(100vh - 7rem);
+        overflow: scroll;
         .drag-content {
             display: flex;
             align-items: center;
@@ -910,8 +911,8 @@ onUnmounted(() => {
             height: 100%;
             .model-content {
                 padding: 2rem 0;
-                height: 100%;
-                overflow: scroll;
+                // height: 100%;
+                // overflow: scroll;
             }
             .model-drag {
                 width: v-bind(model_drag_width);

@@ -29,16 +29,4 @@ const frame_style = computed(() => common_store.frame_style + `${ props.isCustom
 const style_container = computed(() => common_styles_computer(form.value.common_config));
 </script>
 <style lang="scss" scoped>
-.rich-text-content {
-    position: relative;
-    z-index: 999;
-    .editor {
-        position: relative;
-        height: 30rem !important;
-        overflow-y: hidden;
-        * {
-            max-width: 100%;
-        }
-    }
-}
 </style>

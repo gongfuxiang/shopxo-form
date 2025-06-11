@@ -106,7 +106,7 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 .rich-text-content {
     position: relative;
-    z-index: 999;
+    z-index: 9;
     .editor {
         position: relative;
         overflow-y: hidden;

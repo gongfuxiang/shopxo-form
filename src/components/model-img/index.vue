@@ -40,16 +40,4 @@ const img_style = computed(() => {
 });
 </script>
 <style lang="scss" scoped>
-.rich-text-content {
-    position: relative;
-    z-index: 999;
-    .editor {
-        position: relative;
-        height: 30rem !important;
-        overflow-y: hidden;
-        * {
-            max-width: 100%;
-        }
-    }
-}
 </style>

@@ -236,15 +236,6 @@ const handleClose = () => {
 .title-location-icon.active {
     border: 0.1rem solid #2A94FF;
 }
-.dialog-main .component-style, .dialog-main .free-main-content{
-    :deep(.rendering-area .content) {
-        pointer-events: none;
-    }
-}
-.free-main-content {
-    position: absolute;
-    overflow: hidden;
-}
 .head-title { 
     word-wrap: break-word;
     font-size: 20px;

@@ -176,11 +176,9 @@ const submit = () => {
         align-items: center;
         justify-content: center;
         background: #fff !important;
-        ;
 
         :deep(.el-radio-button__inner) {
             color: #2A94FF !important;
-            ;
         }
     }
 
@@ -190,9 +188,5 @@ const submit = () => {
         box-shadow: none !important;
         background-color: transparent !important;
     }
-}
-.free-main-content {
-    position: absolute;
-    overflow: hidden;
 }
 </style>

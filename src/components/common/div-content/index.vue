@@ -1,26 +1,40 @@
 <template>
-    <div v-for="(item, index) in diy_data" :key="item.id" :class="['item', { 'active': item.show_tabs == '1', 'required-error': item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item.show_tabs)">
-        <div v-if="item.show_tabs == '1'" class="oprate">
-            <div class="icon" @click.stop="set_enable(index)">
-                <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
+    <template v-if="diy_data.length > 0">
+        <div v-for="(item, index) in diy_data" :key="item.id" :class="['item', { 'active': item.show_tabs == '1', 'required-error': item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item.show_tabs)">
+            <div v-if="item.show_tabs == '1'" class="oprate">
+                <div class="icon" @click.stop="set_enable(index)">
+                    <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
+                </div>
+                <span class="divider"></span>
+                <div class="icon" @click="on_del(index)">
+                    <icon name="del" size="10"></icon>
+                </div>
+                <span class="divider"></span>
+                <div class="icon" @click="on_copy(index)">
+                    <icon name="copy" size="10"></icon>
+                </div>
             </div>
-            <span class="divider"></span>
-            <div class="icon" @click="on_del(index)">
-                <icon name="del" size="10"></icon>
-            </div>
-            <span class="divider"></span>
-            <div class="icon" @click="on_copy(index)">
-                <icon name="copy" size="10"></icon>
+            <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+                <div class="main-content">
+                    <component-show :value="item"></component-show>
+                </div>
             </div>
         </div>
-        <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
-            <div class="main-content">
-                <component-show :value="item"></component-show>
-            </div>
+    </template>
+    <template v-else>
+        <div class="w h flex-col align-c jc-c gap-15">
+            <img class="img radius-xs" :width="140" :height="131" src="/src/assets/no-data.png" />
+            <span class="no-data-tips">从左侧拖拽或点击来创建表单</span>
         </div>
-    </div>
+    </template>
 </template>
 <script lang="ts" setup>
+// computer
+const url_computer = () => {
+    // const new_url = common_store.common.config.attachment_host + `/static/diy/images/layout/siderbar/${name}.png`;
+    const new_url = `/src/assets/no-data.png`;
+    return new_url;
+};
 interface Props {
     diyData: any[];
 }
@@ -130,5 +144,12 @@ const get_diy_index_data = (index: number) => {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.no-data-tips {
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: #999999;
+    line-height: 1.7rem;
+    font-style: normal;
 }
 </style>

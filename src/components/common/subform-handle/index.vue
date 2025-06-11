@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-col defalult-setting gap-10">
+    <div class="flex-col gap-10">
         <div class="flex-row align-c">
             <template v-if="is_remove_selected">
                 <el-button class="custom-button" @click="remove_handle">取消操作</el-button>
@@ -438,9 +438,6 @@ const drawer_change = (data: any) => {
             }
         }
     }
-}
-.defalult-setting .content {
-    pointer-events: auto;
 }
 .selected-checkbox {
     :deep(.el-checkbox) {

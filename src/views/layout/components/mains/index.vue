@@ -24,7 +24,7 @@
         </div>
         <div class="flex-1 drag-container">
             <el-scrollbar>
-                <div class="pa-30">
+                <div class="pa-30 h">
                     <div class="drag-content flex-row br-f1 radius-xl pa-16">
                         <VueDraggable v-model="diy_data" :animation="500" :touch-start-threshold="2" group="people" class="drag-area w re flex-1" ghost-class="ghost" :on-sort="on_sort" :on-start="on_start" :on-end="on_end">
                             <div-content :diy-data="diy_data"  @on_choose="on_choose" @del="on_del" @copy="on_copy"></div-content>
@@ -274,7 +274,7 @@ const set_show_tabs = (index: number) => {
         max-width: calc(100% - 23.4rem);
         max-height: calc(100vh - 7rem);
         .drag-content {
-            min-height: 20rem;
+            min-height: 100%;
             max-width: 100rem;
             background-color: #fff;
             margin: 0 auto;

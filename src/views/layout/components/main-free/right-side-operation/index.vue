@@ -71,7 +71,8 @@ const bottom_up = (index: number, flag: boolean) => {
 .acticons {
     position: absolute;
     right: 0;
-    margin-right: -4rem;
+    // margin-right: -4rem;
+    margin-right: 2rem;
     top: 50%;
     display: flex;
     flex-direction: column;
