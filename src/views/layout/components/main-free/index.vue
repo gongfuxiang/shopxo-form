@@ -1018,16 +1018,4 @@ onUnmounted(() => {
         left: -0.8rem;
     }
 }
-.plug-in-close::before {
-    position: absolute;
-    content: '\5DF2\9690\85CF';
-    background: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 </style>

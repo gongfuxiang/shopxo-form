@@ -62,7 +62,7 @@
             </div>
             <div class="flex-1 scroll-area flex-row">
                 <div class="flex-row">
-                    <div v-for="item in form.children" :key="item.id" class="subform-item re w h" :style="`width: ${ item.com_data.com_width }px;`">
+                    <div v-for="item in children" :key="item.id" :class="['subform-item re w h', { 'plug-in-close': item.is_enable != '1' }]" :style="`width: ${ item.com_data.com_width }px;`">
                         <div class="flex-col jc-c w h">
                             <!-- 头部操作逻辑 -->
                             <div class="item-label flex-row align-c">
@@ -97,6 +97,10 @@ const props = defineProps({
     isPreview: {
         type: Boolean,
         default: false,
+    },
+    isDefault: {
+        type: Boolean,
+        default: false,
     }
 });
 const form = ref(props.value);
@@ -104,6 +108,7 @@ const form_error_list = ref<any[]>([]);
 watch(() => props.value, (val) => {
     form.value = val;
 }, {immediate: true, deep: true});
+const children = computed(() => form.value.children.filter((item: any) => props.isPreview || props.isDefault ? item.is_enable === '1' : true));
 // 表单数据发生变化时的处理
 watch(() => form.value.form_value, (val) => {
     if (props.isPreview) {
@@ -111,7 +116,7 @@ watch(() => form.value.form_value, (val) => {
             val.forEach((item: any, index: number) => {
                 if (isEmpty(form_error_list.value[index])) {
                     const data: any = {};
-                    form.value.children.forEach((item1: any) => {
+                    children.value.forEach((item1: any) => {
                         if (isEmpty(item[item1.id])) {
                             data[item1.id] = { common_config: { is_error: '0', error_text: ''} };
                         }
@@ -136,7 +141,7 @@ const error_list = computed(() => {
     }
 });
 const form_data = computed(() => {
-    return form.value.children.reduce((acc: any, item: any) => {
+    return children.value.reduce((acc: any, item: any) => {
         acc[item.id] = item.com_data.form_value;
         return acc;
     }, {});
@@ -255,8 +260,8 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
 const line_error = computed(() => {
     return (index: number) => {
         let text = '';
-        for (let i = 0; i < form.value.children.length; i++) {
-            const item = form.value.children[i];
+        for (let i = 0; i < children.value.length; i++) {
+            const item = children.value[i];
             if (form_error_list.value[index]) {
                 const err_list = form_error_list.value[index][item.id] || {};
                 // 如果当前行有错误
@@ -285,7 +290,7 @@ const enlarge_click = (index: number) => {
 }
 const drawer_data = ref([]);
 const set_drawer_data = (index: number) => { 
-    const data = cloneDeep(form.value.children);
+    const data = cloneDeep(children.value);
     data.forEach((item: any) => {
         if (props.isPreview) {
             if (form_error_list.value[index] && !isEmpty(form_error_list.value[index][item.id])) {

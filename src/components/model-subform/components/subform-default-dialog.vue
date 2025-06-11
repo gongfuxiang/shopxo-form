@@ -1,7 +1,7 @@
 <template>
     <el-dialog v-model="dialogVisible" title="设置默认值" width="800px" style="height: 600px" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body draggable @close="cancel"> 
         <div class="content flex-col gap-10 mtb-20 defalult-setting">
-            <subform-handle :value="form"></subform-handle>
+            <subform-handle :value="form" :is-default="true"></subform-handle>
         </div>
         <template #footer>
             <span class="dialog-footer">

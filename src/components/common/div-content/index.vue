@@ -133,18 +133,6 @@ const get_diy_index_data = (index: number) => {
         display: none;
     }
 }
-.plug-in-close::before {
-    position: absolute;
-    content: '\5DF2\9690\85CF';
-    background: rgba(0, 0, 0, 0.5);
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .no-data-tips {
     font-weight: 400;
     font-size: 1.2rem;

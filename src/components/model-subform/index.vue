@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <template v-if="form.children.length > 0">
+                <template v-if="children.length > 0">
                     <subform-handle :key="get_math" :value="form" :is-preview="isPreview"></subform-handle>
                     <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
                 </template>
@@ -33,8 +33,9 @@ const props = defineProps({
     },
 });
 const form = computed(() => props.value);
+const children = computed(() => form.value.children.filter((item: any) => props.isPreview ? item.is_enable === '1' : true));
 watch(() => form.value.form_value, () => {
-    if (form.value.is_required == '1' && form.value.form_value.length <= 0 && form.value.children.length > 0) {
+    if (form.value.is_required == '1' && form.value.form_value.length <= 0 && children.value.length > 0) {
         // 是否报错显示
         form.value.common_config.is_error = '1';
         form.value.common_config.error_text = '请填写至少一条记录';
