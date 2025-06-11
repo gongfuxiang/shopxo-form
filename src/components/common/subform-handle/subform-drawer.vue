@@ -66,7 +66,7 @@ const loading_handle = () => {
 };
 watch(() => form_data.value, () => {
     emit('change', form_data.value);
-}, {deep: true});
+}, { deep: true });
 </script>
 
 <style lang="scss" scoped>

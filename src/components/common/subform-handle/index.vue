@@ -255,7 +255,7 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
 const line_error = computed(() => {
     return (index: number) => {
         let text = '';
-        for (let i = 0; i < form.value.children.length - 1; i++) {
+        for (let i = 0; i < form.value.children.length; i++) {
             const item = form.value.children[i];
             if (form_error_list.value[index]) {
                 const err_list = form_error_list.value[index][item.id] || {};

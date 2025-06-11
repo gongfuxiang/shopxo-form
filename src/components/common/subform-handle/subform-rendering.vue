@@ -169,7 +169,7 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>
-                            <upload-setting :key="subformKey" :value="form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" @change="upload_change" />
+                            <upload-setting :value="form_value" :accept-type="model_type == 'upload-img' ? 'img' : model_type == 'upload-video' ? 'video' : 'file'" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" @change="upload_change" />
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -224,7 +224,7 @@
 
 <script setup lang="ts"> 
 import { color_change } from "@/utils/common";
-import { checkbox_range_handle, common_styles_computer, date_style_options, get_border_left_right_size, get_format_checks, get_format_checks_v2, get_math, isEmpty, number_range_handle } from "@/utils";
+import { common_styles_computer, date_style_options, get_border_left_right_size, get_math, isEmpty } from "@/utils";
 import { commonStore } from "@/store";
 import type { ElSelect, FormInstance, FormRules } from "element-plus";
 import { Search } from '@element-plus/icons-vue'
@@ -301,7 +301,7 @@ const time_focus = () => {
 
 const time_blur = () => {
     is_time_icon_show.value = true;
-    get_format_checks(form.value)
+    emit('data_check', { is_format: false, type: '' });
 };
 const el_time = ref<any>(null);
 const custom_icon_click = () => {
@@ -416,6 +416,9 @@ const eye_change = () => {
 //#region 上传
 const upload_change = (value: any) => {
     form_value.value = value;
+    setTimeout(() => {
+        emit('data_check', { is_format: false, type: '' });
+    }, 0);
 }
 // file转换成base64
 const file_to_base64 = (file: any) => {
@@ -558,6 +561,7 @@ const frame_style = computed(() => common_store.frame_style + `max-width:100%;wi
     border: 0.1rem solid #e3e3e3;
     width: 100%;
     height: 3.2rem;
+    background: #fff;
     :deep(.el-dropdown-menu__item:not(.is-disabled)):hover{
         background: #fff;
     }
