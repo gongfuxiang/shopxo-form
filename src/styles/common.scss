@@ -500,3 +500,16 @@
         color: #2a94ff;
     }
 }
+
+.drawer-class {
+    width: 46rem !important;
+    .el-drawer__header {
+        padding-top: 0.9rem;
+        padding-bottom: 0.9rem;
+        margin-bottom: 0;
+        border-bottom: 1px solid #ebeef5;
+    }
+    .el-drawer__body {
+        padding: 0;
+    }
+}

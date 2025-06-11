@@ -103,7 +103,7 @@ const blur_input = () => {
 // 监听内容发生变化时，重新触发方法
 watch(() => [props.decimalNum, props.isThousandthsSymbol, props.format], () => {
     blur_input();
-}, {immediate: true, deep: true})
+}, { deep: true })
 //#region 获取百分比时的最大宽度
 const use_input_width = ref(26);
 watchEffect(() => {

@@ -21,7 +21,7 @@ const props = defineProps({
 });
 const form = ref<any>({});
 watch(() => props.value, (val) => {
-    form.value = val;
+    form.value = cloneDeep(val);
 }, {immediate: true, deep: true});
 const dialogVisible = defineModel('visible', { type: Boolean, default: false });
 const cancel = () => {

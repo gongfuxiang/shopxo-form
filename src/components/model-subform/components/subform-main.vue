@@ -201,7 +201,10 @@ const clone_item_com_data = (item: commonComponentData) => {
         show_tabs: '1',
         is_enable: '1',
         key: item.key,
-        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+        com_data: {
+            ...cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+            ...(item.key === 'checkbox' ? { type: 'select-multi' } : item.key === 'radio-btns' ? { type: 'select' } : {})
+        }
     };
 };
 
@@ -216,7 +219,10 @@ const draggable_click = (item: componentsData) => {
         show_tabs: '1',
         is_enable: '1',
         key: item.key,
-        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+        com_data: {
+            ...cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
+            ...(item.key === 'checkbox' ? { type: 'select-multi' } : item.key === 'radio-btns' ? { type: 'select' } : {})
+        }
     };
     diy_data.value.push(new_item);
     // 设置当前选中的是那个

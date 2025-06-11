@@ -1,9 +1,9 @@
 <template>
-    <el-dropdown trigger="click" popper-class="component-switch" max-height="300px" size="large" placement="bottom" @visible-change="visible_change">
-        <div class="dialog-add">{{ data_type_map }}<icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="#666"/></div>
+    <el-dropdown trigger="click" popper-class="component-switch" :disabled="new_option_list.length <= 0" max-height="300px" size="large" placement="bottom" @visible-change="visible_change">
+        <div class="dialog-add">{{ data_type_map }}<icon v-if="new_option_list.length > 0" :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="#666"/></div>
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item v-for="item in props.optionList.filter(item1 => data_type !== item1.value)" :key="item.value" @click="dropdown_click(item.value)">{{ item.name }}</el-dropdown-item>
+                <el-dropdown-item v-for="item in new_option_list" :key="item.value" @click="dropdown_click(item.value)">{{ item.name }}</el-dropdown-item>
             </el-dropdown-menu>
         </template>
     </el-dropdown>
@@ -22,6 +22,8 @@ const props = defineProps({
         default: () => ([]),
     },
 });
+
+const new_option_list = computed(() => props.optionList.filter(item1 => data_type.value !== item1.value));
 const data_type = defineModel({ type: String, default: '', required: true})
 
 const data_type_map = computed(() => {
@@ -42,9 +44,10 @@ const visible_change = (val: boolean) => {
 
 <style lang="scss" scoped>
 .dialog-add {
-    background: #f5f6f8;
+    background: #F6F6F6;
     text-align: center;
     font-size: 1.2rem;
+    color: #333;
     height: 2.4rem;
     width: 10rem;
     border: 0;

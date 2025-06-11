@@ -45,6 +45,7 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
+import { cloneDeep } from "lodash";
 const common_store = commonStore();
 interface DiyItem {
     id: number | string;
@@ -64,8 +65,8 @@ const props = defineProps({
 });
 const diy_data = ref(props.value);
 watch(() => props.value, () => {
-    diy_data.value = props.value;
-});
+    diy_data.value = cloneDeep(props.value);
+}, { immediate: true, deep: true});
 const type_value = ref('computer');
 // 弹出框显示逻辑
 const dialogVisible = defineModel('visible', { type: Boolean, default: false })

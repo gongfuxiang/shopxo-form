@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb w h">标题
-                    <component-switch-select v-model="form.type" :option-list="form_type_option" @dropdown_click="dropdown_click"/>
+                    <component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value !== 'radio-btns') || !isSubform)" @dropdown_click="dropdown_click"/>
                 </div>
                 <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
             </div>

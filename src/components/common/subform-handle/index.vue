@@ -17,36 +17,45 @@
                 </div>
                 <template v-if="form.form_value.length > 0">
                     <template v-if="is_remove_selected">
-                        {{ form.form_error_list }}
                         <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change">
                             <el-checkbox v-for="(item, index) in form.form_value" :key="index + get_math()" :value="index" class="flex-1 row-num flex-row align-c jc-c" />
                         </el-checkbox-group>
                     </template>
                     <template v-else>
                         <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="row-table flex-1 flex-row re">
-                            <div class="row-num flex-row align-c jc-c">{{ index + 1 }}</div>
-                            <div class="operate flex-row align-c gap-10">
-                                <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
-                                    <template #reference>
-                                        <icon name="delete" size="16" color="primary"></icon>
-                                    </template>
-                                    <template #actions="{ confirm, cancel }">
-                                        <el-button size="small" @click="cancel">取消</el-button>
-                                        <el-button type="danger" size="small" @click="confirm">确定</el-button>
-                                    </template>
-                                </el-popconfirm>
-                                <el-dropdown placement="bottom">
-                                    <icon name="more-o" size="16" color="primary"></icon>
-                                    <template #dropdown>
-                                        <el-dropdown-menu>
-                                            <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
-                                            <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
-                                            <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
-                                            <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
-                                        </el-dropdown-menu>
-                                    </template>
-                                </el-dropdown>
+                            <div class="row-num flex-row align-c jc-c">
+                                <template v-if="isEmpty(line_error(index))">
+                                    {{ index + 1 }}
+                                </template>
+                                <template v-else>
+                                    <div class="error-icon">!</div>
+                                </template>
                             </div>
+                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
+                                <div class="operate flex-row align-c jc-c gap-5">
+                                    <icon name="enlarge" size="14" color="primary" @click="enlarge_click(index)"></icon>
+                                    <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
+                                        <template #reference>
+                                            <icon name="delete" size="14" color="primary"></icon>
+                                        </template>
+                                        <template #actions="{ confirm, cancel }">
+                                            <el-button size="small" @click="cancel">取消</el-button>
+                                            <el-button type="danger" size="small" @click="confirm">确定</el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                    <el-dropdown placement="bottom">
+                                        <icon name="more-o" size="14" color="primary"></icon>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
+                                </div>
+                            </el-tooltip>
                         </div>
                     </template>
                 </template>
@@ -72,6 +81,7 @@
             </div>
         </div>
     </div>
+    <subform-drawer v-model:visible="drawer_visible" v-model:title="drawer_title" v-model:total="form.form_value.length" v-model:size="drawer_index" v-model:form_data="drawer_data" @previous-page="previous_page" @next-page="next_page" @add="drawer_add" @copy="drawer_copy" @change="drawer_change"></subform-drawer>
 </template>
 
 <script lang="ts" setup>
@@ -92,7 +102,7 @@ const props = defineProps({
 const form = ref(props.value);
 const form_error_list = ref<any[]>([]);
 watch(() => props.value, (val) => {
-    form.value = cloneDeep(val);
+    form.value = val;
 }, {immediate: true, deep: true});
 // 表单数据发生变化时的处理
 watch(() => form.value.form_value, (val) => {
@@ -241,6 +251,99 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
         } 
     }
 };
+// 报错显示
+const line_error = computed(() => {
+    return (index: number) => {
+        let text = '';
+        for (let i = 0; i < form.value.children.length - 1; i++) {
+            const item = form.value.children[i];
+            if (form_error_list.value[index]) {
+                const err_list = form_error_list.value[index][item.id] || {};
+                // 如果当前行有错误
+                if (err_list && err_list.common_config && err_list.common_config.is_error == '1') {
+                    if (err_list.common_config.error_text == '此项为必填项') {
+                        text = `请填写「${item.com_data.title}」`;
+                    } else {
+                        text = `请正确填写「${item.com_data.title}」`;
+                    }
+                    break;
+                }
+            }
+        }
+        return text;
+    };
+});
+//#region 表单详情相关
+const drawer_visible = ref(false);
+const drawer_index = ref(0);
+const drawer_title = computed(() => form.value.title);
+// 打开抽屉
+const enlarge_click = (index: number) => {
+    set_drawer_data(index);
+    drawer_index.value = index + 1;
+    drawer_visible.value = true;
+}
+const drawer_data = ref([]);
+const set_drawer_data = (index: number) => { 
+    const data = cloneDeep(form.value.children);
+    data.forEach((item: any) => {
+        if (props.isPreview) {
+            if (form_error_list.value[index] && !isEmpty(form_error_list.value[index][item.id])) {
+                const error = form_error_list.value[index][item.id];
+                item.com_data.common_config.is_error = error.common_config.is_error;
+                item.com_data.common_config.error_text = error.common_config.error_text;
+            }
+        } else {
+            item.com_data.is_required = '0';
+            item.com_data.common_config.is_error = '0';
+            item.com_data.common_config.error_text = '';
+        }
+        if (form.value.form_value[index] && !isEmpty(form.value.form_value[index][item.id])) {
+            const value = form.value.form_value[index][item.id];
+            item.com_data.form_value = value;
+        }
+    });
+    drawer_data.value = data;
+};
+const previous_page = (index: number) => {
+    enlarge_click(index - 1);
+};
+const next_page = (index: number) => { 
+    enlarge_click(index);
+};
+// 抽屉点击添加
+const drawer_add = () => { 
+    form.value.form_value.push(cloneDeep(form_data.value));
+    enlarge_click(form.value.form_value.length - 1);
+};
+// 抽屉点击复制
+const drawer_copy = (data: any) => { 
+    const new_data = data.reduce((acc: any, item: any) => {
+        acc[item.id] = item.com_data.form_value;
+        return acc;
+    }, {});
+    form.value.form_value.push(cloneDeep(new_data));
+    enlarge_click(form.value.form_value.length - 1);
+};
+
+const drawer_change = (data: any) => {
+    const new_data = data.reduce((acc: any, item: any) => {
+        acc[item.id] = item.com_data.form_value;
+        return acc;
+    }, {});
+    const index = drawer_index.value - 1;
+    form.value.form_value[index] = new_data;
+    if (props.isPreview) {
+        data.forEach((item: any) => {
+            const err_list = form_error_list.value[index];
+            if (err_list && err_list[item.id]) {
+                err_list[item.id].common_config.is_error = item.com_data.common_config.is_error;
+                err_list[item.id].common_config.error_text = item.com_data.common_config.error_text;
+            }
+        });
+    }
+};
+//#endregion    
 </script>
 
 <style lang="scss" scoped>
@@ -271,7 +374,7 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
         .row-num:last-child {
             border-bottom-left-radius: 0.3rem;
         }
-        .row-table:hover {
+        .row-table:hover, .row-num:hover {
             .operate {
                 display: flex;
             }
@@ -282,10 +385,10 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
         .operate {
             position: absolute;
             background: #fff;
-            padding: 1rem;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            left: 0.1rem;
+            width: calc(100% - 0.2rem);
+            height: calc(100% - 0.2rem);
+            top: 0.1rem;
             z-index: 2;
             display: none;
         }
@@ -349,5 +452,17 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
 }
 .item-row-error {
     background: #fdeeee;
+}
+.error-icon {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.6rem;
+    line-height: 1.6rem;
+    background: #eb5050;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

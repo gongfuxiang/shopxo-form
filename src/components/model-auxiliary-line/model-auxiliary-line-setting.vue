@@ -52,7 +52,6 @@
 </template>
 <script setup lang="ts">
 import { get_container_location, location_compute } from '@/utils';
-import { cloneDeep } from 'lodash'
 import { commonStore } from "@/store";
 const common_store = commonStore();
 const props = defineProps({

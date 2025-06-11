@@ -100,7 +100,7 @@ const props = defineProps({
 const form = ref(props.value);
 watch(() => props.value, (val) => {
     form.value = val;
-})
+}, {deep: true})
 </script>
 
 <style lang="less" scoped>

@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
-import { cloneDeep } from "lodash"
 const common_store = commonStore();
 const props = defineProps({
     value: {

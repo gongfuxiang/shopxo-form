@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "38496546",
+      "name": "收起",
+      "font_class": "contract",
+      "unicode": "e70c",
+      "unicode_decimal": 59148
+    },
+    {
       "icon_id": "44464565",
       "name": "电脑",
       "font_class": "computer",
