@@ -9,7 +9,7 @@
                 <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
             </view>
             <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :is-custom="selected_is_custom" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
-            <preview v-model:visible="previewVisible" :value="form.diy_data"></preview>
+            <preview :key="previewKey" v-model:visible="previewVisible" :value="form.diy_data"></preview>
         </div>
     </div>
 </template>
@@ -20,6 +20,7 @@ import { layout_settings, style_settings } from '@/utils/common';
 import defaultSettings from './index';
 import CommonAPI from '@/api/common';
 import { commonStore } from '@/store';
+import { get_math } from '@/utils';
 const common_store = commonStore();
 interface diy_data_item {
     id: string;
@@ -135,7 +136,9 @@ const form_config_event = () => {
 };
 // 预览信息
 const previewVisible = ref(false);
+const previewKey = ref('');
 const preview_event = () => {
+    previewKey.value = get_math();
     previewVisible.value = true;
 }
 // 模式切换的时候清空缓存数据

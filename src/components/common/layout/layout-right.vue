@@ -102,13 +102,13 @@
                 <div class="flex-1">
                     <el-radio-group v-model="form.heading_title_location" is-button class="two-copies-group three-copies-group w h">
                         <el-tooltip content="左对齐" placement="top" effect="dark">
-                            <el-radio-button value="left"><icon name="iconfont icon-left"></icon></el-radio-button>
+                            <el-radio-button value="flex-start"><icon name="iconfont icon-left"></icon></el-radio-button>
                         </el-tooltip>
                         <el-tooltip content="居中" placement="top" effect="dark">
                             <el-radio-button value="center"><icon name="iconfont icon-center"></icon></el-radio-button>
                         </el-tooltip>
                         <el-tooltip content="右对齐" placement="top" effect="dark">
-                            <el-radio-button value="right"><icon name="iconfont icon-right"></icon></el-radio-button>
+                            <el-radio-button value="flex-end"><icon name="iconfont icon-right"></icon></el-radio-button>
                         </el-tooltip>
                     </el-radio-group>
                 </div>

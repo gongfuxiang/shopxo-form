@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-const title = defineModel('title', { type: String, default: '' });;
+const title = defineModel('title', { type: String, default: '' });
 const drawer_visible = defineModel('visible', { type: Boolean, default: false });
 const total = defineModel('total', { type: Number, default: 1 });
 const size = defineModel('size', { type: Number, default: 1 });
