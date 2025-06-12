@@ -1,5 +1,5 @@
 <template>
-    <div class="layout">
+    <div v-loading.fullscreen.lock="fullscreen_loading" element-loading-background="rgba(255,255,255,1)" element-loading-custom-class="loading-custom" class="layout">
         <navbar v-model="form.model" :save-disabled="save_disabled" @form-config="form_config_event" @preview="preview_event" @save="save_event" @save-close="save_close_event"/>
         <div class="content flex-1 flex-row">
             <div v-if="form.overall_config.type_value == 'default'" class="flex-1 main-style">
@@ -91,11 +91,13 @@ const update_setting = (data: any, diy: any[], is_custom: boolean = false) => {
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);
 };
+// 全局loading
+const fullscreen_loading = ref(false);
 // 页面加载
 onMounted(() => {
+    fullscreen_loading.value = true;
     common_init();
 });
-
 const common_init = () => {
     common_store.get_address();
     CommonAPI.getInit().then((res: any) => {
@@ -104,7 +106,16 @@ const common_init = () => {
     });
 };
 const init = () => {
-    form.value.diy_data = data_merge(form.value.diy_data);
+    // 从缓存中取出数据，并将数据赋值给对应的内容
+    const data = sessionStorage.getItem('clone_form') || '';
+    if (!isEmpty(data)) {
+        form.value = JSON.parse(data);
+    }
+    // // 删除缓存数据，避免多次
+    // sessionStorage.removeItem('clone_form');
+    setTimeout(() => {
+        fullscreen_loading.value = false;
+    }, 500)
 };
 // 将内容传递给子组件, 避免多次传递
 provide('diy_data', computed(() => form.value.diy_data));
@@ -153,14 +164,15 @@ const save_disabled = ref(false);
 // 保存
 const save_event = () => {
     save_disabled.value = true;
-
+    save_formmat_form_data(form.value);
 }
 // 保存并关闭
 const save_close_event = () => {
     save_disabled.value = true;
+    save_formmat_form_data(form.value);
 }
 // save_formmat_form_data: 保存数据， data： 数据， close： 是否关闭， is_export： 是否导出， is_preview： 是否预览
-const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_export: boolean = false, is_preview: boolean = false) => {
+const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_preview: boolean = false) => {
     ElMessage({
         message: '保存中',
         type: 'success',
@@ -169,6 +181,17 @@ const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_
         customClass: 'message-box-custom',
     })
     const clone_form = cloneDeep(data);
+    sessionStorage.setItem('clone_form', JSON.stringify(clone_form));
+    setTimeout(() => {
+        save_disabled.value = false;
+    }, 500);
+    ElMessage.closeAll();
+    setTimeout(() => {
+        // 如果是导出或预览模式，则不显示保存成功的消息
+        if (!is_preview) {
+            ElMessage.success('保存成功');
+        }
+    }, 100);
     // 数据改造
     // const new_data = diy_data_transfor_form_data(clone_form);
     // DiyAPI.save(new_data)
