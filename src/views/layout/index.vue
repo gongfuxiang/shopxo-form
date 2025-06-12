@@ -1,6 +1,6 @@
 <template>
     <div class="layout">
-        <navbar v-model="form.model" @form-config="form_config_event" @preview="preview_event" />
+        <navbar v-model="form.model" :save-disabled="save_disabled" @form-config="form_config_event" @preview="preview_event" @save="save_event" @save-close="save_close_event"/>
         <div class="content flex-1 flex-row">
             <div v-if="form.overall_config.type_value == 'default'" class="flex-1 main-style">
                 <mains :diy-data="form.diy_data" @update-setting="update_setting"></mains>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import { layout_settings, style_settings } from '@/utils/common';
 import defaultSettings from './index';
 import CommonAPI from '@/api/common';
@@ -85,7 +85,9 @@ const update_setting = (data: any, diy: any[], is_custom: boolean = false) => {
     diy_data_item.value = data;
     form.value.diy_data = diy;
     selected_is_custom.value = is_custom;
-    is_show_form_model.value = false;
+    if (!isEmpty(data)) {
+        is_show_form_model.value = false;
+    }
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);
 };
@@ -138,6 +140,7 @@ const form_config_event = () => {
 const previewVisible = ref(false);
 const previewKey = ref('');
 const preview_event = () => {
+    save_disabled.value = true;
     previewKey.value = get_math();
     previewVisible.value = true;
 }
@@ -145,6 +148,72 @@ const preview_event = () => {
 const type_change = () => {
     form.value.diy_data = [];
 }
+//#region 保存逻辑
+const save_disabled = ref(false);
+// 保存
+const save_event = () => {
+    save_disabled.value = true;
+
+}
+// 保存并关闭
+const save_close_event = () => {
+    save_disabled.value = true;
+}
+// save_formmat_form_data: 保存数据， data： 数据， close： 是否关闭， is_export： 是否导出， is_preview： 是否预览
+const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_export: boolean = false, is_preview: boolean = false) => {
+    ElMessage({
+        message: '保存中',
+        type: 'success',
+        duration: 0,
+        icon: 'Loading',
+        customClass: 'message-box-custom',
+    })
+    const clone_form = cloneDeep(data);
+    // 数据改造
+    // const new_data = diy_data_transfor_form_data(clone_form);
+    // DiyAPI.save(new_data)
+    //     .then((res) => {
+    //         setTimeout(() => {
+    //             save_disabled.value = false;
+    //         }, 500);
+    //         ElMessage.closeAll();
+    //         setTimeout(() => {
+    //           // 如果是导出或预览模式，则不显示保存成功的消息
+    //             if (!(is_export || is_preview)) {
+    //                 ElMessage.success('保存成功');
+    //             }
+    //         }, 100);
+    //         if (close) {
+    //             ElMessageBox.confirm('您确定要关闭本页吗？', '提示')
+    //                 .then(() => {
+    //                     // 关闭页面
+    //                     window.close();
+    //                 })
+    //                 .catch(() => {});
+    //         } else {
+    //             // 判断是否需要导出
+    //             if (is_export) {
+    //                 const index = window.location.href.lastIndexOf('?s=');
+    //                 const pro_url = window.location.href.substring(0, index);
+    //                 const new_url = import.meta.env.VITE_APP_BASE_API == '/dev-api' ? import.meta.env.VITE_APP_BASE_API_URL : pro_url;
+    //                 window.open(new_url + '?s=diyapi/diydownload/id/' + res.data + '.html', '_blank');
+    //             }
+    //             form.value.id = String(res.data);
+    //             history.pushState({}, '', '?s=diy/saveinfo/id/' + res.data + '.html');
+    //         }
+    //     })
+    //     .catch((err: string) => {
+    //         // 失败的时候关闭弹出框
+    //         ElMessage.closeAll();
+    //         if (err == 'canceled') {
+    //             console.log('请求已取消');
+    //         } else {
+    //             ElMessage.error(err || '系统出错');
+    //         }
+    //         save_disabled.value = false;
+    //     });
+};
+//#endregion
 </script>
 
 <style scoped lang="scss">

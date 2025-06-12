@@ -111,6 +111,7 @@ const handleClose = () => {
         }
     }
 };
+
 const option_list = [
     { name: 'A3', width: 297, height: 420 },
     { name: 'A4', width: 210, height: 297 },
@@ -122,12 +123,14 @@ const option_list = [
 // 初始化自定义配置对象，用于存储纸张类型、宽度和高度
 const custom_config = reactive({ type: 'A3', width: 297, height: 420 });
 
-// 监听props.value的变化，当发生变化时，更新自定义配置对象的属性
-watch(() => props.value, (val) => {
-    custom_config.type = cloneDeep(val.custom_size_type);
-    custom_config.width = cloneDeep(val.custom_width);
-    custom_config.height = cloneDeep(val.custom_height);
-});
+// 监听表单配置重新打开的时候
+watch(() => props.isShowFormModel, (val) => {
+    if (val) {
+        custom_config.type = cloneDeep(form.value.custom_size_type);
+        custom_config.width = cloneDeep(form.value.custom_width);
+        custom_config.height = cloneDeep(form.value.custom_height);
+    }
+}, { immediate: true, deep: true });
 
 /**
  * 提交函数，将当前自定义配置应用到表单对象
