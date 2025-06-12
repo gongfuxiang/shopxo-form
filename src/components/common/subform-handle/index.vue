@@ -353,7 +353,7 @@ const enlarge_click = (index: number) => {
 }
 const drawer_data = ref([]);
 const set_drawer_data = (index: number) => { 
-    const data = cloneDeep(children.value);
+    const data = cloneDeep(form.value.children);
     data.forEach((item: any) => {
         if (props.isPreview) {
             if (form_error_list.value[index] && !isEmpty(form_error_list.value[index][item.id])) {

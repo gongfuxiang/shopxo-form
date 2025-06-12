@@ -17,7 +17,7 @@
         </template>
         <div v-loading="loading" class="content w h">
             <div class="main">
-                <div v-for="(item, index) in form_data" :key="index" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
+                <div v-for="(item, index) in filteredDiyData" :key="index" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
                     <component-show :value="item"></component-show>
                 </div>
             </div>
@@ -36,6 +36,40 @@ const drawer_visible = defineModel('visible', { type: Boolean, default: false })
 const total = defineModel('total', { type: Number, default: 1 });
 const size = defineModel('size', { type: Number, default: 1 });
 const form_data = defineModel('form_data', { type: Array<any>, default: () => [] });
+interface DiyItem {
+    id: number | string;
+    key: string;
+    is_enable: string;
+    com_data: any;
+}
+// 计算属性：根据显隐规则过滤出需要显示的组件
+const filteredDiyData = computed(() => {
+    const componentMap = new Map(form_data.value.map((item: any) => [item.id, item])) as any;
+    // 取出所有设置显隐规则的组件
+    const list = form_data.value.filter((item: any) => ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    const list_map = list.map((item: DiyItem) => ({ id: item.id, list: item.com_data.show_hidden_list }));
+    return form_data.value.filter((item: DiyItem) => {
+        // 优先判断是否启用
+        if (item.is_enable !== '1') return false;
+
+        if (list_map.length === 0) return true;
+        // 将所有的内容的组件进行筛选
+        const isShownByRule = list_map.some((list_item: any) => {
+            const targetComponent = componentMap.get(list_item.id);
+            // 判断显隐规则对应的组件是否存在
+            if (!targetComponent) return false;
+            return list_item.list.some((hidden_item: any) => {
+                // 判断当前组件是否在显隐规则中，如果不在，直接显示，否则的话判断值是否存在
+                if (hidden_item.is_show.includes(item.id)) {
+                    return targetComponent.com_data.form_value.includes(hidden_item.value);
+                } else {
+                    return true;
+                }
+            });
+        });
+        return isShownByRule;
+    });
+});
 const emit = defineEmits(['add', 'copy', 'previousPage', 'nextPage', 'change' ]);
 const previous_page = (index: number) => {
     if (index >= 1) {
