@@ -129,6 +129,7 @@ const show_row = (index: number, id: string) => {
         return true;
     }
 };
+// 判断childer符合显隐规则的数量
 const filtered_Data = (type: string, index?: number) => { 
     const componentMap = new Map(form.value.children.map((item: any) => [item.id, item])) as any;
 

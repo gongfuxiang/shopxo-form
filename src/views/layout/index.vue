@@ -180,6 +180,9 @@ const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_
         customClass: 'message-box-custom',
     })
     const clone_form = cloneDeep(data);
+    clone_form.diy_data.forEach(item => {
+        item.show_tabs = '0'
+    })
     sessionStorage.setItem('clone_form', JSON.stringify(clone_form));
     setTimeout(() => {
         save_disabled.value = false;
