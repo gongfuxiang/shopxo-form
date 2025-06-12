@@ -121,9 +121,13 @@ interface DiyItem {
 const filteredDiyData = computed(() => filtered_Data('all'));
 // index: 列索引 id: 组件id
 const show_row = (index: number, id: string) => {
-    const show_children = filtered_Data('value', index);
-    const children_index = show_children.findIndex((item: any) => item.id === id);
-    return children_index !== -1;
+    if (props.isPreview || props.isDefault) {
+        const show_children = filtered_Data('value', index);
+        const children_index = show_children.findIndex((item: any) => item.id === id);
+        return children_index !== -1;
+    } else {
+        return true;
+    }
 };
 const filtered_Data = (type: string, index?: number) => { 
     const componentMap = new Map(form.value.children.map((item: any) => [item.id, item])) as any;
