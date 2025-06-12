@@ -24,7 +24,7 @@
                         <el-input v-model="input_value3" class="search-select-input" placeholder="搜索" :prefix-icon="Search" size="large" />
                     </template>
                     <el-checkbox-group :model-value="form_item.is_show">
-                        <el-option v-for="item in diy_data.filter((item1: any) => item1.com_data.title.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.com_data.title">
+                        <el-option v-for="item in show_hidden_operate_list.filter((item1: any) => item1.com_data.title.includes(input_value3) && item1.id !== modelId && item1.is_enable == '1')" :key="item.id" :value="item.id" :label="item.com_data.title">
                             <el-checkbox :value="item.id" :label="item.com_data.title">{{ item.com_data.title }}</el-checkbox>
                         </el-option>
                     </el-checkbox-group>
@@ -44,6 +44,7 @@
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue'
 import { isEmpty, cloneDeep } from "lodash";
+import SubformWidth from '../subform-handle/subform-width.vue';
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
 
@@ -60,6 +61,14 @@ const props = defineProps({
     modelId: {
         type: String,
         default: '',
+    },
+    isSubform: {
+        type: Boolean,
+        default: false,
+    },
+    subformData: {
+        type: Array<any>,
+        default: () => ([]),
     }
 });
 //#region 规则显示逻辑处理
@@ -68,6 +77,11 @@ type show_hidden = {
     is_show: string[];
 }
 const form = ref<show_hidden[]>([]);
+const subformData = computed(() => props.subformData);
+watch(() => subformData.value, (newValue) => { 
+    console.log(newValue);
+});
+const show_hidden_operate_list = computed(() => props.isSubform ? subformData.value : diy_data.value);
 // 搜索内容
 const input_value1 = ref('');
 const input_value2 = ref('');
@@ -112,7 +126,7 @@ type hiddenData = {
 };
 const submit = () => {
     // 取出所有设置显隐规则的组件
-    const list = diy_data.value.filter((item: any) => item.id !== props.modelId && ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    const list = show_hidden_operate_list.value.filter((item: any) => item.id !== props.modelId && ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
     // 取出其他的显隐规则逻辑
     let old_hidden_list: hiddenData[] = [];
     if (list.length > 0) {

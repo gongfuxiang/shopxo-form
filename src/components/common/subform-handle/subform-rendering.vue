@@ -1,5 +1,5 @@
 <template>
-    <div class="setting-content content">
+    <div class="setting-content content w h oh">
         <!-- 单行文本 | 下拉框 | 单选按钮组-->
         <template v-if="['single-text', 'select', 'radio-btns'].includes(model_type)">
             <template v-if="['radio-btns', 'select'].includes(form.type)">
@@ -26,7 +26,7 @@
         </template>
         <!-- 多行文本 -->
         <template v-else-if="model_type == 'multi-text'">
-            <el-input v-model="form_value" type="textarea" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
+            <el-input v-model="form_value" type="textarea" :style="frame_style + style_container + 'height:8.2rem;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
         </template>
         <!-- 数字 -->
         <template v-else-if="model_type == 'number'">

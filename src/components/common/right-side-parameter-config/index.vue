@@ -2,7 +2,7 @@
     <div class="setting-content">
         <!-- 单行文本 | 下拉框 | 单选按钮组-->
         <template v-if="['single-text', 'select', 'radio-btns'].includes(model_value.key)">
-            <model-input-setting :value="model_value.com_data" :model-id="model_value.id" :is-custom="isCustom" :is-subform="isSubform"></model-input-setting>
+            <model-input-setting :value="model_value.com_data" :model-id="model_value.id" :is-custom="isCustom" :is-subform="isSubform" :subform-list="subformList"></model-input-setting>
         </template>
         <!-- 多行文本 -->
         <template v-else-if="model_value.key == 'multi-text'">
@@ -95,7 +95,11 @@ const props = defineProps({
     isSubform: {
         type: Boolean,
         default: false
-    }
+    },
+    subformList: {
+        type: Array,
+        default: () => ([]),
+    },
 });
 const model_value = defineModel({ type: Object, default: () => ({}) });
 </script>

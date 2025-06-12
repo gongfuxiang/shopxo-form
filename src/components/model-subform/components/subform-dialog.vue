@@ -3,7 +3,7 @@
         <div class="flex-row w h">
             <subform-main ref="draglist" class="flex-1 main-style" :diy-data="form.children" :value="form.form_value" @update-setting="update_setting"></subform-main>
             <div class="setting ptb-20 plr-12">
-                <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true" :is-subform="true"></right-side-parameter-config>
+                <right-side-parameter-config :key="key" v-model="diy_data_item" :is-custom="true" :is-subform="true" :subform-list="subform_data"></right-side-parameter-config>
             </div>
         </div>
         <template #footer>
@@ -31,10 +31,12 @@ watch(() => props.value, (val) => {
 }, { deep: true});
 
 const diy_data_item = ref({});
+const subform_data = ref<any[]>([]);
 const key = ref('');
 // 更新设置
 const update_setting = (data: any, diy: any[], is_custom: boolean = false) => {
     diy_data_item.value = data;
+    subform_data.value = diy;
     // 生成随机id
     key.value = Math.random().toString(36).substring(2);
 };

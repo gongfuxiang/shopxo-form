@@ -81,7 +81,7 @@
         <template v-if="isSubform">
             <subform-width v-model="form.com_width"></subform-width>
         </template>
-        <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :model-id="modelId" @submit="submit"></show-hidden>
+        <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :is-subform="isSubform" :subform-data="subformList" :model-id="modelId" @submit="submit"></show-hidden>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -100,6 +100,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    subformList: {
+        type: Array,
+        default: () => ([]),
+    }
 });
 const form = ref(props.value);
 // 切换组件选项

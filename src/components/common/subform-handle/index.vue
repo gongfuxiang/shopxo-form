@@ -71,9 +71,11 @@
                                 <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
                             </div>
                             <div v-for="(item1, index1) in form.form_value" :key="index1" :class="['flex-1 item-row rendering-area flex-row align-c jc-c re', { 'item-row-error': error_list(index1, item.id)[0] == '1' }]">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index1, item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index1, item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
-                                    <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]" :index="index1" @change="tablist_change($event, index1, item.id)" @data_check="data_check($event, index1, item.id, item.com_data)"></subform-rendering>
-                                </el-tooltip>
+                                <template v-if="show_row(index1, item.id)">
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index1, item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index1, item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
+                                        <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]" :index="index1" @change="tablist_change($event, index1, item.id)" @data_check="data_check($event, index1, item.id, item.com_data)"></subform-rendering>
+                                    </el-tooltip>
+                                </template>
                             </div>
                         </div>
                     </div>
@@ -105,10 +107,63 @@ const props = defineProps({
 });
 const form = ref(props.value);
 const form_error_list = ref<any[]>([]);
-watch(() => props.value, (val) => {
-    form.value = val;
-}, {immediate: true, deep: true});
-const children = computed(() => form.value.children.filter((item: any) => props.isPreview || props.isDefault ? item.is_enable === '1' : true));
+//#region 判断列是否显示，或者某一行的某一个是否显示
+interface DiyItem {
+    id: number | string;
+    key: string;
+    is_enable: string;
+    com_data: any;
+}
+// 计算属性：根据显隐规则过滤出需要显示的组件
+const filteredDiyData = computed(() => filtered_Data('all'));
+// index: 列索引 id: 组件id
+const show_row = (index: number, id: string) => {
+    const show_children = filtered_Data('value', index);
+    const children_index = show_children.findIndex((item: any) => item.id === id);
+    return children_index !== -1;
+};
+const filtered_Data = (type: string, index?: number) => { 
+    const componentMap = new Map(form.value.children.map((item: any) => [item.id, item])) as any;
+
+    // 取出所有设置显隐规则的组件
+    const list = form.value.children.filter((item: any) => ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    const list_map = list.map((item: DiyItem) => ({ id: item.id, list: item.com_data.show_hidden_list }));
+    return form.value.children.filter((item: DiyItem) => {
+        // 优先判断是否启用
+        if (item.is_enable !== '1') return false;
+
+        if (list_map.length === 0) return true;
+        // 将所有的内容的组件进行筛选
+        const isShownByRule = list_map.some((list_item: any) => {
+            const targetComponent = componentMap.get(list_item.id);
+            // 判断显隐规则对应的组件是否存在
+            if (!targetComponent) return false;
+            return list_item.list.some((hidden_item: any) => {
+                // 判断当前组件是否在显隐规则中，如果不在，直接显示，否则的话判断值是否存在
+                if (hidden_item.is_show.includes(item.id)) {
+                    if (type == 'all') {
+                        // 判断所有的是否满足条件
+                        const data = form.value.form_value.filter((form_item: any) => form_item[list_item.id].includes(hidden_item.value))
+                        return data.length > 0;
+                    } else {
+                        // 判断是单个还是多个内容
+                        if (index == null) {
+                            return false;
+                        } else {
+                            // 否则判断当前组件的值是否存在
+                            return form.value.form_value[index][list_item.id].includes(hidden_item.value);
+                        }
+                    }
+                } else {
+                    return true;
+                }
+            });
+        });
+        return isShownByRule;
+    });
+};
+const children = computed(() => props.isPreview || props.isDefault ? filteredDiyData.value : form.value.children);
+//#endregion
 // 表单数据发生变化时的处理
 watch(() => form.value.form_value, (val) => {
     if (props.isPreview) {
