@@ -70,6 +70,7 @@ declare module 'vue' {
     LayoutDialog: typeof import('./../components/common/layout/layout-dialog.vue')['default']
     LayoutIndex: typeof import('./../components/common/layout/layout-index.vue')['default']
     LayoutRight: typeof import('./../components/common/layout/layout-right.vue')['default']
+    LayoutTop: typeof import('./../components/common/layout/layout-top.vue')['default']
     Main: typeof import('./../components/model-subform/components/main.vue')['default']
     MainFree: typeof import('./../views/layout/components/main-free/index.vue')['default']
     Mains: typeof import('./../views/layout/components/mains/index.vue')['default']

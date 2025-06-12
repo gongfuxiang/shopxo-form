@@ -187,6 +187,8 @@ const type_change = () => {
     }
 }
 :deep(.el-dialog.layout-dialog.form-dialog) {
+    top: 0;
+    height: 100%;
     .el-dialog__header {
         padding: 1.3rem 2rem;
     }

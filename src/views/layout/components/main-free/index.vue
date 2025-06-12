@@ -23,7 +23,7 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <div class="drag-content h flex-row">
+            <div class="drag-content">
                 <!-- 拖拽区 -->
                 <div class="model-content">
                     <div class="model-drag re">
@@ -904,15 +904,13 @@ onUnmounted(() => {
         overflow: scroll;
         .drag-content {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            max-width: 90%;
-            margin: 0 auto;
+            overflow: hidden;
             height: 100%;
             .model-content {
                 padding: 2rem 0;
-                // height: 100%;
-                // overflow: scroll;
+                overflow: scroll;
             }
             .model-drag {
                 width: v-bind(model_drag_width);

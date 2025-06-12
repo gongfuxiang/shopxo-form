@@ -12,20 +12,12 @@
                     </template>
                 </div>
                 <!-- 内容信息 -->
-                <div v-if="type_value == 'computer'" class="dialog-main re z-i w h">
+                <div v-if="type_value == 'computer'" class="dialog-main re z-i w h flex-row align-c jc-c">
                     <!-- 表单数据 -->
-                    <div class="main-overflow h flex-col align-c jc-c">
+                    <div class="main-overflow w h">
                         <template v-if="common_store.form_config.type_value == 'free'">
-                            <div :style="`width: ${ common_store.form_config.custom_width }px;`">
-                                <div v-if="configType !== 'layout'" class="dialog-main-header">
-                                    <template v-if="config_value.heading_type == 'img' && config_value.heading_image.length > 0">
-                                        <image-empty v-model="config_value.heading_image[0]" error-style="width:100%;height:3.2rem;"></image-empty>
-                                    </template>
-                                    <template v-else>
-                                        <div :style="`height:3.2rem;width:100%;background:${ config_value.heading_color }`"></div>
-                                    </template>
-                                    <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="heading_title_style">{{ common_store.form_model_config.name }}</div>
-                                </div>
+                            <div :style="`margin:0 auto;width: ${ common_store.form_config.custom_width }px;`">
+                                <layout-top v-if="configType !== 'layout'" v-model="type_value" ></layout-top>
                                 <div class="re bg-f main-content" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
                                     <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index) : -999};`">
                                         <component-show :value="item" :is-custom="true"></component-show>
@@ -35,15 +27,7 @@
                         </template>
                         <template v-else>
                             <div class="main-content" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
-                                <div v-if="configType !== 'layout'" class="dialog-main-header">
-                                    <template v-if="config_value.heading_type == 'img' && config_value.heading_image.length > 0">
-                                        <image-empty v-model="config_value.heading_image[0]" error-style="width:100%;height:3.2rem;"></image-empty>
-                                    </template>
-                                    <template v-else>
-                                        <div :style="`height:3.2rem;width:100%;background:${ config_value.heading_color }`"></div>
-                                    </template>
-                                    <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="heading_title_style">{{ common_store.form_model_config.name }}</div>
-                                </div>
+                                <layout-top v-if="configType !== 'layout'" v-model="type_value" ></layout-top>
                                 <div class="pa-16">
                                     <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
                                         <component-show :value="item"></component-show>
@@ -190,11 +174,6 @@ const handleClose = () => {
     dialogVisible.value = false;
     emit('handleClose');
 };
-// 表单名称的样式
-const heading_title_style = computed(() => {
-    const { heading_title_location, heading_title_color, heading_title_size, heading_title_font_weight } = config_value.value;
-    return `justify-content:${ heading_title_location };color:${ heading_title_color };font-size:${ heading_title_size }px;font-weight:${ heading_title_font_weight };`
-})
 </script>
 
 <style lang="scss" scoped>

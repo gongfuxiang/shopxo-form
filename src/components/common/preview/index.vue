@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="dialogVisible" class="layout-dialog form-dialog" :close-on-press-escape="false" close-on-click-modal :append-to-body="false" :before-close="handleClose">
+    <el-dialog v-model="dialogVisible" class="layout-dialog form-dialog" fullscreen :close-on-press-escape="false" close-on-click-modal :append-to-body="false" :before-close="handleClose">
         <template #header>
             <el-radio-group v-model="type_value" class="custom-radio-group">
                 <el-radio-button value="computer">
@@ -10,12 +10,22 @@
                 </el-radio-button>
             </el-radio-group>
         </template>
-        <div class="flex-row h w bg-f8">
-            <div v-if="type_value == 'computer'" class="flex-1 dialog-main">
+        <div class="flex-row h w re">
+            <div class="abs w h">
+                <!-- 背景信息 -->
+                <template v-if="config_value.background_type == 'img' && config_value.background_image.length > 0">
+                    <image-empty v-model="config_value.background_image[0]" error-style="width:100%;height:100%;"></image-empty>
+                </template>
+                <template v-else>
+                    <div :style="`height:100%;width:100%;background:${ config_value.background_color }`"></div>
+                </template>
+            </div>
+            <div v-if="type_value == 'computer'" class="flex-1 dialog-main z-i re z-i w h flex-row align-c jc-c">
                 <!-- 表单数据 -->
-                <div class="main-overflow h flex-col align-c jc-c">
+                <div class="main-overflow w h">
                     <template v-if="common_store.form_config.type_value == 'free'">
                         <div class="main-content re bg-f" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
+                            <layout-top></layout-top>
                             <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index) : -999};`">
                                 <component-show :value="item" :is-custom="true" :is-preview="true"></component-show>
                             </div>
@@ -23,6 +33,7 @@
                     </template>
                     <template v-else>
                         <div class="main-content" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
+                            <layout-top></layout-top>
                             <div class="pa-16">
                                 <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
                                     <component-show :value="item" :is-preview="true"></component-show>
@@ -156,6 +167,8 @@ const submit = () => {
     ElMessage.warning('当前状态下不支持该操作');
 }
 //#endregion
+// 配置信息，区分是手机端数据还是电脑端数据
+const config_value = computed(() => type_value.value == 'computer' ? common_store.form_config.style_settings.computer : common_store.form_config.style_settings.mobile);
 </script>
 
 <style lang="scss" scoped>
