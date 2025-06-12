@@ -38,8 +38,8 @@
                         <!-- 底部数据 -->
                         <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
                             <div class="main-footer flex-row align-c jc-e gap-20 right-0" :style="`width: ${ common_store.form_config.type_value == 'free' ? common_store.form_config.custom_width : 1000}px;`">
-                                <el-button v-if="form_config.is_show_save_draft == '1'" plain>{{ form_config.submit_title }}</el-button>
-                                <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color"><span style="color:#fff;">{{ form_config.save_draft_title }}</span></el-button>
+                                <el-button v-if="form_config.is_show_save_draft == '1'" plain>{{ form_config.save_draft_title }}</el-button>
+                                <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color"><span style="color:#fff;">{{ form_config.submit_title }}</span></el-button>
                             </div>
                         </div>
                     </div>

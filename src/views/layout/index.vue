@@ -152,8 +152,7 @@ const previewVisible = ref(false);
 const previewKey = ref('');
 const preview_event = () => {
     save_disabled.value = true;
-    previewKey.value = get_math();
-    previewVisible.value = true;
+    save_formmat_form_data(form.value, false, true);
 }
 // 模式切换的时候清空缓存数据
 const type_change = () => {
@@ -190,6 +189,9 @@ const save_formmat_form_data = (data: diy_data_item, close: boolean = false, is_
         // 如果是导出或预览模式，则不显示保存成功的消息
         if (!is_preview) {
             ElMessage.success('保存成功');
+        } else {
+            previewKey.value = get_math();
+            previewVisible.value = true;
         }
     }, 100);
     // 数据改造
