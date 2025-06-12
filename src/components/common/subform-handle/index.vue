@@ -106,6 +106,9 @@ const props = defineProps({
     }
 });
 const form = ref(props.value);
+watch(() => props.value, (val) => {
+    form.value = val;
+}, {immediate: true, deep: true});
 const form_error_list = ref<any[]>([]);
 //#region 判断列是否显示，或者某一行的某一个是否显示
 interface DiyItem {
