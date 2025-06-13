@@ -536,6 +536,6 @@
     justify-content: center;
 }
 
-.border-focus:hover {
+.border-focus:hover, .border-focus:focus, .border-focus:active {
     border-color: #2a94ff !important;
 }

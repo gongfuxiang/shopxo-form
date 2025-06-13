@@ -22,7 +22,8 @@ const isLogoutModalShown = ref(true);
 
 // 创建 axios 实例
 const index = window.location.href.lastIndexOf('?s=');
-const pro_url = window.location.href.substring(0, index);
+// const pro_url = window.location.href.substring(0, index);
+const pro_url = 'https://new.shopxo.vip/';
 const service = axios.create({
     baseURL: import.meta.env.VITE_APP_BASE_API == '/dev-api' ? import.meta.env.VITE_APP_BASE_API : pro_url + '?s=',
     timeout: 60000,

@@ -59,8 +59,8 @@ const form = ref<diy_data_item>({
         type_value: 'default',
         is_layout_settings: '0',
         custom_size_type: 'A3',
-        custom_width:  297,
-        custom_height:  420,
+        custom_width: 842,
+        custom_height: 1191,
         layout_settings: cloneDeep(layout_settings),
         is_style_settings: '0',
         style_settings: cloneDeep(style_settings), 
@@ -100,10 +100,10 @@ onMounted(() => {
 });
 const common_init = () => {
     common_store.get_address();
-    CommonAPI.getInit().then((res: any) => {
-        common_store.set_common(res.data);
+    // CommonAPI.getInit().then((res: any) => {
+        // common_store.set_common(res.data);
         init();
-    });
+    // });
 };
 const init = () => {
     // 从缓存中取出数据，并将数据赋值给对应的内容
@@ -111,6 +111,10 @@ const init = () => {
     if (!isEmpty(data)) {
         form.value = JSON.parse(data);
     }
+    // 公共配置信息
+    common_store.set_form_layout(form.value.overall_config.layout_settings);
+    common_store.set_config(form.value.overall_config);
+    common_store.set_model_config(form.value.model);
     // // 删除缓存数据，避免多次
     // sessionStorage.removeItem('clone_form');
     setTimeout(() => {

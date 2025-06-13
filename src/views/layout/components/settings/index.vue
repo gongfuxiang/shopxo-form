@@ -113,12 +113,12 @@ const handleClose = () => {
 };
 
 const option_list = [
-    { name: 'A3', width: 297, height: 420 },
-    { name: 'A4', width: 210, height: 297 },
-    { name: 'A5', width: 148, height: 210 },
-    { name: 'B3', width: 353, height: 500 },
-    { name: 'B4', width: 250, height: 353 },
-    { name: 'B5', width: 176, height: 250 },
+    { name: 'A3', width: 842, height: 1191 },
+    { name: 'A4', width: 595, height: 842 },
+    { name: 'A5', width: 420, height: 595 },
+    { name: 'B3', width: 780, height: 1032 },
+    { name: 'B4', width: 780, height: 1032 },
+    { name: 'B5', width: 499, height: 709 },
 ];
 // 初始化自定义配置对象，用于存储纸张类型、宽度和高度
 const custom_config = reactive({ type: 'A3', width: 297, height: 420 });

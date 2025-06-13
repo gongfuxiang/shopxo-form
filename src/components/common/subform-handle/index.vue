@@ -253,7 +253,7 @@ const remove_selected = () => {
     const list: any[] = [];
     // 过滤掉选中的项，直接删除，index为当前项的索引会乱，所以用一个新数组承接
     form.value.form_value.forEach((item: any, index: number) => {
-        if (!selected_list.value.includes(index)) {
+        if (!selected_list.value[index]) {
             list.push(item);
         }
     });

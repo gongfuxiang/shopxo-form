@@ -119,11 +119,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
             rollupOptions: {
                 output: {
                     // 自定义 chunk 文件的输出路径和文件名格式
-                    chunkFileNames: 'static/diy/js/chunk/[name]-[hash].js',
+                    chunkFileNames: 'static/form/js/chunk/[name]-[hash].js',
                     // 自定义 entry chunk 的输出路径和文件名格式
-                    entryFileNames: 'static/diy/js/entry/[name]-[hash].js',
+                    entryFileNames: 'static/form/js/entry/[name]-[hash].js',
                     //非js文件夹，按照文件类型分类css,png,jpg
-                    assetFileNames: 'static/diy/[ext]/[name]-[hash].[ext]',
+                    assetFileNames: 'static/form/[ext]/[name]-[hash].[ext]',
                 },
             },
         },
