@@ -68,7 +68,7 @@
                 <template #header>
                     <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                 </template>
-                <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change.stop="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
+                <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
                 <el-checkbox-group :model-value="form_value">
                     <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                         <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>

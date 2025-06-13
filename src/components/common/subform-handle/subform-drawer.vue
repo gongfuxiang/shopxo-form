@@ -1,5 +1,5 @@
 <template>
-    <el-drawer v-model="drawer_visible" class="drawer-class" :close-on-press-escape="false" destroy-on-close :show-close="false" @close="drawer_visible = false">
+    <el-drawer v-model="drawer_visible" class="drawer-class" :close-on-press-escape="false" append-to-body destroy-on-close :show-close="false" @close="drawer_visible = false">
         <template #header="{ close }">
             <div class="flex-row align-c jc-sb">
                 <span>{{ title }}</span>
