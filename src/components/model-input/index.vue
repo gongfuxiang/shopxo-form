@@ -9,7 +9,7 @@
                             <div class="flex-row gap-10 align-c">
                                 <div :style="option_style(item)">{{ item.name }}</div>
                                 <template v-if="form.form_value == 'outer' && form.form_value == item.value">
-                                    <el-input v-model="form.outer_value" :style="frame_style + style_container" placeholder="请填写内容"></el-input>
+                                    <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" placeholder="请填写内容"></el-input>
                                 </template>
                             </div>
                         </el-radio>
@@ -17,7 +17,7 @@
                 </template>
                 <template v-else-if="form.type == 'select'">
                     <div class="flex-col gap-10">
-                        <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="frame_style + style_container" @change="select_change">
+                        <el-select ref="selectRef" v-model="form.form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1 border-focus" :style="frame_style + style_container" @change="select_change">
                             <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form.form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form.form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                             <template #tag>
                                 <template v-if="isEmpty(form.form_value)">
@@ -29,12 +29,12 @@
                             </template>
                         </el-select>
                         <template v-if="form.form_value == 'outer'">
-                            <el-input v-model="form.outer_value" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
+                            <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                         </template>
                     </div>
                 </template>
                 <template v-else>
-                    <el-input v-model="form.form_value" :style="frame_style + style_container" :placeholder="form.placeholder"  @blur="data_check(true)" @change="data_check(true)"></el-input>
+                    <el-input v-model="form.form_value" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder"  @blur="data_check(true)" @change="data_check(true)"></el-input>
                 </template>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>

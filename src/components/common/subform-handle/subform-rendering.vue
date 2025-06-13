@@ -1,10 +1,10 @@
 <template>
-    <div class="setting-content content w h oh">
+    <div class="setting-content content w oh">
         <!-- 单行文本 | 下拉框 | 单选按钮组-->
         <template v-if="['single-text', 'select', 'radio-btns'].includes(model_type)">
             <template v-if="['radio-btns', 'select'].includes(form.type)">
                 <div class="flex-col gap-10">
-                    <el-select ref="selectRef" v-model="form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1" :style="frame_style + style_container" @change="select_change">
+                    <el-select ref="selectRef" v-model="form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1 border-focus" :style="frame_style + style_container" @change="select_change">
                         <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                         <template #tag>
                             <template v-if="isEmpty(form_value)">
@@ -16,32 +16,32 @@
                         </template>
                     </el-select>
                     <template v-if="form_value == 'outer'">
-                        <el-input v-model="form.outer_value" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
+                        <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                     </template>
                 </div>
             </template>
             <template v-else>
-                <el-input v-model="form_value" :style="frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
+                <el-input v-model="form_value" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder" @blur="data_check(true)" @change="data_check(true)"></el-input>
             </template>
         </template>
         <!-- 多行文本 -->
         <template v-else-if="model_type == 'multi-text'">
-            <el-input v-model="form_value" type="textarea" :style="frame_style + style_container + 'height: auto'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
+            <el-input v-model="form_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height: auto'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check(false)" @change="data_check(false)"></el-input>
         </template>
         <!-- 数字 -->
         <template v-else-if="model_type == 'number'">
-            <number-input v-model="form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :placeholder="form.placeholder" :style="frame_style + style_container" @blur="data_check(true, 'number')" @change="data_check(true, 'number')"></number-input>
+            <number-input v-model="form_value" :decimal-num="form.is_decimal == '1' ? form.decimal_num : 0" :money-sign="form.is_display_money == '1' ? form.money_sign : ''" :format="form.format" :is-thousandths-symbol="form.is_thousandths_symbol" :is-percentage="form.format == 'percentage'" :placeholder="form.placeholder" class="border-focus" :style="frame_style + style_container" @blur="data_check(true, 'number')" @change="data_check(true, 'number')"></number-input>
         </template>
         <!-- 日期时间 -->
         <template v-else-if="model_type == 'date'">
             <template v-if="['option1', 'option2'].includes(form.date_type)">
-                <div class="re w h" :style="frame_style + style_container + 'height: 100%;'">
+                <div class="re w h border-focus" :style="frame_style + style_container + 'height: 100%;'">
                     <el-time-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" clearable :placeholder="form.placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
             </template>
             <template v-else>
-                <div class="re w h" :style="frame_style + style_container + 'height: 100%;'">
+                <div class="re w h border-focus" :style="frame_style + style_container + 'height: 100%;'">
                     <el-date-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'month' : form.date_type == 'option4' ? 'date' : 'datetime'" clearable :placeholder="form.placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
@@ -50,13 +50,13 @@
         <!-- 日期时间组 -->
         <template v-else-if="model_type == 'date-group'">
             <template v-if="['option1', 'option2'].includes(form.date_type)">
-                <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                <div class="re w h border-focus" :style="frame_style + style_container + 'height: 100%'">
                     <el-time-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
             </template>
             <template v-else>
-                <div class="re w h" :style="frame_style + style_container + 'height: 100%'">
+                <div class="re w h border-focus" :style="frame_style + style_container + 'height: 100%'">
                     <el-date-picker v-model="form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" :type="form.date_type == 'option3' ? 'monthrange' : form.date_type == 'option4' ? 'daterange' : 'datetimerange'" clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :value-format="date_style_format" :format="date_style_format" @focus="time_focus" @blur="time_blur" />
                     <icon v-if="is_time_icon_show" :name="form.icon_name" class="custom-icon" size="16" @click="custom_icon_click"></icon>
                 </div>
@@ -64,11 +64,11 @@
         </template>
         <!-- 多选按钮组 ｜ 下拉复选框 -->
         <template v-else-if="['checkbox', 'select-multi'].includes(model_type)">
-            <el-select v-model="form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="frame_style + style_container" @change="data_check(true, 'checkbox')" @visible-change="input_value = ''">
+            <el-select v-model="form_value" multiple placeholder="" class="multi-select flex-1 border-focus" popper-class="custom-select" :style="frame_style + style_container" @change="data_check(true, 'checkbox')" @visible-change="input_value = ''">
                 <template #header>
                     <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                 </template>
-                <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
+                <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change.stop="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
                 <el-checkbox-group :model-value="form_value">
                     <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                         <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
@@ -119,12 +119,12 @@
         <!-- 地址 -->
         <template v-else-if="model_type == 'address'">
             <div class="flex-col gap-10 align-c" :style="frame_style + 'height: 100%;'">
-                <el-cascader v-model="form_value" :options="common_store.address_list" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false)" />
+                <el-cascader v-model="form_value" :options="common_store.address_list" class="border-focus" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false)" />
             </div>
         </template>
         <!-- 密码 -->
         <template v-else-if="model_type == 'pwd'">
-            <el-input v-model="form_value" :type="pwd_is_show ? 'password' : ''" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check(false)">
+            <el-input v-model="form_value" :type="pwd_is_show ? 'password' : ''" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check(false)">
                 <template #prefix>
                     <icon :name="form.icon_name" color="#999"></icon>
                 </template>
@@ -135,7 +135,7 @@
         </template>
         <!-- 评分 -->
         <template v-else-if="model_type == 'score'">
-            <custom-rate v-model="form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" @change="data_check"/>
+            <custom-rate v-model="form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style + 'height:100%;'" @change="data_check"/>
         </template>
         <!-- 上传图片｜上传视频 ｜ 上传文件 -->
         <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_type)">

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="dialogVisible" title="设置默认值" width="800px" style="height: 600px" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body draggable @close="cancel"> 
+    <el-dialog v-model="dialogVisible" title="设置默认值" width="1000px" style="height: 800px" align-center :close-on-click-modal="false" :close-on-press-escape="false" destroy-on-close append-to-body draggable @close="cancel"> 
         <div class="content flex-col gap-10 mtb-20 defalult-setting">
             <subform-handle :value="form" :is-default="true"></subform-handle>
         </div>
@@ -45,8 +45,11 @@ const submit = () => {
     max-width: calc(100% - 30rem);
 }
 .content {
-    height: 44rem;
-    overflow-y: auto;
+    height: 63rem;
+    overflow: hidden;
+    :deep(.subform) {
+        height: 57rem;
+    }
 }
 .defalult-setting {
     :deep(.content) {

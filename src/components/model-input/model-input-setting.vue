@@ -54,7 +54,7 @@
         <template v-if="form.type !== 'single-text'">
             <el-form-item label-width="0">
                 <div class="flex-col gap-10 w h">
-                    <div class="new_title">显隐规则</div>
+                    <div class="new_title flex-row align-c gap-10">显隐规则<tooltip v-if="isSubform" content="子表单里的显隐规则只在设置默认值和实际使用时生效"></tooltip></div>
                     <el-button v-if="form.show_hidden_list.length == 0" @click="open_dialog">设置</el-button>
                     <div v-if="form.show_hidden_list.length > 0" class="flex-row jc-sb align-c gap-10 layout-style pr-10" @click="open_dialog">
                         <div class="title">已设置显隐规则</div>

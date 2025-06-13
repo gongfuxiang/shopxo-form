@@ -4,13 +4,13 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="flex-col gap-10" :style="frame_style + 'height: 100%;'">
-                    <el-input v-model="form.form_value" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
+                    <el-input v-model="form.form_value" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                         <template #prefix>
                             <icon :name="form.icon_name" color="#999"></icon>
                         </template>
                     </el-input>
                     <div v-if="form.is_sms_verification == '1'" class="flex-row gap-10 align-c">
-                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
+                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
                         <el-button :style="frame_style + 'width:100px;'" :disabled="isEmpty(form.form_value)" @click="open_dialog">获取验证码</el-button>
                     </div>
                 </div>

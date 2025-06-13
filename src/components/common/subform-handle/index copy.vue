@@ -10,71 +10,75 @@
                 <el-button v-if="form.form_value.length > 0" class="custom-button" @click="remove_handle"><icon name="delete" size="14"></icon>删除</el-button>
             </template>
         </div>
-        <div class="subform flex-row">
-            <div class="table-container rendering-area">
-                <div class="table-header flex-row align-c">
-                    <div class="head-label flex-row align-c jc-c shrink table-sticky">
-                        <el-checkbox v-if="is_remove_selected" v-model="selectAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
-                    </div>
-                    <!-- 头部标题显示 -->
-                    <div v-for="item in children" :key="item.id" class="item-label flex-row align-c shrink" :style="`width: ${ item.com_data.com_width }px;`">
-                        <span v-if="item.com_data.is_required == '1'" class="required">*</span>
-                        {{ item.com_data.title }}
-                        <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
-                    </div>
+        <div class="subform oh flex-row">
+            <div class="row-header flex-col">
+                <div class="head-label flex-row align-c jc-c">
+                    <el-checkbox v-if="is_remove_selected" v-model="selectAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
                 </div>
-                <div class="table-body">
-                    <!-- <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change"> -->
-                    <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row w flex-row" >
-                        <div class="cell-num flex-row align-c jc-c shrink table-sticky">
-                            <template v-if="is_remove_selected && selected_list.length > 0">
-                                <el-checkbox v-model="selected_list[index]" :value="index" />
-                            </template>
-                            <template v-else>
-                                <div class="row-num flex-row align-c jc-c">
-                                    <template v-if="isEmpty(line_error(index))">
-                                        {{ index + 1 }}
-                                    </template>
-                                    <template v-else>
-                                        <div class="error-icon">!</div>
-                                    </template>
+                <template v-if="form.form_value.length > 0">
+                    <template v-if="is_remove_selected">
+                        <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change">
+                            <el-checkbox v-for="(item, index) in form.form_value" :key="index + get_math()" :value="index" class="flex-1 row-num flex-row align-c jc-c" />
+                        </el-checkbox-group>
+                    </template>
+                    <template v-else>
+                        <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="row-table flex-1 flex-row re">
+                            <div class="row-num flex-row align-c jc-c">
+                                <template v-if="isEmpty(line_error(index))">
+                                    {{ index + 1 }}
+                                </template>
+                                <template v-else>
+                                    <div class="error-icon">!</div>
+                                </template>
+                            </div>
+                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
+                                <div class="operate flex-row align-c jc-c gap-5">
+                                    <icon name="enlarge" size="14" color="primary" @click="enlarge_click(index)"></icon>
+                                    <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
+                                        <template #reference>
+                                            <icon name="delete" size="14" color="primary"></icon>
+                                        </template>
+                                        <template #actions="{ confirm, cancel }">
+                                            <el-button size="small" @click="cancel">取消</el-button>
+                                            <el-button type="danger" size="small" @click="confirm">确定</el-button>
+                                        </template>
+                                    </el-popconfirm>
+                                    <el-dropdown placement="bottom">
+                                        <icon name="more-o" size="14" color="primary"></icon>
+                                        <template #dropdown>
+                                            <el-dropdown-menu>
+                                                <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
+                                                <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
+                                            </el-dropdown-menu>
+                                        </template>
+                                    </el-dropdown>
                                 </div>
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
-                                    <div class="operate flex-row align-c jc-c gap-5">
-                                        <icon name="enlarge" size="14" color="primary" @click="enlarge_click(index)"></icon>
-                                        <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
-                                            <template #reference>
-                                                <icon name="delete" size="14" color="primary"></icon>
-                                            </template>
-                                            <template #actions="{ confirm, cancel }">
-                                                <el-button size="small" @click="cancel">取消</el-button>
-                                                <el-button type="danger" size="small" @click="confirm">确定</el-button>
-                                            </template>
-                                        </el-popconfirm>
-                                        <el-dropdown placement="bottom">
-                                            <icon name="more-o" size="14" color="primary"></icon>
-                                            <template #dropdown>
-                                                <el-dropdown-menu>
-                                                    <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
-                                                </el-dropdown-menu>
-                                            </template>
-                                        </el-dropdown>
-                                    </div>
-                                </el-tooltip>
-                            </template>
+                            </el-tooltip>
                         </div>
-                        <div v-for="children_item in children" :key="children_item.id" :class="['cell re flex-row align-c jc-c shrink', { 'item-row-error': error_list(index, children_item.id)[0] == '1' }]" :style="`width: ${ children_item.com_data?.com_width || 0 }px;`">
-                            <template v-if="show_row(index, children_item.id)">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index, children_item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index, children_item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
-                                    <subform-rendering v-model="children_item.com_data" v-model:type="children_item.key" :value="item[children_item.id]" :index="index" @change="tablist_change($event, index, children_item.id)" @data_check="data_check($event, index, children_item.id, children_item.com_data)"></subform-rendering>
-                                </el-tooltip>
-                            </template>
+                    </template>
+                </template>
+            </div>
+            <div class="flex-1 scroll-area flex-row">
+                <div class="flex-row">
+                    <div v-for="item in children" :key="item.id" :class="['subform-item re w h', { 'plug-in-close': item.is_enable != '1' }]" :style="`width: ${ item.com_data.com_width }px;`">
+                        <div class="flex-col jc-c w h">
+                            <!-- 头部操作逻辑 -->
+                            <div class="item-label flex-row align-c">
+                                <span v-if="item.com_data.is_required == '1'" class="required">*</span>
+                                {{ item.com_data.title }}
+                                <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
+                            </div>
+                            <div v-for="(item1, index1) in form.form_value" :key="index1" :class="['flex-1 item-row rendering-area flex-row align-c jc-c re', { 'item-row-error': error_list(index1, item.id)[0] == '1' }]">
+                                <template v-if="show_row(index1, item.id)">
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index1, item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index1, item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
+                                        <subform-rendering v-model="item.com_data" v-model:type="item.key" :value="item1[item.id]" :index="index1" @change="tablist_change($event, index1, item.id)" @data_check="data_check($event, index1, item.id, item.com_data)"></subform-rendering>
+                                    </el-tooltip>
+                                </template>
+                            </div>
                         </div>
                     </div>
-                    <!-- </el-checkbox-group> -->
                 </div>
             </div>
         </div>
@@ -166,7 +170,7 @@ const filtered_Data = (type: string, index?: number) => {
         return isShownByRule;
     });
 };
-const children = computed(() => props.isPreview || props.isDefault ? filteredDiyData.value : form.value.children.filter((item: any) => item.is_enable === '1'));
+const children = computed(() => props.isPreview || props.isDefault ? filteredDiyData.value : form.value.children);
 //#endregion
 // 表单数据发生变化时的处理
 watch(() => form.value.form_value, (val) => {
@@ -247,7 +251,6 @@ const is_remove_selected = ref(false);
 
 const remove_handle = () => { 
     is_remove_selected.value = !is_remove_selected.value;
-    // selected_list.value = [];
 };
 const remove_selected = () => {
     const list: any[] = [];
@@ -261,8 +264,8 @@ const remove_selected = () => {
     if (form.value.form_value.length <= 0) {
         is_remove_selected.value = false;
     }
-    // 删除完成之后，将所有的数据改为false
-    selected_list.value = form.value.form_value.map((item: any, index: number) => false);
+    // 删除完成之后，置空选中数据显示
+    selected_list.value = [];
 };
 // 是否全选
 const selectAll = ref(false);
@@ -275,27 +278,13 @@ const checkbox_change = (val: any) => {
 };
 // 全选反选时的操作
 const handleCheckAllChange = () => {
-    const val = form.value.form_value;
-    // 如果是全选的话，就按照数据结构全部为true，否则的话是全部为false
-    selected_list.value = selectAll.value ? form.value.form_value.map((item: any, index: number) => true) : val.map((item: any) => false)
+    selected_list.value = selectAll.value ? form.value.form_value.map((item: any, index: number) => index) : []
 };
 // 监听数据发生变化
 watchEffect(() => {
-    const val = form.value.form_value;
-    // 取出所以选中的项
-    const new_selected_list = selected_list.value.filter(item => item);
-    // 判断是全选还是未全选
-    selectAll.value = val.length > 0 && new_selected_list.length === val.length;
-    indeterminate.value = new_selected_list.length > 0 && new_selected_list.length < val.length;
+    selectAll.value = form.value.form_value.length > 0 && selected_list.value.length === form.value.form_value.length;
+    indeterminate.value = selected_list.value.length > 0 && selected_list.value.length < form.value.form_value.length;
 });
-// 子组件中有全选和反选的判断，如果加上了checkboxGroup，子组件的全选和反选就无法生效，所以改为数组通过true和false来进行判断
-watch(() => form.value.form_value, (new_val) => { 
-    if (new_val.length > 0) {
-        selected_list.value = new_val.map((item: any) => false)
-    } else {
-        selected_list.value = [];
-    }
-}, { immediate: true, deep: true });
 //#endregion
 
 const data_check = (object: any, index: number, id: string, com_data: any) => {
@@ -426,13 +415,13 @@ const drawer_change = (data: any) => {
 </script>
 
 <style lang="scss" scoped>
-.table-container {
-    padding-bottom: 0.2rem;
-    overflow: auto; /* 允许滚动 */
-    .table-header {
-        position: sticky;
-        top: 0;
-        z-index: 3;
+.subform {
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    .row-header {
+        padding-bottom: 1rem;
+        overflow-x: scroll;
         .head-label {
             background: #f0f1f4;
             border: 0.1rem solid #e6e8ed;
@@ -440,19 +429,7 @@ const drawer_change = (data: any) => {
             width: 7.8rem;
             height: 3.5rem;
         }
-        .item-label {
-            flex-shrink: 0;
-            height: 3.5rem;
-            padding: 0.5rem;
-            background: #f0f1f4;
-            font-size: 1.4rem;
-            color: #141E31;
-            border: 0.1rem solid #e6e8ed;
-            border-left: 0;
-        }
-    }
-    .table-body {
-        .table-row .cell-num {
+        .row-num {
             text-align: center;
             background: #fff;
             border: 0.1rem solid #e6e8ed;
@@ -460,25 +437,12 @@ const drawer_change = (data: any) => {
             width: 7.8rem;
             min-height: 4rem;
             line-height: 4rem;
+            position: relative;
         }
-        .table-row .cell {
-            flex-shrink: 0;
-            padding: 0.5rem;
-            min-height: 4rem;
-            border: 0.1rem solid #e6e8ed;
-            border-left: 0;
-            border-top: 0;
+        .row-num:last-child {
+            border-bottom-left-radius: 0.3rem;
         }
-        .item-row-error {
-            background: #fdeeee;
-        }
-        .table-row:hover {
-            .cell {
-                background: #f0f1f4;
-            }
-            .item-row-error {
-                background: #fdeeee;
-            }
+        .row-table:hover, .row-num:hover {
             .operate {
                 display: flex;
             }
@@ -497,13 +461,50 @@ const drawer_change = (data: any) => {
             display: none;
         }
     }
-    .table-sticky {
-        position: sticky;
-        left: 0;
-        z-index: 2;
+    .subform-item {
+        .item-label {
+            height: 3.5rem;
+            padding: 0.5rem;
+            background: #f0f1f4;
+            font-size: 1.4rem;
+            color: #141E31;
+            border: 0.1rem solid #e6e8ed;
+            border-left: 0;
+        }
+        .item-row { 
+            padding: 0.5rem;
+            min-height: 4rem;
+            border: 0.1rem solid #e6e8ed;
+            border-left: 0;
+            border-top: 0;
+        }
     }
-    .row-num {
-        font-size: 1.4rem;
+    .scroll-area {
+        padding-bottom: 1rem;
+        overflow-x: scroll;
+        .oprate {
+            position: absolute;
+            right: 0.5rem;
+            top: 0.5rem;
+            display: flex;
+            align-items: center;
+            background-color:#f5fbff;
+            border-radius: 15px;
+            color: $cr-primary;
+            z-index: 2;
+            .icon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                padding: 0.3rem 0.6rem;
+            }
+            .divider {
+                width: 1px;
+                height: 1.2rem;
+                background-color: #e4e7ec;
+            }
+        }
     }
 }
 .selected-checkbox {
@@ -514,8 +515,8 @@ const drawer_change = (data: any) => {
         }
     }
 }
-.shrink {
-    flex-shrink: 0;
+.item-row-error {
+    background: #fdeeee;
 }
 .error-icon {
     width: 2rem;

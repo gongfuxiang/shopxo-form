@@ -1,12 +1,12 @@
 <template>
 	<div class="flex-row align-c gap-6 flex-wrap" :class="disaled ? 'is-disable' : 'no-disable'">
-		<div v-for="(item, index) in Array(props.max)" :key="index">
+		<div v-for="(item, index) in Array(props.max)" :key="index" class="rate-item">
 			<template v-if="props.type !== '2'">
 				<template v-if="index < new_selected">
-					<icon :name="props.type == '0' ? 'pointed' : 'heart'" size="16" :color="props.selectColor" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
+					<icon :name="props.type == '0' ? 'pointed' : 'heart'" size="16" class="w h" :color="props.selectColor" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
 				</template>
 				<template v-else>
-					<icon :name="props.type == '0' ? 'five-pointed' : 'the-heart'" size="16" color="#ccc" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
+					<icon :name="props.type == '0' ? 'five-pointed' : 'the-heart'" size="16" class="w h" color="#ccc" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
 				</template>
 			</template>
 			<template v-else>
@@ -73,6 +73,10 @@ const icon_click = (index: number) => {
 </script>
 
 <style lang="scss" scoped>
+.rate-item {
+    width: 1.6rem;
+    height: 1.6rem;
+}
 .is-disable {
 	cursor: auto;
 	i.iconfont:hover {

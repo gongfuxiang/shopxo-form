@@ -29,7 +29,7 @@
                 </template>
                 <template v-else-if="form.type == 'select-multi'">
                     <div class="flex-col gap-10">
-                        <el-select v-model="form.form_value" multiple placeholder="" class="multi-select flex-1" popper-class="custom-select" :style="frame_style + style_container" @change="data_check" @visible-change="input_value = ''">
+                        <el-select v-model="form.form_value" multiple placeholder="" class="multi-select flex-1 border-focus" popper-class="custom-select" :style="frame_style + style_container" @change="data_check" @visible-change="input_value = ''">
                             <template #header>
                                 <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                             </template>
