@@ -440,7 +440,7 @@ defineExpose({
                     background-color:#f5fbff;
                     border-radius: 15px;
                     color: $cr-primary;
-                    z-index: 3;
+                    z-index: 5;
                     .icon {
                         display: flex;
                         justify-content: center;

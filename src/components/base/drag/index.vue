@@ -5,6 +5,7 @@
                 <slot :row="item" :index="index" />
                 <icon name="drag" size="16" class="cursor-move" />
                 <icon v-if="isShowCopy" name="copy" size="16" color="3" @click="copy(index)"/>
+                <icon v-if="isShowCopy" :name="item.is_enable == '1' ? 'eye' : 'eye-close'" class="eye-before" size="16" color="3" @click="on_show_or_hidden(index)"/>
                 <icon name="delete-o" size="18" color="6" @click="remove(index)"/>
             </li>
         </TransitionGroup>
@@ -13,7 +14,7 @@
 
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus';
-const emits = defineEmits(['click', 'remove', 'edit', 'onSort', 'replace', 'copy']);
+const emits = defineEmits(['click', 'remove', 'edit', 'onSort', 'replace', 'copy', 'on_show_or_hidden']);
 
 interface Props {
     data: any; // 拖拽列表数据
@@ -37,6 +38,9 @@ watch(
 );
 const from = ref(props.data);
 
+const on_show_or_hidden = (index: number) => {
+    emits('on_show_or_hidden', index);
+};
 const on_click = (item: any, index: number) => {
     emits('click', item, index);
 };
@@ -82,6 +86,9 @@ const on_sort = () => {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+}
+.eye-before.icon-eye-close {
+    color: #ff2222;
 }
 .multiple-icon {
     display: flex;

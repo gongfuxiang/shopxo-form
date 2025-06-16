@@ -10,7 +10,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <el-button class="w custom-button size-14" :disabled="form.children.length <= 0" @click="set_default"><icon name="edit" size="14"></icon>设置默认值</el-button>
+                <el-button class="w custom-button size-14" :disabled="default_children.length <= 0" @click="set_default"><icon name="edit" size="14"></icon>设置默认值</el-button>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -23,7 +23,7 @@
             <div class="flex-col gap-10 w h">
                 <div class="new_title">子字段</div>
                 <template v-if="form.children.length > 0">
-                    <drag class="w" :data="form.children" is-show-copy :space-col="20" @remove="remove" @copy="copy" @on-sort="on_sort">
+                    <drag class="w" :data="form.children" is-show-copy :space-col="20" @remove="remove" @copy="copy" @on-sort="on_sort" @on_show_or_hidden="on_show_or_hidden">
                         <template #default="{ row }">
                             <el-input v-model="row.com_data.title"></el-input>
                         </template>
@@ -109,6 +109,7 @@ import { Search } from '@element-plus/icons-vue'
 import { get_math } from '@/utils';
 import { cloneDeep, isEmpty } from 'lodash'
 import defaultSettings from '@/views/layout/index';
+const app = getCurrentInstance();
 const fixed_option = [
     { name: '一列', value: 1 },
     { name: '两列', value: 2 },
@@ -134,6 +135,7 @@ const props = defineProps({
     }
 });
 const form = ref(props.value);// 判断配置项是否有误
+const default_children = computed(() => form.value.children.filter((item: any) => item.is_enable === '1'));
 const old_title = ref(cloneDeep(props.value.title));
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
@@ -223,7 +225,9 @@ const dropdown_click = (item: { name: string; key: string }) => {
 };
 // 删除数据
 const remove = (index: number) => {
-    form.value.children.splice(index, 1);
+    app?.appContext.config.globalProperties.$common.message_box('删除后不可恢复，确定继续吗?', 'warning').then(() => {
+        form.value.children.splice(index, 1);    
+    });
 };
 // 复制数据
 const copy = (index: number) => {
@@ -238,6 +242,13 @@ const copy = (index: number) => {
 // 拖拽的时候返回的数据
 const on_sort = (val: any) => {
     form.value.children = val;
+};
+const on_show_or_hidden = (index: number) => {
+    form.value.children.forEach((item : { is_enable: string}, index1: number) => {
+        if (index1 === index) {
+            item.is_enable = item.is_enable == '1' ? '0' : '1';
+        }
+    });
 };
 //#endregion
 //#region 设置默认值

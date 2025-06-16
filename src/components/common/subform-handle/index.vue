@@ -27,53 +27,55 @@
                 </div>
                 <div class="table-body">
                     <!-- <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change"> -->
-                    <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row flex-row">
-                        <div class="cell-num flex-row align-c jc-c shrink re" :style="left_sticky(0)">
-                            <template v-if="is_remove_selected && selected_list.length > 0">
-                                <el-checkbox v-model="selected_list[index]" :value="index" />
-                            </template>
-                            <template v-else>
-                                <div class="row-num flex-row align-c jc-c">
-                                    <template v-if="isEmpty(line_error(index))">
-                                        {{ index + 1 }}
-                                    </template>
-                                    <template v-else>
-                                        <div class="error-icon">!</div>
-                                    </template>
-                                </div>
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
-                                    <div class="operate flex-row align-c jc-c gap-5">
-                                        <icon name="enlarge" size="14" color="primary" @click="enlarge_click(index)"></icon>
-                                        <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
-                                            <template #reference>
-                                                <icon name="delete" size="14" color="primary"></icon>
-                                            </template>
-                                            <template #actions="{ confirm, cancel }">
-                                                <el-button size="small" @click="cancel">取消</el-button>
-                                                <el-button type="danger" size="small" @click="confirm">确定</el-button>
-                                            </template>
-                                        </el-popconfirm>
-                                        <el-dropdown placement="bottom">
-                                            <icon name="more-o" size="14" color="primary"></icon>
-                                            <template #dropdown>
-                                                <el-dropdown-menu>
-                                                    <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
-                                                    <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
-                                                </el-dropdown-menu>
-                                            </template>
-                                        </el-dropdown>
+                    <div class="flex-1 flex-col">
+                        <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row flex-row">
+                            <div class="cell-num flex-row align-c jc-c shrink re" :style="left_sticky(0)">
+                                <template v-if="is_remove_selected && selected_list.length > 0">
+                                    <el-checkbox v-model="selected_list[index]" :value="index" />
+                                </template>
+                                <template v-else>
+                                    <div class="row-num flex-row align-c jc-c">
+                                        <template v-if="isEmpty(line_error(index))">
+                                            {{ index + 1 }}
+                                        </template>
+                                        <template v-else>
+                                            <div class="error-icon">!</div>
+                                        </template>
                                     </div>
-                                </el-tooltip>
-                            </template>
-                        </div>
-                        <div v-for="(children_item, children_index) in children" :key="children_item.id" :class="['cell re flex-row align-c jc-c shrink', { 'item-row-error': error_list(index, children_item.id)[0] == '1' }]" :style="`width: ${ children_item.com_data?.com_width || 0 }px;${ left_sticky(children_index + 1) }`">
-                            <template v-if="show_row(index, children_item.id)">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index, children_item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index, children_item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
-                                    <subform-rendering v-model="children_item.com_data" v-model:type="children_item.key" :value="item[children_item.id]" :index="index" @change="tablist_change($event, index, children_item.id)" @data_check="data_check($event, index, children_item.id, children_item.com_data)"></subform-rendering>
-                                </el-tooltip>
-                            </template>
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
+                                        <div class="operate flex-row align-c jc-c gap-5">
+                                            <icon name="enlarge" size="14" color="primary" @click="enlarge_click(index)"></icon>
+                                            <el-popconfirm :key="index + get_math()" width="220" title="该条记录存在数据，数据删除后将无法恢复，确定删除？" :hide-after="0" @confirm="remove(index)">
+                                                <template #reference>
+                                                    <icon name="delete" size="14" color="primary"></icon>
+                                                </template>
+                                                <template #actions="{ confirm, cancel }">
+                                                    <el-button size="small" @click="cancel">取消</el-button>
+                                                    <el-button type="danger" size="small" @click="confirm">确定</el-button>
+                                                </template>
+                                            </el-popconfirm>
+                                            <el-dropdown placement="bottom">
+                                                <icon name="more-o" size="14" color="primary"></icon>
+                                                <template #dropdown>
+                                                    <el-dropdown-menu>
+                                                        <el-dropdown-item @click.stop="copy(index, 'bottom')">复制到下一行</el-dropdown-item>
+                                                        <el-dropdown-item @click.stop="copy(index, 'last')">复制到最后一行</el-dropdown-item>
+                                                        <el-dropdown-item @click.stop="insert(index, 'top')">向上插入一行</el-dropdown-item>
+                                                        <el-dropdown-item @click.stop="insert(index, 'bottom')">向下插入一行</el-dropdown-item>
+                                                    </el-dropdown-menu>
+                                                </template>
+                                            </el-dropdown>
+                                        </div>
+                                    </el-tooltip>
+                                </template>
+                            </div>
+                            <div v-for="(children_item, children_index) in children" :key="children_item.id" :class="['cell re flex-row align-c jc-c shrink', { 'item-row-error': error_list(index, children_item.id)[0] == '1' }]" :style="`width: ${ children_item.com_data?.com_width || 0 }px;${ left_sticky(children_index + 1) }`">
+                                <template v-if="show_row(index, children_item.id)">
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index, children_item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index, children_item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
+                                        <subform-rendering v-model="children_item.com_data" v-model:type="children_item.key" :value="item[children_item.id]" :index="index" @change="tablist_change($event, index, children_item.id)" @data_check="data_check($event, index, children_item.id, children_item.com_data)"></subform-rendering>
+                                    </el-tooltip>
+                                </template>
+                            </div>
                         </div>
                     </div>
                     <!-- </el-checkbox-group> -->
@@ -275,10 +277,6 @@ const selectAll = ref(false);
 const indeterminate = ref(true);
 // 选中的内容
 const selected_list = ref<number[]>([]);
-// 选中时的操作
-const checkbox_change = (val: any) => {
-    selected_list.value = val;
-};
 // 全选反选时的操作
 const handleCheckAllChange = () => {
     const val = form.value.form_value;
@@ -482,7 +480,6 @@ const left_sticky = (index: number) => {
     }
     .table-body {
         display: flex;
-        flex-direction: column;
         .table-row .cell-num {
             text-align: center;
             background: #fff;

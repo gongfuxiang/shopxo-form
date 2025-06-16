@@ -33,7 +33,7 @@ const props = defineProps({
     },
 });
 const form = computed(() => props.value);
-const children = computed(() => form.value.children.filter((item: any) => props.isPreview ? item.is_enable === '1' : true));
+const children = computed(() => form.value.children.filter((item: any) => item.is_enable === '1'));
 const custom_height = computed(() => {
     if (props.isCustom) {
         const layout: any = common_store.form_layout;

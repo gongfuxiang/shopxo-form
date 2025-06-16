@@ -26,59 +26,61 @@
             <div class="drag-content">
                 <!-- 拖拽区 -->
                 <div class="model-content">
-                    <div class="model-drag re">
-                        <div class="coordinate flex-col re">
-                            <div class="flex-row gap-9 align-e pl-20">
-                                <template v-for="(item, index) in horizontalTicks" :key="index">
-                                    <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
-                                        <template v-if="index > 0">
-                                            <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index * 10 }}</div>
-                                        </template>
-                                        <template v-else>
-                                            <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
-                                        </template>
-                                    </div>
-                                </template>
-                            </div>
-                            <div class="horizontal_all_line"></div>
-                        </div>
-                        <div class="coordinate flex-row">
-                            <div class="h flex-row">
-                                <div class="flex-col gap-9 align-e pt-9">
-                                    <template v-for="(item, index) in verticalTicks" :key="index">
-                                        <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
-                                            <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index * 10 }}</div>
+                    <div class="model-width">
+                        <div class="model-drag re">
+                            <div class="coordinate flex-col re">
+                                <div class="flex-row gap-9 align-e pl-20">
+                                    <template v-for="(item, index) in horizontalTicks" :key="index">
+                                        <div :class="`re ${ item.isMultipleOf10 ? 'horizontal_big_line' : 'horizontal_line'}`">
+                                            <template v-if="index > 0">
+                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title left-3">{{ index * 10 }}</div>
+                                            </template>
+                                            <template v-else>
+                                                <div v-if="item.isMultipleOf10" class="abs top-0 coordinate_title coordinate_0_title">{{ index }}</div>
+                                            </template>
                                         </div>
                                     </template>
                                 </div>
-                                <div class="vertical_all_line"></div>
+                                <div class="horizontal_all_line"></div>
                             </div>
-                            <div class="model-wall">
-                                <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
-                                    <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
-                                        <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
-                                            <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': item.is_enable == '1' ? (diy_data.length - 1) - index : -999 }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
-                                                <div :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
-                                                    <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
-                                                        <div class="main-content">
-                                                            <component-show :value="item" :is-custom="true"></component-show>
+                            <div class="coordinate flex-row">
+                                <div class="h flex-row">
+                                    <div class="flex-col gap-9 align-e pt-9">
+                                        <template v-for="(item, index) in verticalTicks" :key="index">
+                                            <div v-if="index > 0" :class="`re ${ item.isMultipleOf10 ? 'vertical_big_line' : 'vertical_line'}`">
+                                                <div v-if="item.isMultipleOf10" class="abs left-0 coordinate_title top-3">{{ index * 10 }}</div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="vertical_all_line"></div>
+                                </div>
+                                <div class="model-wall">
+                                    <div ref="imgBoxRef" class="drag-area re dropzone" @dragover.prevent @dragenter.prevent @drop="drop">
+                                        <div class="w h" @mousedown.prevent="start_drag" @mousemove.prevent="move_drag" @mouseup.prevent="end_drag">
+                                            <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
+                                                <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': item.is_enable == '1' ? (diy_data.length - 1) - index : -999 }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
+                                                    <div :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
+                                                        <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+                                                            <div class="main-content">
+                                                                <component-show :value="item" :is-custom="true"></component-show>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </Vue3DraggableResizable>
-                                        </DraggableContainer>
-                                        <div ref="areaRef" class="area" :style="init_drag_style"></div>
-                                    </div>
-                                    <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
-                                        <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
-                                        <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
-                                        <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
-                                        <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
-                                        <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
-                                        <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
-                                        <!-- 已完成 -->
-                                        <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
-                                        <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
+                                                </Vue3DraggableResizable>
+                                            </DraggableContainer>
+                                            <div ref="areaRef" class="area" :style="init_drag_style"></div>
+                                        </div>
+                                        <div v-for="(item, index) in hot_list.data" :key="index" class="area-box" :style="rect_style(item.drag_start, item.drag_end)" @mousedown.stop="start_drag_area_box(index, $event)" @dblclick="dbl_drag_event(item, index)">
+                                            <div class="del-btn" @click.stop="del_area_event(index)"><icon name="close"></icon></div>
+                                            <div class="drag-btn drag-tl" :data-index="index" @mousedown.stop="start_drag_btn_tl(index, $event)"></div>
+                                            <div class="drag-btn drag-tc" :data-index="index" @mousedown.stop="start_drag_btn_tc(index, $event)"></div>
+                                            <div class="drag-btn drag-lc" :data-index="index" @mousedown.stop="start_drag_btn_lc(index, $event)"></div>
+                                            <div class="drag-btn drag-bl" :data-index="index" @mousedown.stop="start_drag_btn_bl(index, $event)"></div>
+                                            <div class="drag-btn drag-bc" :data-index="index" @mousedown.stop="start_drag_btn_bc(index, $event)"></div>
+                                            <!-- 已完成 -->
+                                            <div class="drag-btn drag-br" :data-index="index" @mousedown.stop="start_drag_btn_br(index, $event)"></div>
+                                            <div class="drag-btn drag-rc" :data-index="index" @mousedown.stop="start_drag_btn_rc(index, $event)"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -911,6 +913,12 @@ onUnmounted(() => {
             .model-content {
                 padding: 2rem 0;
                 overflow: scroll;
+            }
+            .model-width {
+                max-width: 80%;
+                overflow: hidden;
+                overflow-x: auto;
+                margin: 0 auto;
             }
             .model-drag {
                 width: v-bind(model_drag_width);
