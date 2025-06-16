@@ -12,21 +12,23 @@
         </div>
         <div class="subform flex-row">
             <div class="table-container rendering-area">
-                <div class="table-header flex-row align-c">
-                    <div class="head-label flex-row align-c jc-c shrink table-sticky">
-                        <el-checkbox v-if="is_remove_selected" v-model="selectAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
-                    </div>
-                    <!-- 头部标题显示 -->
-                    <div v-for="item in children" :key="item.id" class="item-label flex-row align-c shrink" :style="`width: ${ item.com_data.com_width }px;`">
-                        <span v-if="item.com_data.is_required == '1'" class="required">*</span>
-                        {{ item.com_data.title }}
-                        <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
+                <div class="table-header flex">
+                    <div class="flex-row align-c jc-c">
+                        <div class="head-label flex-row align-c jc-c shrink" :style="left_sticky(0)">
+                            <el-checkbox v-if="is_remove_selected" v-model="selectAll" :indeterminate="indeterminate" @change="handleCheckAllChange" />
+                        </div>
+                        <!-- 头部标题显示 -->
+                        <div v-for="(item, index) in children" :key="item.id" class="item-label flex-row align-c shrink" :style="`width: ${ item.com_data.com_width }px;${ left_sticky(index + 1) }`">
+                            <span v-if="item.com_data.is_required == '1'" class="required">*</span>
+                            {{ item.com_data.title }}
+                            <tooltip v-if="item.com_data.common_config.help_is_show == '1'" :content="item.com_data.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
+                        </div>
                     </div>
                 </div>
                 <div class="table-body">
                     <!-- <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change"> -->
-                    <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row w flex-row" >
-                        <div class="cell-num flex-row align-c jc-c shrink table-sticky">
+                    <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row flex-row">
+                        <div class="cell-num flex-row align-c jc-c shrink re" :style="left_sticky(0)">
                             <template v-if="is_remove_selected && selected_list.length > 0">
                                 <el-checkbox v-model="selected_list[index]" :value="index" />
                             </template>
@@ -66,7 +68,7 @@
                                 </el-tooltip>
                             </template>
                         </div>
-                        <div v-for="children_item in children" :key="children_item.id" :class="['cell re flex-row align-c jc-c shrink', { 'item-row-error': error_list(index, children_item.id)[0] == '1' }]" :style="`width: ${ children_item.com_data?.com_width || 0 }px;`">
+                        <div v-for="(children_item, children_index) in children" :key="children_item.id" :class="['cell re flex-row align-c jc-c shrink', { 'item-row-error': error_list(index, children_item.id)[0] == '1' }]" :style="`width: ${ children_item.com_data?.com_width || 0 }px;${ left_sticky(children_index + 1) }`">
                             <template v-if="show_row(index, children_item.id)">
                                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="error_list(index, children_item.id)[1]" popper-class="custom-error-tooltip" :disabled="error_list(index, children_item.id)[0] == '0'" :show-arrow="false" raw-content placement="top-start">
                                     <subform-rendering v-model="children_item.com_data" v-model:type="children_item.key" :value="item[children_item.id]" :index="index" @change="tablist_change($event, index, children_item.id)" @data_check="data_check($event, index, children_item.id, children_item.com_data)"></subform-rendering>
@@ -422,7 +424,29 @@ const drawer_change = (data: any) => {
         });
     }
 };
-//#endregion    
+//#endregion 
+const left_sticky = (index: number) => {
+    const { is_fixed = '0', fixed_num = 1 } = form.value?.computer || {};
+    if (is_fixed == '1' && index <= fixed_num - 1) {
+        let left = 0;
+        if (index == 0) {
+            left = 0;
+        } else {
+            left = 78;
+            for (let i = 1; i < children.value.length; i++) {
+                if (i > 1) {
+                    left += children.value[i - 1]?.com_data?.com_width || 0;
+                }
+                if (i == index && i < fixed_num) {
+                    break;
+                }
+            }
+        }
+        return `position: sticky;left: ${left}px;z-index: 2;`;
+    } else {
+        return '';
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -433,6 +457,7 @@ const drawer_change = (data: any) => {
         position: sticky;
         top: 0;
         z-index: 3;
+        display: flex;
         .head-label {
             background: #f0f1f4;
             border: 0.1rem solid #e6e8ed;
@@ -452,6 +477,7 @@ const drawer_change = (data: any) => {
         }
     }
     .table-body {
+        display: flex;
         .table-row .cell-num {
             text-align: center;
             background: #fff;
@@ -463,6 +489,7 @@ const drawer_change = (data: any) => {
         }
         .table-row .cell {
             flex-shrink: 0;
+            background: #fff;
             padding: 0.5rem;
             min-height: 4rem;
             border: 0.1rem solid #e6e8ed;
@@ -470,14 +497,14 @@ const drawer_change = (data: any) => {
             border-top: 0;
         }
         .item-row-error {
-            background: #fdeeee;
+            background: #fdeeee !important;
         }
         .table-row:hover {
             .cell {
-                background: #f0f1f4;
+                background: #f0f1f4 !important;
             }
             .item-row-error {
-                background: #fdeeee;
+                background: #fdeeee !important;
             }
             .operate {
                 display: flex;
@@ -497,16 +524,11 @@ const drawer_change = (data: any) => {
             display: none;
         }
     }
-    .table-sticky {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-    }
     .row-num {
         font-size: 1.4rem;
     }
 }
-.selected-checkbox {
+.table-row {
     :deep(.el-checkbox) {
         margin-right: 0;
         .el-checkbox__label {

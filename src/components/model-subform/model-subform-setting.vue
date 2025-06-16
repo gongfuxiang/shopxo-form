@@ -45,6 +45,47 @@
         </el-form-item>
         <el-button class="w custom-button size-14 mb-18" @click="custom_edit"><icon name="edit" size="14"></icon>表单编辑</el-button>
         <help-config class="mb-18" :value="form.common_config" />
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">子表单展示样式</div>
+                <div class="flex-col gap-10 w h">
+                    <el-radio-group v-model="form.subform_type" class="custom-radio-group">
+                        <el-radio-button value="computer">电脑端</el-radio-button>
+                        <el-radio-button value="mobile">移动端</el-radio-button>
+                    </el-radio-group>
+                    <template v-if="form.subform_type == 'computer'">
+                        <el-checkbox v-model="form.computer.is_fixed" true-value="1" false-value="0">
+                            固定前
+                            <el-select v-model="form.computer.fixed_num" :disabled="form.computer.is_fixed == '0'" class="ml-10" value-key="id" filterable>
+                                <el-option v-for="item in fixed_option" :key="item.value" :label="item.name" :value="item.value" />
+                            </el-select>
+                        </el-checkbox>
+                    </template>
+                    <template v-else>
+                        <el-radio-group v-model="form.mobile.arrange" @change="operation_end">
+                            <el-radio value="direction">纵向平铺显示</el-radio>
+                            <el-radio value="horizontal">横向表格显示</el-radio>
+                        </el-radio-group>
+                        <template v-if="form.mobile.arrange === 'horizontal'">
+                            <el-checkbox v-model="form.mobile.is_fixed" true-value="1" false-value="0">
+                                固定前
+                                <el-select v-model="form.mobile.horizontal_fixed_num" :disabled="form.mobile.is_fixed == '0'" value-key="id" filterable>
+                                    <el-option v-for="item in fixed_option" :key="item.value" :label="item.name" :value="item.value" />
+                                </el-select>
+                            </el-checkbox>
+                        </template>
+                        <template v-else>
+                            <div class="flex-col gap-10">
+                                <sapn class="size-14 cr-6">数据收起时显示的简报</sapn>
+                                <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
+                                    <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
+                                </el-select>
+                            </div>
+                        </template>
+                    </template> 
+                </div>
+            </div>
+        </el-form-item>
         <subform-dialog v-model:visible="subform_visible" :value="form" @accomplish="accomplish"></subform-dialog>
         <subform-default-dialog v-model:visible="subform_default_visible" :value="form" @submit="submit"></subform-default-dialog>
     </el-form>
@@ -54,6 +95,16 @@ import { Search } from '@element-plus/icons-vue'
 import { get_math } from '@/utils';
 import { cloneDeep, isEmpty } from 'lodash'
 import defaultSettings from '@/views/layout/index';
+const fixed_option = [
+    { name: '一列', value: 1 },
+    { name: '两列', value: 2 },
+    { name: '三列', value: 3 },
+    { name: '四列', value: 4 }
+]
+const direction_fixed_option = [
+    { name: '自定义', value: 'custom' },
+    { name: '前3个字段的值', value: '3' },
+];
 const props = defineProps({
     value: {
         type: Object,
@@ -230,6 +281,35 @@ const set_default = () => {
     gap: 0.4rem;
     &:focus-visible {
         outline: none !important;
+    }
+}
+.custom-radio-group {
+    background: #F3F3F3;
+    border-radius: 4px;
+    padding: 0.2rem;
+
+    .el-radio-button {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .el-radio-button.is-active {
+        height: 100%;
+        background: #fff !important;
+        :deep(.el-radio-button__inner) {
+            color: #2A94FF !important;
+        }
+    }
+
+    :deep(.el-radio-button__inner) {
+        text-align: center;
+        font-weight: 400;
+        border: 0;
+        color: #000 !important;
+        box-shadow: none !important;
+        background-color: transparent !important;
     }
 }
 </style>

@@ -295,7 +295,7 @@ const set_show_tabs = (index: number) => {
                     top: 0;
                     left: -0.2rem;
                     border: 0.2rem solid $cr-main;
-                    z-index: 1;
+                    z-index: 3;
                 }
                 .oprate {
                     position: absolute;
@@ -306,7 +306,7 @@ const set_show_tabs = (index: number) => {
                     background-color:#f5fbff;
                     border-radius: 15px;
                     color: $cr-primary;
-                    z-index: 2;
+                    z-index: 4;
                     .icon {
                         display: flex;
                         justify-content: center;

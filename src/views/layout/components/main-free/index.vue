@@ -944,7 +944,7 @@ onUnmounted(() => {
                         background-color:#f5fbff;
                         border-radius: 15px;
                         color: $cr-primary;
-                        z-index: 2;
+                        z-index: 4;
                         .icon {
                             display: flex;
                             justify-content: center;
