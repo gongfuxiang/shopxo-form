@@ -4,7 +4,7 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <template v-if="children.length > 0">
-                    <subform-handle :key="get_math" :value="form" :is-preview="isPreview"></subform-handle>
+                    <subform-handle :key="get_math" :value="form" :is-preview="isPreview" :custom-height="custom_height"></subform-handle>
                     <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
                 </template>
                 <template v-else>
@@ -34,6 +34,17 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const children = computed(() => form.value.children.filter((item: any) => props.isPreview ? item.is_enable === '1' : true));
+const custom_height = computed(() => {
+    if (props.isCustom) {
+        const layout: any = common_store.form_layout;
+        const layout_style = layout.computer?.filed_title_size_type || 'small';
+        const text_height = layout_style == 'big' ? 31 : layout_style == 'middle' ? 22.5 : 16.5;
+        // 32 是按钮的大小 20是按钮与表格和标题与表格之间的间隔 text_height 是表头的高度
+        return form.value.com_height - 32 - 20 - text_height + 'px;';
+    } else {
+        return '100%';
+    }
+});
 watch(() => form.value.form_value, () => {
     if (form.value.is_required == '1' && form.value.form_value.length <= 0 && children.value.length > 0) {
         // 是否报错显示

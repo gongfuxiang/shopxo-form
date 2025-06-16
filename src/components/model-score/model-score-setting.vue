@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">密码</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -55,6 +55,7 @@
 import { commonStore } from '@/store';
 import { parse_and_format } from '@/utils';
 const common_store = commonStore();
+import { cloneDeep, isEmpty } from 'lodash';
 const props = defineProps({
     value: {
         type: Object,
@@ -71,6 +72,14 @@ const props = defineProps({
 });
 const form = ref(props.value);// 判断配置项是否有误
 
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 /**
  * 处理最小值和最大值输入框失焦事件
  * 该函数旨在确保最小值和最大值符合规定的十进制数，并防止最小值大于最大值

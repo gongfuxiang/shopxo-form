@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">地址</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -45,6 +45,7 @@
 </template>
 <script setup lang="ts">
 import { commonStore } from '@/store';
+import { isEmpty, cloneDeep } from 'lodash';
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -61,7 +62,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);// 判断配置项是否有误
-
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(props.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 // 校验类型选项
 const format_option = [
     { name: '省-市-区', value: 'noDetailed' },
@@ -71,7 +79,6 @@ const format_option = [
 const address_type_change = (val: any) => {
     form.value.detailed_value = '';
 };
-
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
     emit('operation_end');

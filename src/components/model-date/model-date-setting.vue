@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">日期时间</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -67,7 +67,7 @@
 </template>
 <script setup lang="ts">
 import { date_style_options } from '@/utils';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 
 const props = defineProps({
     value: {
@@ -84,6 +84,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);// 判断配置项是否有误
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 const style_option = [
     { name: 'YYYY-MM-DD HH:mm:ss', value: 'horizontal' },
     { name: 'YYYY/MM/DD HH:mm:ss', value: 'slash' },

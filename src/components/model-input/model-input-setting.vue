@@ -6,7 +6,7 @@
                 <div class="new_title flex-row align-c jc-sb w h">标题
                     <component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value !== 'radio-btns') || !isSubform)" @dropdown_click="dropdown_click"/>
                 </div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item v-if="form.type !== 'radio-btns'" label-width="0">
@@ -86,7 +86,7 @@
 </template>
 <script setup lang="ts">
 import { parse_and_format } from '@/utils';
-
+import { cloneDeep, isEmpty } from 'lodash';
 const props = defineProps({
     value: {
         type: Object,
@@ -106,6 +106,14 @@ const props = defineProps({
     }
 });
 const form = ref(props.value);
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 // 切换组件选项
 const form_type_option = [
     { name: '单行文本', value: 'single-text' },

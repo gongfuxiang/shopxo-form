@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">上传{{ name }}</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -30,7 +30,7 @@
 </template>
 <script setup lang="ts">
 import { commonStore } from '@/store';
-import { parse_and_format } from '@/utils';
+import { cloneDeep, isEmpty } from 'lodash';
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -51,6 +51,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);// 判断配置项是否有误
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 const name = computed(() => props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件');
 
 const emit = defineEmits(['operation_end']);

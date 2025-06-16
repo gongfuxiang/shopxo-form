@@ -4,7 +4,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">富文本</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -45,7 +45,7 @@
     </el-form>
 </template>
 <script setup lang="ts">
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 const props = defineProps({
     value: {
         type: Object,
@@ -61,6 +61,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);// 判断配置项是否有误
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 //#region 关于编辑弹窗的操作
 const dialogVisible = ref(false);
 const old_value = ref('');

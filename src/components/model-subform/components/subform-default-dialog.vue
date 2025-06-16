@@ -1,7 +1,7 @@
 <template>
     <el-dialog v-model="dialogVisible" title="设置默认值" width="1000px" style="height: 800px" align-center :close-on-click-modal="false" :close-on-press-escape="false" destroy-on-close append-to-body draggable @close="cancel"> 
         <div class="content flex-col gap-10 mtb-20 defalult-setting">
-            <subform-handle :value="form" :is-default="true"></subform-handle>
+            <subform-handle :value="form" :is-default="true" custom-height="570px"></subform-handle>
         </div>
         <template #footer>
             <span class="dialog-footer">
@@ -47,9 +47,6 @@ const submit = () => {
 .content {
     height: 63rem;
     overflow: hidden;
-    :deep(.subform) {
-        height: 57rem;
-    }
 }
 .defalult-setting {
     :deep(.content) {

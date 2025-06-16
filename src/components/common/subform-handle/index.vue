@@ -10,7 +10,7 @@
                 <el-button v-if="form.form_value.length > 0" class="custom-button" @click="remove_handle"><icon name="delete" size="14"></icon>删除</el-button>
             </template>
         </div>
-        <div class="subform flex-row">
+        <div class="subform flex-row" :style="`height: ${ customHeight };`">
             <div class="table-container rendering-area">
                 <div class="table-header flex">
                     <div class="flex-row align-c jc-c">
@@ -101,6 +101,10 @@ const props = defineProps({
     isDefault: {
         type: Boolean,
         default: false,
+    },
+    customHeight: {
+        type: String,
+        default: '100%'
     }
 });
 const form = ref(props.value);
@@ -478,6 +482,7 @@ const left_sticky = (index: number) => {
     }
     .table-body {
         display: flex;
+        flex-direction: column;
         .table-row .cell-num {
             text-align: center;
             background: #fff;

@@ -3,8 +3,8 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">文本</div></div>
-                <el-input v-model="form.title" placeholder="请输入标题" clearable @change="operation_end"></el-input>
+                <div class="new_title flex-row align-c jc-sb">标题<div class="new_desc">子表单</div></div>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">
@@ -54,34 +54,48 @@
                         <el-radio-button value="mobile">移动端</el-radio-button>
                     </el-radio-group>
                     <template v-if="form.subform_type == 'computer'">
-                        <el-checkbox v-model="form.computer.is_fixed" true-value="1" false-value="0">
-                            固定前
-                            <el-select v-model="form.computer.fixed_num" :disabled="form.computer.is_fixed == '0'" class="ml-10" value-key="id" filterable>
-                                <el-option v-for="item in fixed_option" :key="item.value" :label="item.name" :value="item.value" />
-                            </el-select>
-                        </el-checkbox>
-                    </template>
-                    <template v-else>
-                        <el-radio-group v-model="form.mobile.arrange" @change="operation_end">
-                            <el-radio value="direction">纵向平铺显示</el-radio>
-                            <el-radio value="horizontal">横向表格显示</el-radio>
-                        </el-radio-group>
-                        <template v-if="form.mobile.arrange === 'horizontal'">
-                            <el-checkbox v-model="form.mobile.is_fixed" true-value="1" false-value="0">
-                                固定前
-                                <el-select v-model="form.mobile.horizontal_fixed_num" :disabled="form.mobile.is_fixed == '0'" value-key="id" filterable>
+                        <el-row>
+                            <el-col :span="8">
+                                <el-checkbox v-model="form.computer.is_fixed" true-value="1" false-value="0">
+                                    固定前
+                                </el-checkbox>
+                            </el-col>
+                            <el-col :span="16">
+                                <el-select v-model="form.computer.fixed_num" :disabled="form.computer.is_fixed == '0'" class="w" value-key="id" filterable>
                                     <el-option v-for="item in fixed_option" :key="item.value" :label="item.name" :value="item.value" />
                                 </el-select>
-                            </el-checkbox>
-                        </template>
-                        <template v-else>
-                            <div class="flex-col gap-10">
-                                <sapn class="size-14 cr-6">数据收起时显示的简报</sapn>
-                                <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
-                                    <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
-                                </el-select>
-                            </div>
-                        </template>
+                            </el-col>
+                        </el-row>
+                    </template>
+                    <template v-else>
+                        <div class="flex-col gap-10">
+                            <el-radio-group v-model="form.mobile.arrange" @change="operation_end">
+                                <el-radio value="direction">纵向平铺显示</el-radio>
+                                <el-radio value="horizontal">横向表格显示</el-radio>
+                            </el-radio-group>
+                            <template v-if="form.mobile.arrange === 'horizontal'">
+                                <el-row>
+                                    <el-col :span="8">
+                                        <el-checkbox v-model="form.mobile.is_fixed" true-value="1" false-value="0">
+                                            固定前
+                                        </el-checkbox>
+                                    </el-col>
+                                    <el-col :span="16">
+                                        <el-select v-model="form.mobile.horizontal_fixed_num" :disabled="form.mobile.is_fixed == '0'" class="w" value-key="id" filterable>
+                                            <el-option v-for="item in fixed_option" :key="item.value" :label="item.name" :value="item.value" />
+                                        </el-select>
+                                    </el-col>
+                                </el-row>
+                            </template>
+                            <template v-else>
+                                <div class="flex-col gap-10">
+                                    <sapn class="size-14 cr-6">数据收起时显示的简报</sapn>
+                                    <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
+                                        <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
+                                    </el-select>
+                                </div>
+                            </template>
+                        </div>
                     </template> 
                 </div>
             </div>
@@ -120,7 +134,7 @@ const props = defineProps({
     }
 });
 const form = ref(props.value);// 判断配置项是否有误
-
+const old_title = ref(cloneDeep(props.value.title));
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
     emit('operation_end');
@@ -230,6 +244,11 @@ const on_sort = (val: any) => {
 const subform_default_visible = ref(false);
 const set_default = () => { 
     subform_default_visible.value = true;
+};
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
 };
 //#endregion
 </script>
