@@ -30,10 +30,10 @@
                 <div class="flex-1">
                     <el-radio-group v-model="form.filed_title_justification" class="two-copies-group w h" is-button>
                         <el-tooltip content="左对齐" placement="top" effect="dark">
-                            <el-radio-button value="left"><icon name="iconfont icon-left" size="16"></icon></el-radio-button>
+                            <el-radio-button value="flex-start"><icon name="iconfont icon-left" size="16"></icon></el-radio-button>
                         </el-tooltip>
                         <el-tooltip content="右对齐" placement="top" effect="dark">
-                            <el-radio-button value="right"><icon name="iconfont icon-right" size="16"></icon></el-radio-button>
+                            <el-radio-button value="flex-end"><icon name="iconfont icon-right" size="16"></icon></el-radio-button>
                         </el-tooltip>
                     </el-radio-group>
                 </div>
@@ -97,28 +97,30 @@
                     </el-radio-group>
                 </div>
             </div>
-            <div class="flex-row gap-10 align-c form-title mb-10">
-                对齐方式
-                <div class="flex-1">
-                    <el-radio-group v-model="form.heading_title_location" is-button class="two-copies-group three-copies-group w h">
-                        <el-tooltip content="左对齐" placement="top" effect="dark">
-                            <el-radio-button value="flex-start"><icon name="iconfont icon-left"></icon></el-radio-button>
-                        </el-tooltip>
-                        <el-tooltip content="居中" placement="top" effect="dark">
-                            <el-radio-button value="center"><icon name="iconfont icon-center"></icon></el-radio-button>
-                        </el-tooltip>
-                        <el-tooltip content="右对齐" placement="top" effect="dark">
-                            <el-radio-button value="flex-end"><icon name="iconfont icon-right"></icon></el-radio-button>
-                        </el-tooltip>
-                    </el-radio-group>
+            <template v-if="form.is_show_heading_title === '1'">
+                <div class="flex-row gap-10 align-c form-title mb-10">
+                    对齐方式
+                    <div class="flex-1">
+                        <el-radio-group v-model="form.heading_title_location" is-button class="two-copies-group three-copies-group w h">
+                            <el-tooltip content="左对齐" placement="top" effect="dark">
+                                <el-radio-button value="flex-start"><icon name="iconfont icon-left"></icon></el-radio-button>
+                            </el-tooltip>
+                            <el-tooltip content="居中" placement="top" effect="dark">
+                                <el-radio-button value="center"><icon name="iconfont icon-center"></icon></el-radio-button>
+                            </el-tooltip>
+                            <el-tooltip content="右对齐" placement="top" effect="dark">
+                                <el-radio-button value="flex-end"><icon name="iconfont icon-right"></icon></el-radio-button>
+                            </el-tooltip>
+                        </el-radio-group>
+                    </div>
                 </div>
-            </div>
-            <div class="flex-row gap-10 align-b form-title mb-10">
-                <span class="mt-4">字号</span>
-                <div class="flex-1">
-                    <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
+                <div class="flex-row gap-10 align-b form-title mb-10">
+                    <span class="mt-4">字号</span>
+                    <div class="flex-1">
+                        <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
+                    </div>
                 </div>
-            </div>
+            </template>
         </div>
         <div class="flex-col gap-10 w h">
             <div class="new_title">提交按钮</div>

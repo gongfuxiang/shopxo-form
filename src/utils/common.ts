@@ -28,14 +28,14 @@ export const layout_settings = {
     computer: {
         flex_direction: 'column',
         filed_title_width: 100,
-        filed_title_justification: 'left',
+        filed_title_justification: 'flex-start',
         filed_title_size_type: 'small',
         input_width_type: 'default',
     },
     mobile: {
         flex_direction: 'column',
         filed_title_width: 100,
-        filed_title_justification: 'left',
+        filed_title_justification: 'flex-start',
         filed_title_size_type: 'small',
         input_width_type: 'default',
     }

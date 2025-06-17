@@ -469,9 +469,9 @@ export const get_title_style = (config: any) => {
     //标题宽度控制
     // 根据flex_direction字段决定标题的对齐方式和宽度
     if (data.flex_direction == 'column') {
-        style += `text-align: left;`;
+        style += `justify-content: flex-start;`;
     } else if (data.flex_direction == 'row') {
-        style += `width: ${data.filed_title_width}px;text-align:${data.filed_title_justification}`;
+        style += `width: ${data.filed_title_width}px;justify-content:${data.filed_title_justification}`;
     }
     // 返回拼接好的样式字符串
     return style;

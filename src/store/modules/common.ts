@@ -40,7 +40,7 @@ export const commonStore = defineStore('common', () => {
     const subform_siderbar = ref<componentsData[]>([]);
     
     const form_config = ref<any>({});
-    const form_layout = ref({});
+    const form_layout = ref<any>({});
     type model = {
         [key: string]: string;
     }
