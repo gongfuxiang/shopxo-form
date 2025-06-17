@@ -340,10 +340,11 @@ const download = () => {
 	top: 0;
 	left: 0;
 	background: #000;
-	opacity: 0.7;
+	opacity: 0.8;
 	z-index: 3;
 	:deep(.el-progress__text) {
 		color: #fff;
+		font-size: 0.9rem !important;
 		min-width: 4.5rem;
 	}
 }
