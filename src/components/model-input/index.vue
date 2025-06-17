@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style">
-            <form-title :value="props.value"></form-title>
+        <div class="form-group" :style="common_store.layout_style + layout_style">
+            <form-title :value="props.value" :style="title_style"></form-title>
             <div class="content">
                 <template v-if="form.type == 'radio-btns'">
                     <el-radio-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]">
@@ -58,6 +58,9 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
+const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'radio-btns' ? 'align-items:flex-start;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'radio-btns'? 'margin-top:2px;' : '');
+
 const data_check = (val: boolean = false) => {
     get_format_checks(form.value, val)
 };

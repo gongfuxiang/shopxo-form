@@ -179,6 +179,9 @@ const custom_type_change = (val: string | number | boolean | undefined) => {
     :deep(.el-input-number) {
         width: 100%;
     }
+    :deep(.el-select__wrapper) {
+        font-size: 1.2rem;
+    }
 }
 .radio_form_size {
     :deep(.el-radio-button__inner) {

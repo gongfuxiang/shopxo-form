@@ -1,6 +1,6 @@
 <template>
     <div v-if="is_show_title" class="label flex-row gap-10 align-c oh" :style="common_store.title_style + `${ isSubform ? ';width: 100%;' : '' }`">
-        <div class="flex-row"><span class="text-line-1">{{ form.title }}</span><span v-if="form.is_required == '1'" class="required">*</span></div>
+        <div class="flex-row"><span class="flex-row flex-warp">{{ form.title }}</span><span v-if="form.is_required == '1'" class="required">*</span></div>
         <tooltip v-if="form.common_config.help_is_show == '1'" :content="form.common_config.help_explain" :size="common_store.help_icon_size"></tooltip>
     </div>
 </template>

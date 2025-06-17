@@ -3,7 +3,7 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb w h">标题
+                <div class="new_title flex-row align-c jc-sb w h"><div class="flex-row">标题<span class="required">*</span></div>
                     <component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value !== 'radio-btns') || !isSubform)" @dropdown_click="dropdown_click"/>
                 </div>
                 <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
@@ -19,7 +19,7 @@
             <el-form-item label-width="0">
                 <div class="flex-col gap-10 w h">
                     <div class="new_title">格式</div>
-                    <el-select v-model="form.format" value-key="id" filterable placeholder="请选择输入格式" size="default" class="flex-1" @change="operation_end">
+                    <el-select v-model="form.format" value-key="id" filterable placeholder="请选择输入格式" class="flex-1" @change="operation_end">
                         <el-option v-for="item in format_option" :key="item.value" :label="item.name" :value="item.value" />
                     </el-select>
                 </div>

@@ -3,7 +3,7 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb">标题<component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value == 'select-multi') || !isSubform)" @dropdown_click="dropdown_click"/></div>
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div><component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value == 'select-multi') || !isSubform)" @dropdown_click="dropdown_click"/></div>
                 <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
