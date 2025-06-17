@@ -93,7 +93,7 @@ const get_diy_index_data = (index: number) => {
                 top: 0;
                 left: -0.2rem;
                 border: 0.2rem solid $cr-main;
-                z-index: 3;
+                z-index: 5;
             }
             .oprate {
                 position: absolute;
@@ -104,7 +104,7 @@ const get_diy_index_data = (index: number) => {
                 background-color:#f5fbff;
                 border-radius: 15px;
                 color: $cr-primary;
-                z-index: 3;
+                z-index: 5;
                 .icon {
                     display: flex;
                     justify-content: center;

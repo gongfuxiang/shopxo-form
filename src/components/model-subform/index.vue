@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style">
-            <form-title :value="props.value"></form-title>
+        <div class="form-group flex-col gap-10">
+            <form-title :value="props.value" :is-subform="true"></form-title>
             <div class="content w">
                 <template v-if="children.length > 0">
                     <subform-handle :key="get_math" :value="form" :is-preview="isPreview" :custom-height="custom_height"></subform-handle>

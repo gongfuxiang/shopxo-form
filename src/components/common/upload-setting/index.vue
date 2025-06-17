@@ -7,26 +7,28 @@
 		<div v-if="success_list.length > 0" class="w h mt-14 flex-row align-c flex-wrap gap-10" :style="common_store.frame_style + 'height: 100%;'">
 			<div v-for="(item, index) in success_list" :key="index">
 				<template v-if="acceptType == 'file'">
-					<div v-if="item.raw" class="upload-file-style flex-row align-c gap-10 re" @click="preview_event(file_to_base64(item.raw), item.raw.name)"> 
-						<div v-if="item.raw" class="flex-row align-c upload-file-title w h">
-							<span class="text-line-1">{{ new_name(item.raw.name)[0] || '' }}</span><span>.{{ new_name(item.raw.name)[1] || '' }}</span>
-						</div>
-						<div @click.stop="upload_remove(index)">
-							<icon class="flex-1 c-pointer" name="close" size="10"></icon>
+					<div v-if="item" class="upload-file-style re" @click="preview_event(item.url, item.name)"> 
+						<div class="upload-file-content  flex-row align-c gap-10">
+							<div v-if="item" class="flex-row align-c upload-file-title w h">
+								<span class="text-line-1">{{ new_name(item.name)[0] || '' }}</span><span>.{{ new_name(item.name)[1] || '' }}</span>
+							</div>
+							<div @click.stop="upload_remove(index)">
+								<icon class="flex-1 c-pointer" name="close" size="10"></icon>
+							</div>
 						</div>
 						<div v-if="item.percentage && item.percentage > 0 && item.percentage < 100" class="progress" :style="`width: ${ item.percentage }%;height:2px;`"></div>
 					</div>
 				</template>
 				<template v-else>
-					<div v-if="item.raw" class="upload-img-style flex-col gap-3 re">
+					<div v-if="item" class="upload-img-style flex-col gap-3 re">
 						<icon class="upload-delete c-pointer" name="close-fillup" size="12" @click="upload_remove(index)"></icon>
 						<div class="upload-img oh re">
 							<template v-if="acceptType == 'video'">
-								<icon class="upload-bofang" name="bofang" size="12" @click="preview_event(file_to_base64(item.raw), item.raw.name)"></icon>
-								<video :src="file_to_base64(item.raw)" class="radius-sm w h" @click="preview_event(file_to_base64(item.raw), item.raw.name)"></video>
+								<icon class="upload-bofang" name="bofang" size="12" @click="preview_event(item.url, item.name)"></icon>
+								<video :src="item.url" class="radius-sm w h" @click="preview_event(item.url, item.name)"></video>
 							</template>
 							<template v-else>
-								<el-image :src="file_to_base64(item.raw)" class="preview-img radius-sm w h" fit="contain" @click="preview_event(file_to_base64(item.raw), item.raw.name)">
+								<el-image :src="item.url" class="preview-img radius-sm w h" fit="contain" @click="preview_event(item.url, item.name)">
 									<template #error>
 										<div class="bg-f5 img flex-row jc-c align-c radius h w">
 											<icon name="error-img" size="12"></icon>
@@ -34,14 +36,20 @@
 									</template>
 								</el-image>
 							</template>
+							<div v-if="item.percentage && item.percentage > 0 && item.percentage < 100" class="mask_layer flex-row align-c jc-c re">
+								<el-progress type="circle" :width="45" :stroke-width="3" indeterminate :percentage="item.percentage">
+									<template #default="{ percentage }">
+										<span class="percentage-value">{{ percentage }}%</span>
+									</template>
+								</el-progress>
+							</div>
 						</div>
 						<div class="flex-1 plr-3 oh">
 							<div class="flex-row align-c upload-title">
-								<span class="text-line-1">{{ new_name(item.raw.name)[0] || '' }}</span><span>.{{ new_name(item.raw.name)[1] || '' }}</span>
+								<span class="text-line-1">{{ new_name(item.name)[0] || '' }}</span><span>.{{ new_name(item.name)[1] || '' }}</span>
 							</div>
-							<div class="mb-2 upload-size">{{ annex_size_to_unit(item.raw.size) }}</div>
+							<div class="mb-2 upload-size">{{ annex_size_to_unit(item.size) }}</div>
 						</div>
-						<div v-if="item.percentage && item.percentage > 0 && item.percentage < 100" class="progress" :style="`width: ${ item.percentage }%;height:2px;`"></div>
 					</div>
 				</template>
 			</div>
@@ -172,18 +180,24 @@ const upload_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 		formData.append('type', props.acceptType == 'img' ? 'image' : props.acceptType == 'video' ? 'video' : props.acceptType == 'file' ? 'file' : '');
 		formData.append('category_id', '[]');
 		formData.append('upfile', item.raw);
+		item.url = isEmpty(item.raw) ? '' : file_to_base64(item.raw);
 		if (item.status == 'ready') {
 			item.status = 'loading';
 			const on_upload_progress = (progressEvent: any) => {
 				item.percentage = Number(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2));
 			};
 			UploadAPI.uploadAttachment(formData, on_upload_progress)
-				.then((res) => {
+				.then((res: any) => {
+					if (res.code == 0) {
+						item.url = res.data.url;
+						item.raw = '';
+					}
 					ElMessage.success('上传成功');
 					item.status = 'success';
 				})
 				.catch((err) => {
 					item.status = 'error';
+					item.url = '';
 					item.percentage = 0;
 				});
 		}
@@ -281,11 +295,13 @@ const download = () => {
 	}
 }
 .upload-file-style {
-	padding: 1rem 1.2rem 1rem 1.6rem;
 	// width: 33%;
 	box-shadow: 0px 0px 5px 0px rgba(207,207,207,0.5);
 	background: #fff;
 	border-radius: 0.4rem;
+	.upload-file-content { 
+		padding: 1rem 1.2rem 1rem 1.6rem;
+	}
 	.upload-file-title {
 		font-weight: 400;
 		font-size: 1.2rem;
@@ -303,6 +319,7 @@ const download = () => {
 	height: 0;
 	background: #2A94FF;
 	transition: width 0.3s linear;
+	border-radius: 0.2rem;
 }
 .video-content {
 	position: relative;
@@ -315,5 +332,19 @@ const download = () => {
 .download-desc {
 	color: $cr-main;
 	cursor: pointer;
+}
+.mask_layer {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background: #000;
+	opacity: 0.7;
+	z-index: 3;
+	:deep(.el-progress__text) {
+		color: #fff;
+		min-width: 4.5rem;
+	}
 }
 </style>
