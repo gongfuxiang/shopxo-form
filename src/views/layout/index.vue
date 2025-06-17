@@ -245,7 +245,7 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                     previewVisible.value = true;
                 }
                 form.value.id = String(res.data);
-                history.pushState({}, '', '?s=diy/saveinfo/id/' + res.data + '.html');
+                history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
             }
         })
         .catch((err: string) => {

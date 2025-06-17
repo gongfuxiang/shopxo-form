@@ -27,14 +27,14 @@
     <el-dialog v-model="dialog_visible" class="radius-lg" width="650" draggable :close-on-click-modal="false" append-to-body>
         <template #header>
             <div class="title re">
-                <div class="middle size-16 fw">附件管理</div>
+                <div class="middle size-16 fw">基础信息</div>
             </div>
         </template>
         <div class="content pa-20">
             <el-form ref="ruleFormRef" :model="form" :rules="rules" label-width="50" status-icon @submit.prevent>
-                <!-- <el-form-item label="封面">
+                <el-form-item label="封面">
                     <upload v-model="form.logo" :limit="1"></upload>
-                </el-form-item> -->
+                </el-form-item>
                 <el-form-item label="名称" prop="name">
                     <el-input v-model="form.name" placeholder="请输入名称" clearable @keyup.enter="confirm_event(ruleFormRef)" />
                 </el-form-item>
