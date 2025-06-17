@@ -10,8 +10,8 @@
                         </template>
                     </el-input>
                     <div v-if="form.is_sms_verification == '1'" class="flex-row gap-10 align-c">
-                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
-                        <el-button :style="frame_style + 'width:100px;'" :disabled="isEmpty(form.form_value)" @click="open_dialog">获取验证码</el-button>
+                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus flex-1" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
+                        <el-button style="width:100px;" :disabled="isEmpty(form.form_value) || verify_disabled" @click="open_dialog">{{ verify_txt }}</el-button>
                     </div>
                 </div>
                 <!-- 默认内容设置 -->
@@ -39,7 +39,7 @@
 import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
 import PhoneAPI from '@/api/phone';
-import { isEmpty } from "lodash";
+import { cloneDeep, isEmpty } from "lodash";
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -85,6 +85,11 @@ const open_dialog = () => {
         get_verification();
     }
 }
+const verify_time_total = 60;
+const temp_time = ref(60);
+const temp_clear_time = ref<any>(null);
+const verify_disabled = ref(false);
+const verify_txt = ref('获取验证码');
 // 获取手机验证码
 const get_verification = () => {
     const params = {
@@ -92,11 +97,35 @@ const get_verification = () => {
         type: 'sms', 
         verify: form.value.is_img_sms_verification == '1' ? dialog_value.value : ''
     };
-    PhoneAPI.getVerification(params).then((res) => {
-        // console.log(res);
-        form.value.form_value_code = res;
-    })
+    verify_disabled.value = true;
+    PhoneAPI.getVerification(params).then((res:any) => {
+        if (res.code == 0) {
+            // 倒计时处理
+            temp_time.value = cloneDeep(verify_time_total) - 1;
+            // 默认直接执行一次
+            verify_disabled.value = true;
+            verify_txt.value = `剩余${temp_time.value}秒`;
+            temp_clear_time.value = setInterval(function () {
+                if (temp_time.value <= 1) {
+                    clearInterval(temp_clear_time.value);
+                    verify_disabled.value = false;
+                    verify_txt.value = '获取验证码';
+                } else {
+                    temp_time.value--;
+                    verify_disabled.value = true;
+                    verify_txt.value = `剩余${temp_time.value}秒`;
+                }
+            }, 1000);
+        } else {
+            verify_disabled.value = false;
+        }
+    }).catch(() => {
+        verify_disabled.value = false;
+    });
 }
+onBeforeUnmount(() => {
+    clearInterval(temp_clear_time.value);
+});
 //#endregion
 // 手机号校验逻辑
 const data_check = () => {
