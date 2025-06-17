@@ -35,7 +35,7 @@ const defaultText: DefaultText = {
         arrange: 'horizontal',
         is_fixed: '1',
         horizontal_fixed_num: 1,
-        direction_fixed_num: '1',
+        direction_fixed_num: 'the_first_three',
     },
     common_config: defaultCommon
 };

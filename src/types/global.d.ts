@@ -18,6 +18,11 @@ declare global {
         name: string;
         key: string;
     }
+    interface componentsData {
+        name: string;
+        key: string;
+        data: any[];
+    }
     interface color_list {
         color: string;
         color_percentage: number | undefined;

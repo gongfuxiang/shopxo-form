@@ -150,7 +150,7 @@ const error_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 		const isExist = success_list.value.some(uploadedFile => uploadedFile.name === uploadFile.name && uploadedFile.size === uploadFile.size);
 		if (isExist) {
 			ElMessage.error('该文件已存在，请勿重复上传');
-			console.log(uploadFiles.filter((item, index, self) => self.findIndex(i => i.name === item.name && i.size === item.size) === index ));
+			// console.log(uploadFiles.filter((item, index, self) => self.findIndex(i => i.name === item.name && i.size === item.size) === index ));
 			// 删除已存在的文件
 			file_list.value = uploadFiles.filter((item, index, self) => self.findIndex(i => i.name === item.name && i.size === item.size) === index );
 			return false; // 阻止文件上传

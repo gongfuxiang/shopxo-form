@@ -90,10 +90,11 @@ const get_verification = () => {
     const params = {
         accounts: form.value.form_value, 
         type: 'sms', 
-        verify: form.value.is_img_sms_verification == '1' ? dialog_value.value : '2255'
+        verify: form.value.is_img_sms_verification == '1' ? dialog_value.value : ''
     };
     PhoneAPI.getVerification(params).then((res) => {
-        console.log(res);
+        // console.log(res);
+        form.value.form_value_code = res;
     })
 }
 //#endregion

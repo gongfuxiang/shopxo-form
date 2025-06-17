@@ -448,7 +448,7 @@ export const online_url = async (directory: string = '') => {
                 set_cookie('attachment_host', res.data.config.attachment_host);
                 attachemnt_host = res.data.config.attachment_host;
                 // 将数据存到localStorage中
-                localStorage.setItem('diy_init_common', res.data);
+                localStorage.setItem('forminput_init_common', res.data);
             });
         }
         return attachemnt_host + directory;

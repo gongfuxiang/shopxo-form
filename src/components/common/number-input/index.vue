@@ -126,6 +126,7 @@ watchEffect(() => {
 }
 .percent-input {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     padding-right: 1rem;

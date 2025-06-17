@@ -5,7 +5,7 @@ class CommonAPI {
     /**  链接初始化接口 */
     static getInit() {
         return request({
-            url: `diyapi/init`,
+            url: `forminputapi/init`,
             method: 'post',
         });
     }

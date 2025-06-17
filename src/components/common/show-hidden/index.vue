@@ -78,9 +78,6 @@ type show_hidden = {
 }
 const form = ref<show_hidden[]>([]);
 const subformData = computed(() => props.subformData);
-watch(() => subformData.value, (newValue) => { 
-    console.log(newValue);
-});
 const show_hidden_operate_list = computed(() => props.isSubform ? subformData.value : diy_data.value);
 // 搜索内容
 const input_value1 = ref('');

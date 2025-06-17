@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
     size: '14px',
     text: '暂无数据',
 });
-const no_data_image = ref(common_store.common.config.attachment_host + `/static/diy/images/no-data.png`);
+const no_data_image = ref(common_store.common.config.attachment_host + `/static/form_input/images/no-data.png`);
 const style = computed(() => {
     return {
         width: props.imgWidth,

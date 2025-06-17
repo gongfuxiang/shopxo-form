@@ -5,7 +5,7 @@
             <el-scrollbar>
                 <div class="ptb-5">
                     <el-collapse v-model="activeNames">
-                        <div v-for="(com, i) in components" :key="i" class="plr-12">
+                        <div v-for="(com, i) in common_store.main_free_siderbar" :key="i" class="plr-12">
                             <el-collapse-item v-if="com.data.length > 0" :key="i" :title="com.name" :name="com.key">
                                 <div class="component flex-row flex-wrap gap-10">
                                     <div v-for="item in com.data" :key="item.key" class="item" draggable="true" @dragstart="dragStart(item, $event)" @dragend="dragEnd" @click.stop="draggable_click(item)">
@@ -117,66 +117,9 @@ watchEffect(() => {
 })
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
-interface componentsData {
-    name: string;
-    key: string;
-    data: any[];
-}
-const components = ref<componentsData[]>([
-    {
-        name: '基础',
-        key: 'base',
-        data: [
-            { name: '单行文本', key: 'single-text', data: [] },
-            { name: '多行文本', key: 'multi-text', data: [] },
-            { name: '数字', key: 'number', data: [] },
-            { name: '日期时间', key: 'date', data: [] },
-            { name: '单选按钮组', key: 'radio-btns', data: [] },
-            { name: '复选框组', key: 'checkbox', data: [] },
-            { name: '下拉框', key: 'select', data: [] },
-            { name: '下拉复选框', key: 'select-multi', data: [] },
-            // { name: '选项卡', key: 'tabs', data: [] },
-            { name: '日期时间组', key: 'date-group', data: [] },
-        ],
-    },
-    {
-        name: '高级',
-        key: 'hight-level',
-        data: [
-            { name: '上传图片', key: 'upload-img', data: [] },
-            { name: '定位', key: 'position', data: [] },
-            { name: '地址', key: 'address', data: [] },
-            // { name: '按钮', key: 'btn', data: [] },
-            { name: '子表单', key: 'subform', data: [] },
-            { name: '密码', key: 'pwd', data: [] },
-            { name: '手机', key: 'phone', data: [] },
-            { name: '评分', key: 'score', data: [] },
-            { name: '富文本', key: 'rich-text', data: [] },
-            { name: '上传文件', key: 'upload-attachments', data: [] },
-            { name: '上传视频', key: 'upload-video', data: [] },
-            // { name: '手写签名', key: 'sign', data: [] },
-            // { name: '选择数据', key: 'data', data: [] },
-        ],
-    },
-    {
-        name: '扩展',
-        key: 'extend',
-        data: [
-            { name: '辅助线', key: 'auxiliary-line', data: [] },
-            { name: '文本', key: 'text', data: [] },
-            { name: '图片', key: 'img', data: [] },
-            { name: '视频', key: 'video', data: [] },
-            { name: '文件', key: 'attachments', data: [] },
-            { name: '矩形', key: 'rect', com_data: [] },
-            { name: '圆形', key: 'round', com_data: [] },
-        ],
-    },
-]);
-
 // computer
 const url_computer = (name: string) => {
-    // const new_url = common_store.common.config.attachment_host + `/static/diy/images/layout/siderbar/${name}.png`;
-    const new_url = `/src/assets/img/${name}.png`;
+    const new_url = common_store.common.config.attachment_host + `/static/form_input/images/layout/siderbar/${name}.png`;
     return new_url;
 };
 
@@ -255,12 +198,14 @@ const hot_list_index = ref(0);
 let draggedItem = ref<any>({});
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
+    const new_x = get_random_number();
+    const new_y = get_random_number();
     const new_item = {
         name: item.name,
         key: item.key,
         mark_name: '',
         id: get_math(),
-        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
+        location: { x: new_x, y: new_y, record_x: new_x, record_y: new_y, staging_y: new_y },
         show_tabs: '1',
         is_enable: '1',
         is_hot: '0',
@@ -270,6 +215,10 @@ const draggable_click = (item: componentsData) => {
     // 设置当前选中的是那个
     set_show_tabs(diy_data.value.length - 1);
 };
+// 生成随机数
+function get_random_number() {
+    return Math.floor(Math.random() * 200);
+}
 // 拖拽开始
 const dragStart = (item: any, event: any) => {
     // 初始化拖拽的数据
@@ -636,10 +585,15 @@ const on_copy = (index: number) => {
     if (typeof index === 'number' && !isNaN(index)) {
         const data = cloneDeep(get_diy_index_data(index));
         // 计算存在多少个相同的key
-        const list = diy_data.value.filter(item => item.key == data.key);
+        // const list = diy_data.value.filter(item => item.key == data.key);
+        const location_x = data.location.x + get_random_number();
+        const location_y = data.location.y + get_random_number();
+        // 使用新函数调整位置
+        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, data.com_data.com_width, data.com_data.com_height, center_width.value, center_height.value);
         // 获取当前数据, 复制的时候id更换一下
         const new_data = {
             ...data,
+            location: { x: adjustedX, y: adjustedY, record_x: adjustedX, record_y: adjustedY, staging_y: adjustedY },
             // new_name: data.name + list.length, // 添加别名, 复制是在原有的基础上复制，所以必须要不需要判断是否存在历史的
             id: get_math(),
         };

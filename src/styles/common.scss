@@ -539,3 +539,19 @@
 .border-focus:hover, .border-focus:focus, .border-focus:active {
     border-color: #2a94ff !important;
 }
+
+.message-box-custom {
+    .el-message__icon {
+        background: url('@/assets/loading.svg') no-repeat center; /* 使用自定义图标 */
+        background-size: contain;
+        animation: message__icon 2s infinite linear;
+    }
+}
+@keyframes message__icon {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}

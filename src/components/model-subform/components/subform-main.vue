@@ -5,7 +5,7 @@
             <el-scrollbar>
                 <div class="ptb-5">
                     <el-collapse v-model="activeNames">
-                        <div v-for="(com, i) in components" :key="i" class="plr-12">
+                        <div v-for="(com, i) in common_store.subform_siderbar" :key="i" class="plr-12">
                             <el-collapse-item v-if="com.data.length > 0" :key="i" :title="com.name" :name="com.key">
                                 <VueDraggable v-model="com.data" :animation="500" ghost-class="ghost" handle=".item" :group="{ name: 'people', pull: 'clone', put: false }" class="component flex-row flex-wrap gap-10" :clone="clone_item_com_data" :sort="false" :force-fallback="true">
                                     <div v-for="item in com.data" :key="item.key" class="item drag-item" @click.stop="draggable_click(item)">
@@ -139,55 +139,9 @@ watch(() => diy_data.value, (new_val) => {
 }, { deep: true });
 // siderbar
 const activeNames = reactive(['base', 'hight-level', 'extend']);
-interface componentsData {
-    name: string;
-    key: string;
-    data: any[];
-}
-const components = ref<componentsData[]>([
-    {
-        name: '基础',
-        key: 'base',
-        data: [
-            { name: '单行文本', key: 'single-text', data: [] },
-            { name: '多行文本', key: 'multi-text', data: [] },
-            { name: '数字', key: 'number', data: [] },
-            { name: '日期时间', key: 'date', data: [] },
-            { name: '单选按钮组', key: 'radio-btns', data: [] },
-            { name: '复选框组', key: 'checkbox', data: [] },
-            { name: '下拉框', key: 'select', data: [] },
-            { name: '下拉复选框', key: 'select-multi', data: [] },
-            { name: '日期时间组', key: 'date-group', data: [] },
-        ],
-    },
-    {
-        name: '高级',
-        key: 'hight-level',
-        data: [
-            { name: '上传图片', key: 'upload-img', data: [] },
-            { name: '定位', key: 'position', data: [] },
-            { name: '地址', key: 'address', data: [] },
-            { name: '密码', key: 'pwd', data: [] },
-            { name: '评分', key: 'score', data: [] },
-            { name: '上传文件', key: 'upload-attachments', data: [] },
-            { name: '上传视频', key: 'upload-video', data: [] },
-        ],
-    },
-    {
-        name: '扩展',
-        key: 'extend',
-        data: [
-            { name: '文本', key: 'text', data: [] },
-            { name: '图片', key: 'img', data: [] },
-            { name: '视频', key: 'video', data: [] },
-            { name: '文件', key: 'attachments', data: [] },
-        ],
-    },
-]);
-
 // computer
 const url_computer = (name: string) => {
-    const new_url = `/src/assets/img/${name}.png`;
+    const new_url = common_store.common.config.attachment_host + `/static/form_input/images/layout/siderbar/${name}.png`;
     return new_url;
 };
 

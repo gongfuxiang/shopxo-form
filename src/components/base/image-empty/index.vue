@@ -27,7 +27,7 @@ const props = defineProps({
     },
 });
 const image = defineModel({ type: [Object, String], default: () => {} });
-const error_image = ref(common_store.common.config.attachment_host + `/static/diy/images/empty.png`);
+const error_image = ref(common_store.common.config.attachment_host + `/static/form_input/images/empty.png`);
 const emit = defineEmits(['load']);
 const on_load = (e: any) => {
     const { width, height } = e.target;

@@ -34,6 +34,11 @@ export const commonStore = defineStore('common', () => {
             site_name: '',
         } as any, // 基础数据配置参数
     });
+    // 左侧菜单显示逻辑
+    const mains_siderbar = ref<componentsData[]>([]);
+    const main_free_siderbar = ref<componentsData[]>([]);
+    const subform_siderbar = ref<componentsData[]>([]);
+    
     const form_config = ref<any>({});
     const form_layout = ref({});
     type model = {
@@ -49,10 +54,29 @@ export const commonStore = defineStore('common', () => {
     const set_model_config = (data: any) => {
         form_model_config.value = data;
     }
+    // 定义过滤条件
+    const MAIN_FILTER_KEYS = ['rect', 'round'];
+    const SUBFORM_FILTER_KEYS = ['rect', 'round', 'auxiliary-line', 'subform', 'phone', 'rich-text'];
     // 存储链接数据
     const set_common = (data: any) => {
         common.value = data;
         is_common_api.value = true;
+        if (common.value?.module_list?.length > 0) {
+            // 取出所有数据
+            const moduleList = common.value.module_list;
+            // 自由模式下的左侧数据
+            main_free_siderbar.value = moduleList;
+            // 常规模式下的左侧数据
+            mains_siderbar.value = moduleList.map(group => ({
+                ...group,
+                data: group.data.filter((item: { key: string }) => !MAIN_FILTER_KEYS.includes(item.key))
+            }));
+            // 子表单下的左侧数据
+            subform_siderbar.value = moduleList.map(group => ({
+                ...group,
+                data: group.data.filter((item: { key: string }) => !SUBFORM_FILTER_KEYS.includes(item.key))
+            }));
+        }
     };
     // 如果为false 则转为true
     const set_is_common_api = (bool: boolean) => {
@@ -100,6 +124,9 @@ export const commonStore = defineStore('common', () => {
         address_list,
         form_config,
         form_model_config,
+        main_free_siderbar,
+        mains_siderbar,
+        subform_siderbar,
         set_common,
         set_is_common_api,
         set_is_immersion_model,

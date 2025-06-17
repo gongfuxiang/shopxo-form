@@ -20,7 +20,7 @@ const defaultAuxiliary: DefaultAuxiliary = {
     line_width: 100,
     line_location: 'center',
     line_size: 1,
-    line_color: '#eee',
+    line_color: '#000',
     com_width: 150,
     com_height: 17,
     common_config: defaultCommon

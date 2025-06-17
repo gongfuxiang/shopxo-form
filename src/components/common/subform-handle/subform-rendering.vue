@@ -463,7 +463,6 @@ const copy = (url: string) => {
     try {
         const successful = document.execCommand('copy');
         const msg = successful ? '成功复制！' : '复制失败';
-        console.log(msg);
     } catch (err) {
         console.error('复制失败', err);
     }

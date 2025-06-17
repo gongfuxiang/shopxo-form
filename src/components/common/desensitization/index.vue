@@ -88,7 +88,6 @@ const is_set_desensitization = ref(false);
 const input_value = ref('');
 const desensitization_value = ref('');
 const test_click = () => {
-    console.log(dialog_value.value);
     if (!is_set_desensitization.value) {
         desensitization_value.value = get_desensitization(input_value.value, dialog_value.value[0]);
     }

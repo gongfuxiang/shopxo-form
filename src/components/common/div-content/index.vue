@@ -23,18 +23,15 @@
     </template>
     <template v-else>
         <div class="w h flex-col align-c jc-c gap-15">
-            <img class="img radius-xs" :width="140" :height="131" src="/src/assets/no-data.png" />
+            <img class="img radius-xs" :width="140" :height="131" :src="no_data_image" />
             <span class="no-data-tips">从左侧拖拽或点击来创建表单</span>
         </div>
     </template>
 </template>
 <script lang="ts" setup>
-// computer
-const url_computer = () => {
-    // const new_url = common_store.common.config.attachment_host + `/static/diy/images/layout/siderbar/${name}.png`;
-    const new_url = `/src/assets/no-data.png`;
-    return new_url;
-};
+import { commonStore } from "@/store";
+const common_store = commonStore();
+const no_data_image = ref(common_store.common.config.attachment_host + `/static/form_input/images/no-data.png`);
 interface Props {
     diyData: any[];
 }

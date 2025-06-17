@@ -89,7 +89,7 @@
                             </template>
                             <template v-else>
                                 <div class="flex-col gap-10">
-                                    <sapn class="size-14 cr-6">数据收起时显示的简报</sapn>
+                                    <span class="size-14 cr-6">数据收起时显示的简报</span>
                                     <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
                                         <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
                                     </el-select>
@@ -118,7 +118,7 @@ const fixed_option = [
 ]
 const direction_fixed_option = [
     { name: '自定义', value: 'custom' },
-    { name: '前3个字段的值', value: '3' },
+    { name: '前3个字段的值', value: 'the_first_three' },
 ];
 const props = defineProps({
     value: {
