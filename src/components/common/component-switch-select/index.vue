@@ -1,6 +1,10 @@
 <template>
     <el-dropdown trigger="click" popper-class="component-switch" :disabled="new_option_list.length <= 0" max-height="300px" size="large" placement="bottom" @visible-change="visible_change">
-        <div class="dialog-add">{{ data_type_map }}<icon v-if="new_option_list.length > 0" :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="#666"/></div>
+        <div class="dialog-add">{{ data_type_map }}
+            <template v-if="new_option_list.length > 0">
+                <icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="#666" />
+            </template>
+        </div>
         <template #dropdown>
             <el-dropdown-menu>
                 <el-dropdown-item v-for="item in new_option_list" :key="item.value" @click="dropdown_click(item.value)">{{ item.name }}</el-dropdown-item>

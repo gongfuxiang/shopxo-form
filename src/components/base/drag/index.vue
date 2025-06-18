@@ -4,12 +4,14 @@
             <li v-for="(item, index) in from" :key="index" class="flex-row alingn-c gap-y-16 re">
                 <slot :row="item" :index="index" />
                 <icon name="drag" size="16" class="cursor-move" />
-                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="复制" raw-content placement="top">
-                    <icon v-if="isShowCopy" name="copy" size="16" class="drag-icon" color="3" @click="copy(index)"/>
-                </el-tooltip>
-                <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="item.is_enable == '1' ? '隐藏' : '显示'" raw-content placement="top">
-                    <icon v-if="isShowCopy" :name="item.is_enable == '1' ? 'eye' : 'eye-close'" class="eye-before drag-icon" size="16" color="3" @click="on_show_or_hidden(index)"/>
-                </el-tooltip>
+                <template v-if="isShowCopy">
+                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="复制" raw-content placement="top">
+                        <icon name="copy" size="16" class="drag-icon" color="3" @click="copy(index)"/>
+                    </el-tooltip>
+                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="item.is_enable == '1' ? '隐藏' : '显示'" raw-content placement="top">
+                        <icon :name="item.is_enable == '1' ? 'eye' : 'eye-close'" class="eye-before drag-icon" size="16" color="3" @click="on_show_or_hidden(index)"/>
+                    </el-tooltip>
+                </template>
                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="删除" raw-content placement="top">
                     <icon name="delete-o" size="18" color="6" class="drag-icon" @click="remove(index)"/>
                 </el-tooltip>

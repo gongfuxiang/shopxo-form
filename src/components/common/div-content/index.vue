@@ -3,18 +3,18 @@
         <div v-for="(item, index) in diy_data" :key="item.id" :class="['item', { 'active': item.show_tabs == '1', 'required-error': item.com_data.common_config.is_error == '1' }]" @click.stop="on_choose(index, item.show_tabs)">
             <div v-if="item.show_tabs == '1'" class="oprate">
                 <div class="icon" @click.stop="set_enable(index)">
-                    <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
+                    <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="14"/>
                 </div>
                 <span class="divider"></span>
                 <div class="icon" @click="on_del(index)">
-                    <icon name="del" size="10"></icon>
+                    <icon name="del" size="14"></icon>
                 </div>
                 <span class="divider"></span>
                 <div class="icon" @click="on_copy(index)">
-                    <icon name="copy" size="10"></icon>
+                    <icon name="copy" size="14"></icon>
                 </div>
             </div>
-            <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+            <div class="w h plug-in-disable" :class="{ 'plug-in-close': item.is_enable != '1' }">
                 <div class="main-content">
                     <component-show :value="item"></component-show>
                 </div>
@@ -110,7 +110,7 @@ const get_diy_index_data = (index: number) => {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
-                    padding: 0.6rem 1.2rem;
+                    padding: 0.3rem 0.8rem;
                 }
                 .divider {
                     width: 1px;
@@ -120,6 +120,15 @@ const get_diy_index_data = (index: number) => {
             }
             .main-content {
                 padding: 1.8rem 2rem;
+            }
+            .plug-in-content::before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: transparent;
+                z-index: 2;
             }
         }
     }

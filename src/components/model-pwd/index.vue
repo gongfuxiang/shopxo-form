@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <el-input v-model="form.form_value" :type="is_show ? 'password' : ''" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
+                <el-input v-model="form.form_value" :type="is_show ? 'password' : ''" class="border-focus" autocomplete="off" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                     <template #prefix>
                         <icon :name="form.icon_name" color="#999"></icon>
                     </template>
@@ -19,7 +19,6 @@
 <script setup lang="ts">
 import { common_styles_computer, get_border_left_right_size, get_format_checks } from "@/utils";
 import { commonStore } from "@/store";
-import { cloneDeep } from "lodash"
 const common_store = commonStore();
 const props = defineProps({
     value: {

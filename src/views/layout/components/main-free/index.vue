@@ -60,7 +60,7 @@
                                             <DraggableContainer v-if="draggable_container" style="z-index: 0" :reference-line-visible="true" :disabled="false" reference-line-color="#ddd" @selectstart.prevent @contextmenu.prevent @dragstart.prevent>
                                                 <Vue3DraggableResizable v-for="(item, index) in diy_data" :key="item.id" v-model:w="item.com_data.com_width" v-model:h="item.com_data.com_height" :min-w="0" :min-h="0" :class="[{ 'plug-in-show-component-line': is_show_component_line, 'plug-in-show-tabs': item.show_tabs == '1', 'vdr-handle-z-index': item.com_data.bottom_up == '1', 'required-error': item.com_data.common_config.is_error == '1'}]" :style="{ 'z-index': item.is_enable == '1' ? (diy_data.length - 1) - index : -999 }" :init-w="item.com_data.com_width" :init-h="item.com_data.com_height" :x="item.location.x" :y="item.location.y" :parent="true" :draggable="is_draggable" @mousedown.stop="on_choose(index, item.show_tabs)" @click.stop="on_choose(index, item.show_tabs)" @drag-end="dragEndHandle($event, index)" @resizing="resizingHandle($event, item.key, index)" @resize-end="resizingHandle($event, item.key, index)">
                                                     <div :class="['main-content flex-row re', { 'plug-in-border': item.show_tabs == '1' }]">
-                                                        <div class="w h" :class="{ 'plug-in-close': item.is_enable != '1' }">
+                                                        <div class="w h plug-in-disable" :class="{ 'plug-in-close': item.is_enable != '1' }">
                                                             <div class="main-content">
                                                                 <component-show :value="item" :is-custom="true"></component-show>
                                                             </div>
@@ -586,20 +586,24 @@ const on_copy = (index: number) => {
         const data = cloneDeep(get_diy_index_data(index));
         // 计算存在多少个相同的key
         // const list = diy_data.value.filter(item => item.key == data.key);
-        const location_x = data.location.x + get_random_number();
-        const location_y = data.location.y + get_random_number();
+        const location_x = data.location.x;
+        const location_y = data.location.y;
+        let new_y = location_y + 20;
+        if ((new_y + data.com_data.com_height) > center_height.value) {
+            new_y = location_y - 20;
+        }
         // 使用新函数调整位置
-        const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, data.com_data.com_width, data.com_data.com_height, center_width.value, center_height.value);
+        // const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, data.com_data.com_width, data.com_data.com_height, center_width.value, center_height.value);
         // 获取当前数据, 复制的时候id更换一下
         const new_data = {
             ...data,
-            location: { x: adjustedX, y: adjustedY, record_x: adjustedX, record_y: adjustedY, staging_y: adjustedY },
+            location: { x: location_x, y: new_y, record_x: location_x, record_y: new_y, staging_y: new_y },
             // new_name: data.name + list.length, // 添加别名, 复制是在原有的基础上复制，所以必须要不需要判断是否存在历史的
             id: get_math(),
         };
         // 在当前位置下插入数据
         diy_data.value.splice(index, 0, new_data);
-        set_show_tabs(index + 1);
+        set_show_tabs(index);
     }
 };
 //前置一层 - 1

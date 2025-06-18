@@ -427,27 +427,34 @@ const drawer_change = (data: any) => {
     }
 };
 //#endregion 
-const left_sticky = (index: number) => {
+/**
+ * 计算左侧粘性定位样式
+ * 
+ * @param index - 当前元素的索引位置
+ * @returns 返回CSS粘性定位样式字符串，若不符合条件则返回空字符串
+ */
+ const left_sticky = (index: number) => {
+    // 从表单数据中获取是否启用固定和固定数量配置
     const { is_fixed = '0', fixed_num = 1 } = form.value?.computer || {};
-    if (is_fixed == '1' && index <= fixed_num - 1) {
-        let left = 0;
-        if (index == 0) {
-            left = 0;
-        } else {
-            left = 78;
-            for (let i = 1; i < children.value.length; i++) {
-                if (i > 1) {
-                    left += children.value[i - 1]?.com_data?.com_width || 0;
-                }
-                if (i == index && i < fixed_num) {
-                    break;
-                }
-            }
-        }
-        return `position: sticky;left: ${left}px;z-index: 2;`;
-    } else {
+    
+    // 检查是否满足粘性定位条件：启用固定且索引在固定数量范围内
+    if (is_fixed !== '1' || index >= fixed_num || fixed_num <= 0) {
         return '';
     }
+
+    const childrenList = children.value;
+    // 初始左侧偏移量：第一个元素为0，其他元素默认78px
+    let left = index === 0 ? 0 : 78;
+    
+    // 计算当前元素之前的兄弟元素宽度总和作为偏移量
+    if (index > 0) {
+        for (let i = 1; i < index; i++) {
+            left += childrenList[i - 1]?.com_data?.com_width || 0;
+        }
+    }
+    
+    // 生成粘性定位CSS样式
+    return `position: sticky;left: ${left}px;z-index: 2;`;
 }
 </script>
 

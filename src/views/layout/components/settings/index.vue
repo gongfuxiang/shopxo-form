@@ -5,7 +5,7 @@
                 <div class="flex-col gap-20">
                     <div class="flex-col gap-5">
                         <div class="new_title">模式</div>
-                        <el-radio-group v-model="form.type_value" @change="type_change">
+                        <el-radio-group v-model="type_value" @change="type_change">
                             <el-radio value="default">标准模式</el-radio>
                             <el-radio value="free">自由模式</el-radio>
                         </el-radio-group>
@@ -66,6 +66,7 @@
 <script setup lang="ts">
 import { layout_settings, style_settings } from '@/utils/common';
 import { isEqual, cloneDeep } from "lodash";
+const app = getCurrentInstance();
 const props = defineProps({
     value: {
         type: Object,
@@ -78,15 +79,30 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false
-    }
+    },
+    diyData: {
+        type: Array<any>,
+        default: () => [],
+    },
 });
 const form = ref(props.value);
 const model_value = defineModel({ type: Object, default: () => ({}) });
 
 const emits = defineEmits(['type_change']);
+const type_value = ref(cloneDeep(props.value?.type_value || 'default'));
 // 切换模式
-const type_change = () => {
-    emits('type_change');
+const type_change = (val: string | number | boolean | undefined) => {
+    if (props.diyData.length > 0) {
+        app?.appContext.config.globalProperties.$common.message_box('切换模式将清除当前数据，是否继续？', 'warning').then(() => {
+            form.value.type_value = cloneDeep(val);
+            emits('type_change');
+        }).catch(() => {
+            type_value.value = cloneDeep(form.value.type_value);
+        });
+    } else {
+        form.value.type_value = cloneDeep(val);
+        emits('type_change');
+    }
 };
 // 打开弹出框
 const dialog_visible = ref(false);
