@@ -11,10 +11,10 @@
 			</template>
 			<template v-else>
 				<template v-if="index + 1 == new_selected">
-					<span class="rate-divide-name nowrap" :style="`color:${ props.selectColor };`" @click="icon_click(index + 1)">{{ index + 1 }}分</span>
+					<span class="rate-divide-name nowrap" :style="`color:${ props.selectColor };font-size:${ size }px;`" @click="icon_click(index + 1)">{{ index + 1 }}分</span>
 				</template>
 				<template v-else>
-					<span class="rate-divide-name nowrap" @click="icon_click(index + 1)">{{ index + 1 }}分</span>
+					<span class="rate-divide-name nowrap" :style="`font-size:${ size }px;`" @click="icon_click(index + 1)">{{ index + 1 }}分</span>
 				</template>
 			</template>
 		</div>
@@ -39,7 +39,11 @@ const props = defineProps({
 	disaled: {
 		type: Boolean,
 		default: false
-	}
+	},
+    size: {
+        type: String,
+        default: '10'
+    }
 });
 const selected = defineModel({ type: Number, default: 1 });
 const new_selected = ref(0);
@@ -74,7 +78,7 @@ const icon_click = (index: number) => {
 
 <style lang="scss" scoped>
 .rate-item {
-    width: 1.6rem;
+    // width: 1.6rem;
     height: 1.6rem;
 }
 .is-disable {

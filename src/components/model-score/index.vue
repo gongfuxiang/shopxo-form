@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
-                <custom-rate v-model="form.form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" @change="data_check"/>
+                <custom-rate v-model="form.form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" size="16" @change="data_check"/>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
         </div>
@@ -27,7 +27,7 @@ const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 // 手机号校验逻辑
 const data_check = () => {
-    get_format_checks(form.value, false);
+    get_format_checks(form.value, false, 'score');
 };
 
 const is_show = ref(true);

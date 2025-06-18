@@ -180,7 +180,7 @@ const upload_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 		formData.append('type', props.acceptType == 'img' ? 'image' : props.acceptType == 'video' ? 'video' : props.acceptType == 'file' ? 'file' : '');
 		formData.append('category_id', '[]');
 		formData.append('upfile', item.raw);
-		item.url = isEmpty(item.raw) ? '' : file_to_base64(item.raw);
+		item.url = !isEmpty(item.url) ? item.url : file_to_base64(item.raw);
 		if (item.status == 'ready') {
 			item.status = 'loading';
 			const on_upload_progress = (progressEvent: any) => {
@@ -202,7 +202,6 @@ const upload_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 				});
 		}
 	});
-
 }
 // 超出数量限制回调
 const handle_exceed = () => {

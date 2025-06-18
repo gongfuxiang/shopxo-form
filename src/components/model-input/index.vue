@@ -4,7 +4,7 @@
             <form-title :value="props.value" :style="title_style"></form-title>
             <div class="content">
                 <template v-if="form.type == 'radio-btns'">
-                    <el-radio-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]">
+                    <el-radio-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]" @change="data_check(false, 'radio')">
                         <el-radio v-for="item in form.option_list" :key="item.value" :value="item.value">
                             <div class="flex-row gap-10 align-c">
                                 <div :style="option_style(item)">{{ item.name }}</div>
@@ -61,8 +61,8 @@ const frame_style = computed(() => common_store.frame_style + `${ props.isCustom
 const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'radio-btns' ? 'align-items:flex-start;' : '');
 const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'radio-btns'? 'margin-top:2px;' : '');
 
-const data_check = (val: boolean = false) => {
-    get_format_checks(form.value, val)
+const data_check = (val: boolean = false, type: string = '') => {
+    get_format_checks(form.value, val, type)
 };
 // 没有彩色时的公共样式
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
@@ -89,6 +89,7 @@ const select_click = (val: any) => {
 }
 const select_change = (val: any) => {
     form.value.form_value = Array.isArray(val) ? val[0] : val;
+    get_format_checks(form.value, false, 'select');
 }
 </script>
 <style lang="scss" scoped>

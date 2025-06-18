@@ -1,9 +1,9 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style">
-            <form-title :value="props.value"></form-title>
+        <div class="form-group" :style="common_store.layout_style + layout_style">
+            <form-title :value="props.value" :style="title_style"></form-title>
             <div class="content w">
-                <el-input v-model="form.form_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check" @change="data_check"></el-input>
+                <el-input v-model="form.form_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :show-word-limit="form.is_limit_num == '1' && form.max_num" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check" @change="data_check"></el-input>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
         </div>
@@ -25,6 +25,9 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
+const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:2px;' : '');
+
 const data_check = () => {
     get_format_checks(form.value)
 };

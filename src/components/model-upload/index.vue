@@ -1,6 +1,6 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style + layout_style">
+        <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <upload-setting :value="form.form_value" :accept-type="acceptType" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" @change="change" />
@@ -29,11 +29,10 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
-const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'align-items:baseline;' : '');
 // 校验逻辑
 const change = (value: any) => {
     form.value.form_value = value;
-    get_format_checks(form.value, false);
+    get_format_checks(form.value, false, 'upload');
 };
 // 用于样式显示
 const style_container = computed(() => common_styles_computer(form.value.common_config));

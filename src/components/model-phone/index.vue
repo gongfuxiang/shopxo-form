@@ -1,6 +1,6 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style + layout_style">
+        <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="flex-col gap-10" :style="frame_style + 'height: 100%;'">
@@ -53,7 +53,6 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
-const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'align-items:baseline;' : '');
 //#region 图片验证码内容
 const dialogVisible = ref(false);
 const dialog_value  = ref('');

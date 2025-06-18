@@ -5,11 +5,18 @@
         <!-- 编辑器 -->
         <Editor id="editor-container" ref="editorRef" v-model="html_value" class="editor" :default-config="editor_config" :mode="mode" @on-change="handle_change" @on-created="handle_created" />
     </div>
-    <upload v-model:model-value="upload_list" v-model:visible-dialog="visibleDialog" :type="rich_upload_type" :limit="1" is-custom-dialog @update:model-value="upload_list_change"></upload>
+    <!-- 文件上传区域 -->
+    <el-upload v-model:file-list="file_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="upload-visiable" :limit="1" :show-file-list="false" drag :on-change="upload_change">
+        <el-button ref="upload_type" type="primary">Click to upload</el-button>
+    </el-upload>
 </template>
 <script setup lang="ts">
 import '@wangeditor/editor/dist/css/style.css'; // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
+import { ext_file_name_list, ext_img_name_list, ext_video_name_list } from '../upload';
+import UploadAPI from '@/api/upload';
+import { ElButton, ElUpload, UploadFile, UploadUserFile } from 'element-plus';
+import { isEmpty } from '@/utils';
 interface Props {
     placeholder?: string;
     newStyle?: string;
@@ -26,19 +33,18 @@ const mode = ref('default'); // 编辑器模式
 const editorRef = ref<HTMLElement | null>(null);
 // 编辑器实例，必须用 shallowRef
 const editor_ref = shallowRef();
-// 插入光标位置
-const cursor_position = ref(0);
 const toolbar_config = ref({}); // 工具条配置
-//  上传列表
-const upload_list = ref<uploadList[]>([]);
-// 上传弹窗显示
-const visibleDialog = ref(false);
 // 上传类型
 const rich_upload_type = ref('img');
 // 编辑器配置
 interface InsertFnType {
     (url: string, alt?: string, link?: string): void;
 }
+// 表单数据
+const exts = computed(() => rich_upload_type.value == 'img' ? ext_img_name_list.value : rich_upload_type.value == 'video' ? ext_video_name_list.value : ext_file_name_list.value);
+const exts_text = computed(() => exts.value.join(','));
+
+const upload_type = ref<InstanceType<typeof ElButton> | null>(null);
 // 编辑器配置
 const editor_config = ref({
     placeholder: props.placeholder,
@@ -48,8 +54,12 @@ const editor_config = ref({
             // 自定义选择图片
             customBrowseAndUpload(insertFn: InsertFnType) {
                 rich_upload_type.value = 'img';
-                visibleDialog.value = true;
-                cursor_position.value = editor_ref.value.selection;
+                setTimeout(() => {
+                    if (upload_type.value) {
+                        file_list.value = [];
+                        upload_type.value?.$.vnode.el?.click();
+                    }
+                });
                 upload_insert.value = insertFn;
             },
         },
@@ -57,8 +67,12 @@ const editor_config = ref({
             // 自定义上传视频
             customBrowseAndUpload(insertFn: InsertFnType) {
                 rich_upload_type.value = 'video';
-                visibleDialog.value = true;
-                cursor_position.value = editor_ref.value.selection;
+                setTimeout(() => {
+                    if (upload_type.value) {
+                        file_list.value = [];
+                        upload_type.value?.$.vnode.el?.click();
+                    }
+                });
                 upload_insert.value = insertFn;
             },
         },
@@ -70,31 +84,42 @@ const upload_insert = ref<any>(null);
 const handle_created = (editor: any) => {
     editor_ref.value = editor; // 记录 editor 实例，重要！
 };
-
+const file_list = ref<UploadUserFile[]>([]);
+// 文件添加时触发
+const upload_change = (uploadFile: UploadFile) => {
+    if (!isEmpty(uploadFile.raw)) {
+        const formData = new FormData();
+        formData.append('type', rich_upload_type.value == 'img' ? 'image' : rich_upload_type.value == 'video' ? 'video' : rich_upload_type.value == 'file' ? 'file' : '');
+        formData.append('category_id', '[]');
+        formData.append('upfile', uploadFile?.raw || '');
+        const on_upload_progress = (progressEvent: any) => {
+            uploadFile.percentage = Number(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2));
+        };
+        UploadAPI.uploadAttachment(formData, on_upload_progress)
+            .then((res: any) => {
+                if (res.code == 0) {
+                    const url = res.data.url;
+                    const alt = res.data.name;
+                    // 弹出框结束的时候触发添加事件
+                    if (rich_upload_type.value == 'img') {
+                        upload_insert.value(res.data.url, alt);
+                    } else {
+                        upload_insert.value(url);
+                    }
+                }
+                ElMessage.success('上传成功');
+            })
+            .catch((err) => {
+                ElMessage.success('上传失败');
+            });
+    } else {
+        ElMessage.success('上传失败');
+    }
+}
 const emit = defineEmits(['update:value']);
 // 内容改变
 const handle_change = (editor: any) => {
     html_value.value = editor.getHtml();
-};
-// 上传列表改变
-const upload_list_change = (arry: uploadList[]) => {
-    const editor = editor_ref.value;
-    let new_html = '';
-    if (editor) {
-        arry.forEach((item: uploadList) => {
-            const url = item.url;
-            const alt = item.title;
-            // 弹出框结束的时候触发添加事件
-            if (rich_upload_type.value == 'img') {
-                upload_insert.value(url, alt);
-            } else {
-                upload_insert.value(url);
-            }
-        });
-        // 弹出框结束之后清空数据
-        upload_insert.value = null;
-    }
-    upload_list.value = [];
 };
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -114,5 +139,8 @@ onBeforeUnmount(() => {
             max-width: 100%;
         }
     }
+}
+.upload-visiable {
+    visibility: hidden;
 }
 </style>

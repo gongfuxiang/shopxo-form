@@ -55,7 +55,7 @@ const time_focus = () => {
 
 const time_blur = () => {
     is_time_icon_show.value = true;
-    get_format_checks(form.value)
+    get_format_checks(form.value, false, 'time')
 };
 const el_time = ref<any>(null);
 const custom_icon_click = () => {

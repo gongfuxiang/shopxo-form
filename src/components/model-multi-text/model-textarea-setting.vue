@@ -16,7 +16,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <el-input v-model="form.form_value" placeholder="请输入默认值" clearable @change="operation_end"></el-input>
+                <el-input v-model="form.form_value" placeholder="请输入默认值" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
         <el-form-item label-width="0">

@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area">
-        <div class="form-group" :style="common_store.layout_style">
-            <form-title :value="props.value"></form-title>
+        <div class="form-group" :style="common_store.layout_style + layout_style">
+            <form-title :value="props.value" :style="title_style"></form-title>
             <div class="content w">
                 <editor-config v-model="form.form_value" :placeholder="form.placeholder" :new-style="frame_style + style_container"></editor-config>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
@@ -25,6 +25,8 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);height: 500px;` : 'height: 500px;' }`);
+const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:2px;' : '');
 // 用于样式显示
 const style_container = computed(() => common_styles_computer(form.value.common_config));
 </script>

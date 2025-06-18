@@ -69,7 +69,7 @@
                     <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                 </template>
                 <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
-                <el-checkbox-group :model-value="form_value">
+                <el-checkbox-group :model-value="form_value" @change="data_check(true, 'checkbox')">
                     <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                         <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
                     </el-option>
@@ -119,7 +119,7 @@
         <!-- 地址 -->
         <template v-else-if="model_type == 'address'">
             <div class="flex-col gap-10 align-c" :style="frame_style + 'height: 100%;'">
-                <el-cascader v-model="form_value" :options="common_store.address_list" class="border-focus" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false)" />
+                <el-cascader v-model="form_value" :options="common_store.address_list" class="border-focus" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check(false, 'address')" />
             </div>
         </template>
         <!-- 密码 -->
@@ -135,7 +135,7 @@
         </template>
         <!-- 评分 -->
         <template v-else-if="model_type == 'score'">
-            <custom-rate v-model="form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style + 'height:100%;'" @change="data_check"/>
+            <custom-rate v-model="form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style + 'height:100%;'" size="16" @change="data_check(false, 'score')"/>
         </template>
         <!-- 上传图片｜上传视频 ｜ 上传文件 -->
         <template v-else-if="['upload-img', 'upload-video', 'upload-attachments'].includes(model_type)">
@@ -144,7 +144,7 @@
                     <div class="w h flex-row align-s gap-3 oh pa-4">
                         <div v-for="(item, index) in form_value" :key="index" class="w h flex-row align-c"> 
                             <template v-if="model_type === 'upload-img'">
-                                <el-image :src="file_to_base64(item.raw)" fit="contain" class="h" @click="preview_event(file_to_base64(item.raw), item.raw.name)">
+                                <el-image :src="item.url" fit="contain" class="h" @click="preview_event(item.url, item.raw.name)">
                                     <template #error>
                                         <div class="bg-f5 img flex-row jc-c align-c radius h w">
                                             <icon name="error-img" size="12"></icon>
@@ -153,7 +153,7 @@
                                 </el-image>
                             </template>
                             <template v-else-if="model_type === 'upload-video'">
-                                <video :src="file_to_base64(item.raw)" class="radius-sm w h" @click="preview_event(file_to_base64(item.raw), item.raw.name)"></video>
+                                <video :src="item.url" class="radius-sm w h" @click="preview_event(item.url, item.raw.name)"></video>
                             </template>
                             <template v-else>
                                 <el-tooltip class="radius-sm w h" effect="dark" :content="item.name">
@@ -301,7 +301,7 @@ const time_focus = () => {
 
 const time_blur = () => {
     is_time_icon_show.value = true;
-    emit('data_check', { is_format: false, type: '' });
+    emit('data_check', { is_format: false, type: 'time' });
 };
 const el_time = ref<any>(null);
 const custom_icon_click = () => {
@@ -364,6 +364,7 @@ const handleCheckAllChange = () => {
     } else {
         form_value.value = selectAll.value ? form.value.option_list.map((item: { value: any }) => item.value) : []
     }
+    emit('data_check', { is_format: false, type: 'checkbox' });
 }
 //#endregion
 // #region 添加选项相关
@@ -417,7 +418,7 @@ const eye_change = () => {
 const upload_change = (value: any) => {
     form_value.value = value;
     setTimeout(() => {
-        emit('data_check', { is_format: false, type: '' });
+        emit('data_check', { is_format: false, type: 'upload' });
     }, 0);
 }
 // file转换成base64

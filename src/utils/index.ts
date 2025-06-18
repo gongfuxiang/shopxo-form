@@ -557,7 +557,7 @@ export const get_layout_style = (config: any) => {
     // 根据flex_direction的值，添加相应的对齐方式
     if (data.flex_direction == 'row') {
         // 当flex_direction为row时，添加垂直居中对齐
-        style += `align-items: center;`;
+        style += `align-items: baseline;`;
     } else if (data.flex_direction == 'column') {
         // 当flex_direction为column时，添加水平居中对齐
         style += `justify-content: center;`;
@@ -576,7 +576,7 @@ export const get_format_checks = (data: any, is_format: boolean = false, type: s
     if (data.is_required == '1' && isEmpty(data.form_value)) {
         // 是否报错显示
         data.common_config.is_error = '1';
-        data.common_config.error_text = '必填字段不能为空';
+        data.common_config.error_text = `${ ['select', 'checkbox', 'upload', 'time', 'address', 'score', 'radio'].includes(type) ? '必选' : '必填'}字段不能为空`;
     } else {
         // 否就清除报错显示
         data.common_config.is_error = '0';

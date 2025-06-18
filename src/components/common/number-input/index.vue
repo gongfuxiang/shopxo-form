@@ -1,12 +1,10 @@
 <template>
     <div ref="el" :class="`rendering-area percent-input-wrapper ${ is_focus ? 'focus-input' : 'blur-input'}`" @click="percent_input_click">
         <div class="percent-input">
-            <el-input ref="el_input" v-model="form_value" :style="{ 'width' : isPercentage ? `${ use_input_width }px` : '100%'}" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
+            <el-input ref="el_input" v-model="form_value" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
                 <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
+                <template #suffix>%</template>
             </el-input>
-            <template v-if="isPercentage">
-                <div>%</div>
-            </template>
         </div>
     </div>
 </template>
@@ -47,17 +45,17 @@ const props = defineProps({
     moneySign: {
         type: String,
         default: ''
-    }
+    },
 });
 const form_value = defineModel({ type: String, default: '' });
 //#region 获取容器最大宽度
-const el = ref(null)
-const input_width = ref(0)
-useResizeObserver(el, (entries) => {
-    const entry = entries[0]
-    const { width } = entry.contentRect
-    input_width.value = width;
-})
+// const el = ref(null)
+// const input_width = ref(0)
+// useResizeObserver(el, (entries) => {
+//     const entry = entries[0]
+//     const { width } = entry.contentRect
+//     input_width.value = width;
+// })
 //#endregion
 // 点击div的时候, 输入框默认获取焦点
 const is_focus = ref(false);
@@ -105,18 +103,18 @@ watch(() => [props.decimalNum, props.isThousandthsSymbol, props.format], () => {
     blur_input();
 }, { deep: true })
 //#region 获取百分比时的最大宽度
-const use_input_width = ref(26);
-watchEffect(() => {
-    if (props.isPercentage) {
-        const min_width = 26 + (form_value.value.length * 7);
-        const max_width = input_width.value - 14;
-        if (min_width < max_width) {
-            use_input_width.value = min_width;
-        } else {
-            use_input_width.value = max_width;
-        }
-    }
-})
+// const use_input_width = ref(26);
+// watchEffect(() => {
+//     if (props.isPercentage) {
+//         const min_width = 26 + (form_value.value.length * 7);
+//         const max_width = input_width.value - 14;
+//         if (min_width < max_width) {
+//             use_input_width.value = min_width;
+//         } else {
+//             use_input_width.value = max_width;
+//         }
+//     }
+// })
 //#endregion
 </script>
 
@@ -129,7 +127,6 @@ watchEffect(() => {
     height: 100%;
     display: flex;
     flex-direction: row;
-    padding-right: 1rem;
     align-items: center;
     border-radius: 4px;
 }
@@ -138,8 +135,5 @@ watchEffect(() => {
 }
 .focus-input {
     border:1px solid #409eff; 
-}
-:deep(.el-input__prefix) {
-    padding-right: 0.5rem;
 }
 </style>
