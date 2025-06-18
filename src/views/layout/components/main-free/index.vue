@@ -23,7 +23,7 @@
             </el-scrollbar>
         </div>
         <div class="flex-1 drag-container">
-            <div class="drag-content">
+            <div class="drag-content re">
                 <!-- 拖拽区 -->
                 <div class="model-content">
                     <div class="model-width">
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" @del="on_del" @copy="on_copy" @set_enable="set_enable"  @previous_layer="previous_layer" @underlying_layer="underlying_layer" @top_up="top_up" @bottom_up="bottom_up"></right-side-operation>
+                <right-side-operation v-if="typeof select_index === 'number' && !isNaN(select_index) && diy_data.length > 0" v-model:index="select_index" v-model:data-length="diy_data.length" v-model:is_enable="diy_data[select_index].is_enable" v-model:left-width="left_width" @del="on_del" @copy="on_copy" @set_enable="set_enable"  @previous_layer="previous_layer" @underlying_layer="underlying_layer" @top_up="top_up" @bottom_up="bottom_up"></right-side-operation>
             </div>
         </div>
     </div>
@@ -122,7 +122,32 @@ const url_computer = (name: string) => {
     const new_url = common_store.common.config.attachment_host + `/static/form_input/images/layout/siderbar/${name}.png`;
     return new_url;
 };
-
+//#region 计算右侧悬浮框的位置
+onMounted(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+});
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+});
+const left_width = computed(() => {
+    // 获取中间宽度，容器宽度减去左右宽度
+    const width = innerWidth.value - 300 - 234;
+    // 取出中间区域80%的宽度
+    const eighty_percent = width * 0.8;
+    // 如果自定义表单的宽度大于80%，则右侧显示为80%的一半，否则的话就是自定义表单的宽度的一半
+    if (center_width.value > eighty_percent) {
+        return eighty_percent / 2 + 20;
+    } else {
+        // 如果是小于80%的宽度，那么右侧显示为自定义表单的宽度的一半 + 左侧表格列的宽度
+        return center_width.value / 2 + 40;
+    }
+});
+const innerWidth = ref(0);
+const handleResize = () => {
+    innerWidth.value = window.innerWidth;
+}
+//#endregion
 //#region 组件边线相关
 const is_show_component_line = ref(false);
 //#endregion

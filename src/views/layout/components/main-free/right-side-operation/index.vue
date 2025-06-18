@@ -1,5 +1,5 @@
 <template>
-    <div v-if="typeof index === 'number' && !isNaN(index)" class="acticons">
+    <div v-if="typeof index === 'number' && !isNaN(index)" class="acticons" :style="`margin-left: ${ left_width }px;`">
         <div class="plug-in-right" chosenClass="close">
             <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="隐藏组件" placement="right">
                 <el-icon :class="`iconfont ${ is_enable == '1' ? 'icon-eye' : 'icon-eye-close'}`" @click.stop="set_enable(index)" />
@@ -26,6 +26,8 @@
     </div>
 </template>
 <script setup lang="ts">
+// 距离左侧的宽度
+const left_width = defineModel('leftWidth', { type: Number , default: 0 });
 const index = defineModel('index', { type: Number , default: null });
 const dataLength = defineModel('dataLength', { type: Number , default: 0 });
 const is_enable = defineModel('is_enable', { type: String , default: '1' });
@@ -70,15 +72,14 @@ const bottom_up = (index: number, flag: boolean) => {
 <style scoped lang="scss">
 .acticons {
     position: absolute;
-    right: 0;
     // margin-right: -4rem;
-    margin-right: 2rem;
     top: 50%;
+    left: 50%;
     display: flex;
     flex-direction: column;
     gap: 2rem;
     z-index: 1;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
 }
 .plug-in-right {
     cursor: default;
