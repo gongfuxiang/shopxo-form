@@ -18,13 +18,13 @@
             <div class="nav-tabs">表单发布</div>
         </div>
         <div class="nav-right">
-            <el-dropdown @visible-change="visible_change">
+            <el-dropdown popper-class="nav-right-dropdown" @visible-change="visible_change">
                 <el-button plain type="primary" class="nav-right-dropdown-button"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
-                    <el-dropdown-item @click="import_click">导入</el-dropdown-item>
-                    <el-dropdown-item @click="export_click">导出</el-dropdown-item>
-                    <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
+                        <el-dropdown-item @click="import_click">导入</el-dropdown-item>
+                        <el-dropdown-item @click="export_click">导出</el-dropdown-item>
+                        <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
