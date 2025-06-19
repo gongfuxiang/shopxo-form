@@ -34,7 +34,7 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="main-content" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
+                        <div class="main-content oh" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
                             <layout-top></layout-top>
                             <div class="pa-16">
                                 <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
@@ -58,6 +58,8 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
+import { checkbox_range_handle, get_format_checks, get_format_checks_v2, isEmpty, number_range_handle } from "@/utils";
+import { fa } from "element-plus/es/locale";
 import { cloneDeep } from "lodash";
 const common_store = commonStore();
 interface DiyItem {
@@ -165,9 +167,199 @@ const filteredDiyData = computed(() => {
 const save_draft = () => {
     ElMessage.warning('当前状态下不支持该操作');
 };
-const submit = () => {
-    ElMessage.warning('当前状态下不支持该操作');
+// 定义字段类型与检查参数的映射
+const fieldCheckMap: arrayIndex = {
+    'address': { is_format: false, type: 'address' },
+    'number': { is_format: false, type: 'number' },
+    'checkbox': { is_format: true, type: 'checkbox' },
+    'select-multi': { is_format: true, type: 'checkbox' },
+    'date': { is_format: false, type: 'time' },
+    'date-group': { is_format: false, type: 'time' },
+    'single-text': { is_format: false, type: '' },
+    'multi-text': { is_format: false, type: '' },
+    'rich-text': { is_format: false, type: '' },
+    'radio-btns': { is_format: false, type: 'radio' },
+    'select': { is_format: false, type: 'select' },
+    'pwd': { is_format: false, type: '' },
+    'score': { is_format: false, type: 'score' },
+    'upload-attachments': { is_format: false, type: 'upload' },
+    'upload-img': { is_format: false, type: 'upload' },
+    'upload-video': { is_format: false, type: 'upload' }
+};
+/**
+ * 提交表单数据并进行验证
+ * 
+ * 功能说明：
+ * 1. 遍历过滤后的自定义数据，对必填字段进行验证
+ * 2. 处理特殊字段（如手机号）的验证
+ * 3. 处理子表单的验证逻辑，包括必填项检查和格式验证
+ */
+ const submit = () => {
+    // 遍历所有过滤后的自定义数据项
+    filteredDiyData.value?.forEach((item: any) => {
+        const com_data = item.com_data;
+        // 跳过非必填项
+        if (com_data.is_required === '1') {
+            // 特殊字段验证：手机号
+            if (item.key === 'phone') {
+                handlePhoneValidation(com_data);
+            } 
+            // 其他字段的格式验证
+            else if (fieldCheckMap[item.key]) {
+                const { is_format, type } = fieldCheckMap[item.key];
+                get_format_checks(com_data, is_format, type);
+            }
+        };
+        /**
+         * 子表单处理逻辑
+         * 1. 检查子表单中是否有必填项
+         * 2. 验证子表单整体必填性
+         * 3. 处理子表单内各字段的验证
+         */
+        if (item.key === 'subform') {
+            // 子表单整体必填验证
+            if (com_data.is_required === '1' && com_data.form_value.length <= 0 && com_data.children.value.length > 0) {
+                com_data.common_config.is_error = '1';
+                com_data.common_config.error_text = '请填写至少一条记录';
+            } else {
+                com_data.common_config.is_error = '0';
+                com_data.common_config.error_text = '';
+            }
+            // 处理子表单内各字段的验证
+            if (com_data.children.length > 0 && com_data.form_value.length > 0) {
+                // 获取子表单数据并检查是否有必填项
+                const subform_data = filtered_Data(com_data.children, com_data.form_value, 'all');
+                const hasRequired = subform_data.some(item => item.com_data.is_required === '1');
+                
+                // 没有必填项则跳过
+                if (!hasRequired) return;
+
+                com_data.form_error_list = [];
+                // 初始化错误列表
+                com_data.form_value.forEach((item: any, index: number) => {
+                    if (isEmpty(com_data.form_error_list[index])) {
+                        const data: any = {};
+                        com_data.children.forEach((item1: any) => {
+                            if (isEmpty(item[item1.id])) {
+                                data[item1.id] = { common_config: { is_error: '0', error_text: '' } };
+                            }
+                        });
+                        com_data.form_error_list[index] = data;
+                    }
+                });
+
+                // 验证子表单内各字段
+                com_data.form_value.forEach((form_item: any, index: number) => {
+                    // 取出对应列的数据信息
+                    const form_data = filtered_Data(com_data.children, com_data.form_value, 'index', index);
+                    form_data.forEach((data_item: any) => {
+                        // 跳过非必填项
+                        if (data_item.com_data.is_required !== '1') return;
+                        // 执行字段验证
+                        const checkConfig = fieldCheckMap[data_item.key];
+                        if (checkConfig) {
+                            subform_data_check(checkConfig.is_format, checkConfig.type, index, data_item.id, data_item.com_data, com_data.form_error_list, com_data.form_value);
+                        }
+                    });
+                });
+            }
+        }
+    });
+    const data = filteredDiyData.value.find((item: any) => item.com_data.common_config.is_error === '1' || (item.key === 'subform' && item.com_data.form_error_list.some((item1: any) => item1[Object.keys(item1)[0]].common_config.is_error === '1')));
+    if (!isEmpty(data)) {
+        if (data.key === 'subform') {
+            if (data.com_data.common_config.is_error == '1') {
+                ElMessage.error(`${data.com_data.title}「${data.com_data.common_config.error_text}」`);
+            } else {
+                ElMessage.error(`请检查${data.com_data.title}内的填写`);
+            }
+        } else {
+            ElMessage.error(`${data.com_data.title}「${data.com_data.common_config.error_text}」`);
+        }
+    } else {
+        
+    }
 }
+// 处理手机号验证逻辑
+const handlePhoneValidation = (com_data: any) => {
+    if (com_data.is_sms_verification === '1' && com_data.is_required === '1' && isEmpty(com_data.form_value_code)) {
+        com_data.common_config.is_error = '1';
+        com_data.common_config.error_text = '短信验证码不能为空';
+        return;
+    }
+    com_data.common_config.format = com_data.is_telephone === '1' ? 'telephone-number' : 'phone-number';
+    get_format_checks(com_data, true);
+};
+const filtered_Data = (children: any[], form_value: any[], type: string, index?: number) => { 
+    const componentMap = new Map(children.map((item: any) => [item.id, item])) as any;
+
+    // 取出所有设置显隐规则的组件
+    const list = children.filter((item: any) => ['single-text', 'select', 'radio-btns'].includes(item.key) && ['select', 'radio-btns'].includes(item.com_data.type) && item.com_data.show_hidden_list.length > 0);
+    const list_map = list.map((item: DiyItem) => ({ id: item.id, list: item.com_data.show_hidden_list }));
+    return children.filter((item: DiyItem) => {
+        // 优先判断是否启用
+        if (item.is_enable !== '1') return false;
+
+        if (list_map.length === 0) return true;
+        // 将所有的内容的组件进行筛选
+        const isShownByRule = list_map.some((list_item: any) => {
+            const targetComponent = componentMap.get(list_item.id);
+            // 判断显隐规则对应的组件是否存在
+            if (!targetComponent) return false;
+            return list_item.list.some((hidden_item: any) => {
+                // 判断当前组件是否在显隐规则中，如果不在，直接显示，否则的话判断值是否存在
+                if (hidden_item.is_show.includes(item.id)) {
+                    if (type == 'all') {
+                        // 判断所有的是否满足条件
+                        const data = form_value.filter((form_item: any) => form_item[list_item.id].includes(hidden_item.value))
+                        return data.length > 0;
+                    } else {
+                        // 判断是单个还是多个内容
+                        if (index == null) {
+                            return false;
+                        } else {
+                            // 否则判断当前组件的值是否存在
+                            return form_value[index][list_item.id].includes(hidden_item.value);
+                        }
+                    }
+                } else {
+                    return true;
+                }
+            });
+        });
+        return isShownByRule;
+    });
+};
+const subform_data_check = (is_format: boolean, type: string, index: number, id: string, com_data: any, form_error_list: any[], value: any[]) => {
+    const data = form_error_list[index][id];
+    const form_value = value[index][id];
+    if (isEmpty(data)) {
+        return 
+    }
+    // 判断是否是必填字段,并且没有值
+    if (com_data.is_required == '1' && isEmpty(form_value)) {
+        // 是否报错显示
+        data.common_config.is_error = '1';
+        data.common_config.error_text = `此项为${['select', 'checkbox', 'upload', 'time', 'address', 'score', 'radio'].includes(type) ? '必选' : '必填'}项`;
+    } else {
+        // 否就清除报错显示
+        data.common_config.is_error = '0';
+        data.common_config.error_text = '';
+        if (is_format) {
+            if (type == 'number') {
+                // 数字组件的校验逻辑
+                number_range_handle(com_data, form_value);
+            } else if (type == 'checkbox') {
+                // 复选框和复选下拉框的校验逻辑
+                checkbox_range_handle(com_data, form_value);
+            } else {
+                // 单行文本的校验逻辑
+                // 对字段进行格式检查
+                get_format_checks_v2(com_data.common_config, form_value);
+            }
+        }
+    } 
+};
 //#endregion
 // 配置信息，区分是手机端数据还是电脑端数据
 const config_value = computed(() => type_value.value == 'computer' ? common_store.form_config.style_settings.computer : common_store.form_config.style_settings.mobile);

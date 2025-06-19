@@ -19,7 +19,7 @@
         </div>
         <div class="nav-right">
             <el-dropdown popper-class="nav-right-dropdown" @visible-change="visible_change">
-                <el-button plain type="primary" class="nav-right-dropdown-button"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
+                <el-button plain type="primary" class="nav-right-dropdown-button mr-12"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item @click="import_click">导入</el-dropdown-item>

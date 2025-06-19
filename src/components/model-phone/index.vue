@@ -10,7 +10,7 @@
                         </template>
                     </el-input>
                     <div v-if="form.is_sms_verification == '1'" class="flex-row gap-10 align-c">
-                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus flex-1" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_check"></el-input>
+                        <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus flex-1" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_code_check"></el-input>
                         <el-button style="width:100px;" :disabled="isEmpty(form.form_value) || verify_disabled" @click="open_dialog">{{ verify_txt }}</el-button>
                     </div>
                 </div>
@@ -129,12 +129,22 @@ onBeforeUnmount(() => {
 //#endregion
 // 手机号校验逻辑
 const data_check = () => {
-    if (form.value.is_telephone == '1') {
-        form.value.common_config.format = 'telephone-number';
-    } else {
-        form.value.common_config.format = 'phone-number';
+    if (form.value?.common_config) {
+        form.value.common_config.format = form.value.is_telephone === '1' ? 'telephone-number' : 'phone-number';
     }
     get_format_checks(form.value, true);
+};
+const data_code_check = () => {
+    if (form.value.is_required == '1' && isEmpty(form.value.form_value_code)) {
+        // 是否报错显示
+        form.value.common_config.is_error = '1';
+        form.value.common_config.error_text = '短信验证码不能为空';
+    } else {
+        if (form.value?.common_config) {
+            form.value.common_config.format = form.value.is_telephone === '1' ? 'telephone-number' : 'phone-number';
+        }
+        get_format_checks(form.value, true);
+    }
 };
 // 用于样式显示
 const style_container = computed(() => common_styles_computer(form.value.common_config));

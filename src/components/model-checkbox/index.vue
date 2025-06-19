@@ -34,7 +34,7 @@
                                 <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                             </template>
                             <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
-                            <el-checkbox-group :model-value="form.form_value" @change="data_check">
+                            <el-checkbox-group :model-value="form.form_value" class="select-multi-checkbox flex-col gap-10" @change="data_check">
                                 <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                                     <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
                                 </el-option>
@@ -222,6 +222,9 @@ const style_container = computed(() => common_styles_computer(form.value.common_
         .el-select__selection {
             flex-wrap: nowrap;
             overflow: hidden;
+        }
+        .el-select__selection.is-near {
+            margin-left: 0;
         }
         .el-select__suffix {
             padding-left: 0.2rem;

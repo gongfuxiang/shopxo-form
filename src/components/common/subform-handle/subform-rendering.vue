@@ -4,7 +4,7 @@
         <template v-if="['single-text', 'select', 'radio-btns'].includes(model_type)">
             <template v-if="['radio-btns', 'select'].includes(form.type)">
                 <div class="flex-col gap-10">
-                    <el-select ref="selectRef" v-model="form_value" multiple :multiple-limit="1" filterable placeholder="" class="multicolour-select flex-1 border-focus" :style="frame_style + style_container" @change="select_change">
+                    <el-select ref="selectRef" v-model="form_value" multiple :multiple-limit="1" filterable placeholder="" popper-class="multicolour-select" class="flex-1 border-focus" :style="frame_style + style_container" @change="select_change">
                         <el-option v-for="item in form.option_list" :key="item.value" :value="item.value" :label="item.name" :class="['flex-row align-c select-option' , { 'selected-bg': form_value.includes(item.value) && form.multicolour == '1', 'selected-color': form_value.includes(item.value) && form.multicolour !== '1' }]" @click="select_click(item.value)"><div :style="option_style(item)">{{ item.name }}</div></el-option>
                         <template #tag>
                             <template v-if="isEmpty(form_value)">
@@ -69,7 +69,7 @@
                     <el-input v-model="input_value" class="search-select-input" placeholder="搜索(多个关键字用空格隔开)" :prefix-icon="Search" size="large" />
                 </template>
                 <el-checkbox v-model="selectAll" :indeterminate="indeterminate" class="pl-20" @change="handleCheckAllChange">{{ !isEmpty(input_value) ? '搜索结果全选' : '全选' }}</el-checkbox>
-                <el-checkbox-group :model-value="form_value" @change="data_check(true, 'checkbox')">
+                <el-checkbox-group :model-value="form_value" class="select-multi-checkbox flex-col gap-10" @change="data_check(true, 'checkbox')">
                     <el-option v-for="item in new_option_list" :key="item.value" :value="item.value" :label="item.name">
                         <el-checkbox :value="item.value" :label="item.name"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>
                     </el-option>
@@ -271,6 +271,7 @@ const data_check = (is_format: boolean = false, type: string = '') => {
 };
 const select_change = (val: any) => {
     form_value.value = Array.isArray(val) ? val[0] : val;
+    emit('data_check', { is_format: false, type: 'select' });
 }
 // 关闭下拉框
 const selectRef = ref<InstanceType<typeof ElSelect> | null>(null);
@@ -532,6 +533,9 @@ const frame_style = computed(() => common_store.frame_style + `max-width:100%;wi
         .el-select__selection {
             flex-wrap: nowrap;
             overflow: hidden;
+        }
+        .el-select__selection.is-near {
+            margin-left: 0;
         }
         .el-select__suffix {
             padding-left: 0.2rem;

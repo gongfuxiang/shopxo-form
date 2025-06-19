@@ -321,3 +321,20 @@ p {
         width: 6.8rem;
     }
 }
+
+.select-multi-checkbox {
+    .el-select-dropdown__item {
+        height: 100%;
+        .el-checkbox {
+            height: 100%;
+        }
+    }
+}
+
+.multicolour-select {
+    .el-select-dropdown__list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

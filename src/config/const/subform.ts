@@ -3,6 +3,7 @@ import defaultCommon from './index';
 interface DefaultText {
     title: string;
     form_value: any[];
+    form_error_list: any[];
     children: any;
     subform_type: string;
     computer: {
@@ -24,6 +25,7 @@ const defaultText: DefaultText = {
     title: '子表单',
     form_value: [{}],
     children: [],
+    form_error_list: [],
     com_width: 150,
     com_height: 66,
     subform_type: 'computer',

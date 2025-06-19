@@ -28,19 +28,15 @@
                 <div class="table-body">
                     <!-- <el-checkbox-group :model-value="selected_list" class="flex-1 flex-col selected-checkbox" @change="checkbox_change"> -->
                     <div class="flex-1 flex-col">
-                        <div v-for="(item, index) in form.form_value" :key="index + get_math()" class="table-row flex-row">
+                        <div v-for="(item, index) in form.form_value" :key="index" class="table-row flex-row">
                             <div class="cell-num flex-row align-c jc-c shrink re" :style="left_sticky(0)">
                                 <template v-if="is_remove_selected && selected_list.length > 0">
                                     <el-checkbox v-model="selected_list[index]" :value="index" />
                                 </template>
                                 <template v-else>
                                     <div class="row-num flex-row align-c jc-c">
-                                        <template v-if="isEmpty(line_error(index))">
-                                            {{ index + 1 }}
-                                        </template>
-                                        <template v-else>
-                                            <div class="error-icon">!</div>
-                                        </template>
+                                        <template v-if="isEmpty(line_error(index))">{{ index + 1 }}</template>
+                                        <template v-else><div class="error-icon">!</div></template>
                                     </div>
                                     <el-tooltip effect="dark" :show-after="200" :hide-after="200" :content="line_error(index)" :disabled="isEmpty(line_error(index))" popper-class="custom-error-tooltip" :show-arrow="false" raw-content placement="top-start">
                                         <div class="operate flex-row align-c jc-c gap-5">
@@ -89,7 +85,7 @@
 <script lang="ts" setup>
 import { cloneDeep, isEmpty } from "lodash";
 import { commonStore } from "@/store";
-import { checkbox_range_handle, get_format_checks_v2, get_math, number_range_handle } from "@/utils";
+import { checkbox_range_handle, get_format_checks, get_format_checks_v2, get_math, number_range_handle } from "@/utils";
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -113,7 +109,6 @@ const form = ref(props.value);
 watch(() => props.value, (val) => {
     form.value = val;
 }, {immediate: true, deep: true});
-const form_error_list = ref<any[]>([]);
 //#region 判断列是否显示，或者某一行的某一个是否显示
 interface DiyItem {
     id: number | string;
@@ -181,26 +176,26 @@ watch(() => form.value.form_value, (val) => {
     if (props.isPreview) {
         if (val.length > 0) {
             val.forEach((item: any, index: number) => {
-                if (isEmpty(form_error_list.value[index])) {
+                if (isEmpty(form.value.form_error_list[index])) {
                     const data: any = {};
                     children.value.forEach((item1: any) => {
                         if (isEmpty(item[item1.id])) {
                             data[item1.id] = { common_config: { is_error: '0', error_text: ''} };
                         }
                     });
-                    form_error_list.value[index] = data;
+                    form.value.form_error_list[index] = data;
                 }
             });
         } else {
-            form_error_list.value = [];
+            form.value.form_error_list = [];
         }
     }
 }, {immediate: true, deep: true});
 
 const error_list = computed(() => { 
     return (index: number, id: string) => {
-        if (!isEmpty(form_error_list.value[index]) && !isEmpty(form_error_list.value[index][id])) {
-            const data = form_error_list.value[index][id];
+        if (!isEmpty(form.value.form_error_list[index]) && !isEmpty(form.value.form_error_list[index][id])) {
+            const data = form.value.form_error_list[index][id];
             return [data.common_config.is_error, data.common_config.error_text];
         } else {
             return ['0', '']
@@ -304,7 +299,7 @@ watch(() => form.value.form_value, (new_val) => {
 
 const data_check = (object: any, index: number, id: string, com_data: any) => {
     if (props.isPreview) {
-        const data = form_error_list.value[index][id];
+        const data = form.value.form_error_list[index][id];
         const form_value = form.value.form_value[index][id];
         if (isEmpty(data)) {
             return 
@@ -313,7 +308,7 @@ const data_check = (object: any, index: number, id: string, com_data: any) => {
         if (com_data.is_required == '1' && isEmpty(form_value)) {
             // 是否报错显示
             data.common_config.is_error = '1';
-            data.common_config.error_text = '此项为必填项';
+            data.common_config.error_text = `此项为${['select', 'checkbox', 'upload', 'time', 'address', 'score', 'radio'].includes(object.type) ? '必选' : '必填'}项`;
         } else {
             // 否就清除报错显示
             data.common_config.is_error = '0';
@@ -340,8 +335,8 @@ const line_error = computed(() => {
         let text = '';
         for (let i = 0; i < children.value.length; i++) {
             const item = children.value[i];
-            if (form_error_list.value[index]) {
-                const err_list = form_error_list.value[index][item.id] || {};
+            if (form.value.form_error_list.length > 0 && form.value.form_error_list[index]) {
+                const err_list = form.value.form_error_list[index][item.id] || {};
                 // 如果当前行有错误
                 if (err_list && err_list.common_config && err_list.common_config.is_error == '1') {
                     if (err_list.common_config.error_text == '此项为必填项') {
@@ -371,8 +366,8 @@ const set_drawer_data = (index: number) => {
     const data = cloneDeep(form.value.children);
     data.forEach((item: any) => {
         if (props.isPreview) {
-            if (form_error_list.value[index] && !isEmpty(form_error_list.value[index][item.id])) {
-                const error = form_error_list.value[index][item.id];
+            if (form.value.form_error_list[index] && !isEmpty(form.value.form_error_list[index][item.id])) {
+                const error = form.value.form_error_list[index][item.id];
                 item.com_data.common_config.is_error = error.common_config.is_error;
                 item.com_data.common_config.error_text = error.common_config.error_text;
             }
@@ -418,7 +413,7 @@ const drawer_change = (data: any) => {
     form.value.form_value[index] = new_data;
     if (props.isPreview) {
         data.forEach((item: any) => {
-            const err_list = form_error_list.value[index];
+            const err_list = form.value.form_error_list[index];
             if (err_list && err_list[item.id]) {
                 err_list[item.id].common_config.is_error = item.com_data.common_config.is_error;
                 err_list[item.id].common_config.error_text = item.com_data.common_config.error_text;
