@@ -290,6 +290,7 @@ const handlePhoneValidation = (com_data: any) => {
     com_data.common_config.format = com_data.is_telephone === '1' ? 'telephone-number' : 'phone-number';
     get_format_checks(com_data, true);
 };
+// 子表单显隐规则数据处理
 const filtered_Data = (children: any[], form_value: any[], type: string, index?: number) => { 
     const componentMap = new Map(children.map((item: any) => [item.id, item])) as any;
 
@@ -330,6 +331,7 @@ const filtered_Data = (children: any[], form_value: any[], type: string, index?:
         return isShownByRule;
     });
 };
+// 子表单内部校验逻辑
 const subform_data_check = (is_format: boolean, type: string, index: number, id: string, com_data: any, form_error_list: any[], value: any[]) => {
     const data = form_error_list[index][id];
     const form_value = value[index][id];
