@@ -1,6 +1,7 @@
 <template>
     <div class="form-name-style re">
-        <el-input v-model="name" placeholder="请输入标题" class="w-full" />
+        <!-- 使用 @input 事件进行输入校验 -->
+        <el-input v-model="name" placeholder="请输入标题" class="w-full" @input="validateInput" />
         <div v-if="old_name !== name" class="form-name-button">
             <el-button type="primary" class="name-button" @click="submit">确定</el-button>
         </div>
@@ -41,12 +42,22 @@ watch(() => props.value, () => {
 });
 const name = ref(cloneDeep(props.value));
 const emit = defineEmits(['name_change']);
+
+// 输入校验函数
+const validateInput = () => {
+    const regex = /^[a-zA-Z0-9_]*$/;
+    if (!regex.test(name.value)) {
+        // 若输入不合法，移除非法字符
+        name.value = name.value.replace(/[^a-zA-Z0-9_]/g, '');
+    }
+};
+
 const submit = () => {
     // 取出不是当前数据的内容
     const old_diy_data = show_hidden_operate_list.value.filter((item:any) => item.id !== props.modelId && item.form_name == name.value);
     // 如果有重复的，提示用户
     if (old_diy_data.length > 0) {
-        ElMessage.error('标题重复，请重新输入');
+        ElMessage.error('FROM名称重复，请重新输入');
         name.value = cloneDeep(old_name.value);
         return;
     } else {

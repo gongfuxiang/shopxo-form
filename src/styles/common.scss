@@ -483,6 +483,12 @@
             border-bottom-right-radius: 1.2rem;
             overflow: hidden;
             padding: 2.2rem 2rem;
+            .el-button { 
+                width: 8.8rem;
+            }
+            .el-button+.el-button {
+                margin-left: 0;
+            }
         }
     }
     .component-style {

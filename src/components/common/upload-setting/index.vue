@@ -2,7 +2,7 @@
 	<div class="custom-upload-container">
 		<!-- 文件上传区域 -->
 		<el-upload v-model:file-list="success_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="flex-row align-c jc-c bg-f" :style="uploadStyle" :show-file-list="false" drag :on-change="upload_change" :limit="is_number(limit) ? Number(limit) : 500000" :on-exceed="handle_exceed">
-			<div class="el-upload__text text-line-1" :style="common_store.frame_size"><span style="color: #2A94FF;">请选择</span>（拖拽或单击后选择{{ props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件' }}<template v-if="is_number(fileSizeLimit)">，单个{{ fileSizeLimit }}Mb以内</template>）</div>
+			<div class="el-upload__text text-line-1" :style="common_store.frame_size"><span style="color: #2A94FF;">请选择</span>（拖拽或单击后选择{{ props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件' }}<template v-if="is_number(fileSizeLimit)">，单个{{ fileSizeLimit }}MB以内</template>）</div>
 		</el-upload>
 		<div v-if="success_list.length > 0" class="w h mt-14 flex-row align-c flex-wrap gap-10" :style="common_store.frame_style + 'height: 100%;'">
 			<div v-for="(item, index) in success_list" :key="index">
@@ -78,7 +78,7 @@ import UploadAPI, { Tree } from '@/api/upload';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadFile, UploadFiles, UploadUserFile } from 'element-plus'
 import { ext_img_name_list, ext_video_name_list, ext_file_name_list, ext_file_name_list_map } from '@/components/common/upload/index'
-import { annex_size_to_unit, ext_name, get_math, isEmpty, is_number } from '@/utils';
+import { annex_size_to_unit, ext_name, get_id, get_math, isEmpty, is_number } from '@/utils';
 import { cloneDeep } from "lodash";
 import { commonStore } from "@/store";
 const common_store = commonStore();
@@ -179,6 +179,7 @@ const upload_change = (uploadFile: UploadFile, uploadFiles: UploadFiles) => {
 		const formData = new FormData();
 		formData.append('type', props.acceptType == 'img' ? 'image' : props.acceptType == 'video' ? 'video' : props.acceptType == 'file' ? 'file' : '');
 		formData.append('category_id', '[]');
+		formData.append('path_type', 'forminputdata-' + get_id());
 		formData.append('upfile', item.raw);
 		item.url = !isEmpty(item.url) ? item.url : file_to_base64(item.raw);
 		if (item.status == 'ready') {

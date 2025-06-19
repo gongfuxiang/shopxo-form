@@ -6,7 +6,7 @@
         <Editor id="editor-container" ref="editorRef" v-model="html_value" class="editor" :default-config="editor_config" :mode="mode" @on-change="handle_change" @on-created="handle_created" />
     </div>
     <!-- 文件上传区域 -->
-    <el-upload v-model:file-list="file_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="upload-visiable" :limit="1" :show-file-list="false" drag :on-change="upload_change">
+    <el-upload v-model:file-list="file_list" action="#" :accept="exts_text" :auto-upload="false" class="upload-visiable" :limit="1" :show-file-list="false" drag :on-change="upload_change">
         <el-button ref="upload_type" type="primary">Click to upload</el-button>
     </el-upload>
 </template>

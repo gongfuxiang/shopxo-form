@@ -36,7 +36,7 @@ const props = defineProps({
 const form = computed(() => props.value);
 const video_src = ref(common_store.common.config.attachment_host + `/static/diy/images/components/model-video/video.png`);
 const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
-const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:2px;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:4px;' : '');
 
 const video_style = computed(() => {
     if (!props.isCustom) {

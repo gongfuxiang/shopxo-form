@@ -27,7 +27,7 @@ import { layout_settings, style_settings } from '@/utils/common';
 import CommonAPI from '@/api/common';
 import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
 import { commonStore } from '@/store';
-import { get_cookie, is_obj, set_cookie } from '@/utils';
+import { get_cookie, get_id, is_obj, set_cookie } from '@/utils';
 const common_store = commonStore();
 const form = ref<form_data_item>({
     id: '',
@@ -159,21 +159,6 @@ const loading_event = () => {
     setTimeout(() => {
         loading.value = false;
     }, 1000);
-};
-// 截取document.location.search字符串内id/后面的所有字段
-const get_id = () => {
-    let new_id = '';
-    if (document.location.search.indexOf('id/') != -1) {
-        new_id = document.location.search.substring(document.location.search.indexOf('id/') + 3);
-        // 去除字符串的.html
-        let html_index = new_id.indexOf('.html');
-        if (html_index != -1) {
-            new_id = new_id.substring(0, html_index);
-        }
-        return new_id;
-    } else {
-        return new_id;
-    }
 };
 // 将内容传递给子组件, 避免多次传递
 provide('diy_data', computed(() => form.value.diy_data));

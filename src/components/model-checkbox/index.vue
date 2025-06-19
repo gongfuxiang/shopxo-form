@@ -103,7 +103,7 @@ const data_check = () => {
 };
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
 const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'checkbox' ? 'align-items:flex-start;' : '');
-const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'checkbox'? 'margin-top:2px;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' && form.value.type == 'checkbox'? 'margin-top:4px;' : '');
 // #region 添加选项相关
 type popoverForm = {
     popover_option: string;

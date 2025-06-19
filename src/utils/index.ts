@@ -936,3 +936,19 @@ export const get_container_location = (list: Item[], id: string, type: 'left' | 
     // 返回更新后的坐标
     return { x, y };
 }
+
+// 截取document.location.search字符串内id/后面的所有字段
+export const get_id = () => {
+    let new_id = '';
+    if (document.location.search.indexOf('id/') != -1) {
+        new_id = document.location.search.substring(document.location.search.indexOf('id/') + 3);
+        // 去除字符串的.html
+        let html_index = new_id.indexOf('.html');
+        if (html_index != -1) {
+            new_id = new_id.substring(0, html_index);
+        }
+        return new_id;
+    } else {
+        return new_id;
+    }
+};

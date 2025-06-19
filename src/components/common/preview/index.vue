@@ -163,10 +163,11 @@ const filteredDiyData = computed(() => {
 //#region 表单操作逻辑
 // 保存草稿
 const save_draft = () => {
-    ElMessage.warning('当前状态下不支持该操作');
+    // ElMessage.warning('当前状态下不支持该操作');
 };
 const submit = () => {
-    ElMessage.warning('当前状态下不支持该操作');
+    // ElMessage.warning('当前状态下不支持该操作');
+    
 }
 //#endregion
 // 配置信息，区分是手机端数据还是电脑端数据
