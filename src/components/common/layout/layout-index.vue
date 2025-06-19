@@ -20,7 +20,7 @@
                                 <layout-top v-if="configType !== 'layout'" v-model="type_value" ></layout-top>
                                 <div class="re bg-f main-content plug-in-disable" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
                                     <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index) : -999};`">
-                                        <component-show :value="item" :is-custom="true"></component-show>
+                                        <component-show :value="item" :is-custom="true" :is-show="true"></component-show>
                                     </div>
                                 </div>
                             </div>
@@ -30,7 +30,7 @@
                                 <layout-top v-if="configType !== 'layout'" v-model="type_value" ></layout-top>
                                 <div class="pa-16">
                                     <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
-                                        <component-show :value="item"></component-show>
+                                        <component-show :value="item" :is-show="true"></component-show>
                                     </div>
                                 </div>
                             </div>

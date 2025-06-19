@@ -147,9 +147,11 @@ const url_computer = (name: string) => {
 
 // 复制
 const clone_item_com_data = (item: commonComponentData) => {
+    const new_id = get_math();
     return {
         name: item.name,
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
         mark_name: '',
         location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
         show_tabs: '1',
@@ -165,9 +167,11 @@ const clone_item_com_data = (item: commonComponentData) => {
 //#region 拖拽组件的公共方法
 // 点击添加tabs组件
 const draggable_click = (item: componentsData) => {
+    const new_id = get_math();
     const new_item = {
         name: item.name,
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
         mark_name: '',
         location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
         show_tabs: '1',
@@ -223,9 +227,11 @@ const on_del = (index: number) => {
 // 复制
 const on_copy = (index: number) => {
     // 获取当前数据, 复制的时候id更换一下
+    const new_id = get_math();
     const new_data = {
         ...cloneDeep(get_diy_index_data(index)),
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
     };
     // 在当前位置下插入数据
     diy_data.value.splice(index, 0, new_data);

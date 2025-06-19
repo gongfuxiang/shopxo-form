@@ -3,9 +3,15 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb w h"><div class="flex-row">标题<span class="required">*</span></div>
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">FROM名称<span class="required">*</span></div>
                     <component-switch-select v-model="form.type" :option-list="form_type_option.filter(item => (isSubform && item.value !== 'radio-btns') || !isSubform)" @dropdown_click="dropdown_click"/>
                 </div>
+                <form-name :value="all_form_value.form_name" :model-id="all_form_value.id" :is-subform="isSubform" :subform-list="subformList" @name_change="name_change"></form-name>
+            </div>
+        </el-form-item>
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title flex-row align-c jc-sb w h"><div class="flex-row">标题<span class="required">*</span></div></div>
                 <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
@@ -81,7 +87,7 @@
         <template v-if="isSubform">
             <subform-width v-model="form.com_width"></subform-width>
         </template>
-        <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :is-subform="isSubform" :subform-data="subformList" :model-id="modelId" @submit="submit"></show-hidden>
+        <show-hidden v-model:visible="dialog_visible" :option-list="form.option_list" :show-list="form.show_hidden_list" :is-subform="isSubform" :subform-data="subformList" :model-id="all_form_value.id" @submit="submit"></show-hidden>
     </el-form>
 </template>
 <script setup lang="ts">
@@ -92,10 +98,6 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    modelId: {
-        type: String,
-        default: '',
-    },
     isSubform: {
         type: Boolean,
         default: false,
@@ -103,8 +105,13 @@ const props = defineProps({
     subformList: {
         type: Array,
         default: () => ([]),
+    },
+    allValue: {
+        type: Object,
+        default: () => {},
     }
 });
+const all_form_value = ref(props.allValue);
 const form = ref(props.value);
 //#region 标题更新时的修改
 const old_title = ref(cloneDeep(form.value.title));
@@ -183,6 +190,9 @@ const open_dialog = () => {
 const submit = (val: any) => {
     form.value.show_hidden_list = val;
 };
+const name_change = (val: string) => {
+    all_form_value.value.form_name = val;
+}
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {
     emit('operation_end');

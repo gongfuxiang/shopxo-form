@@ -225,11 +225,13 @@ let draggedItem = ref<any>({});
 const draggable_click = (item: componentsData) => {
     const new_x = get_random_number();
     const new_y = get_random_number();
+    const new_id = get_math();
     const new_item = {
         name: item.name,
         key: item.key,
         mark_name: '',
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
         location: { x: new_x, y: new_y, record_x: new_x, record_y: new_y, staging_y: new_y },
         show_tabs: '1',
         is_enable: '1',
@@ -246,11 +248,13 @@ function get_random_number() {
 }
 // 拖拽开始
 const dragStart = (item: any, event: any) => {
+    const new_id = get_math();
     // 初始化拖拽的数据
     draggedItem.value = {
         name: item.name,
         key: item.key,
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
         mark_name: '',
         location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
         show_tabs: '1',
@@ -620,11 +624,13 @@ const on_copy = (index: number) => {
         // 使用新函数调整位置
         // const { x: adjustedX, y: adjustedY } = adjustPosition(location_x, location_y, data.com_data.com_width, data.com_data.com_height, center_width.value, center_height.value);
         // 获取当前数据, 复制的时候id更换一下
+        const new_id = get_math();
         const new_data = {
             ...data,
             location: { x: location_x, y: new_y, record_x: location_x, record_y: new_y, staging_y: new_y },
             // new_name: data.name + list.length, // 添加别名, 复制是在原有的基础上复制，所以必须要不需要判断是否存在历史的
-            id: get_math(),
+            id: new_id,
+            form_name: new_id,
         };
         // 在当前位置下插入数据
         diy_data.value.splice(index, 0, new_data);

@@ -44,7 +44,6 @@
 <script lang="ts" setup>
 import { Search } from '@element-plus/icons-vue'
 import { isEmpty, cloneDeep } from "lodash";
-import SubformWidth from '../subform-handle/subform-width.vue';
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
 

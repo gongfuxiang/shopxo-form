@@ -3,7 +3,13 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
-                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div><div class="new_desc">密码</div></div>
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">FROM名称<span class="required">*</span></div><div class="new_desc">评分</div></div>
+                <form-name :value="all_form_value.form_name" :model-id="all_form_value.id" :is-subform="isSubform" :subform-list="subformList" @name_change="name_change"></form-name>
+            </div>
+        </el-form-item>
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div></div>
                 <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
             </div>
         </el-form-item>
@@ -61,15 +67,20 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-    modelId: {
-        type: String,
-        default: '',
-    },
     isSubform: {
         type: Boolean,
         default: false,
     },
+    subformList: {
+        type: Array,
+        default: () => ([]),
+    },
+    allValue: {
+        type: Object,
+        default: () => {},
+    }
 });
+const all_form_value = ref(props.allValue);
 const form = ref(props.value);// 判断配置项是否有误
 
 //#region 标题更新时的修改
@@ -104,6 +115,10 @@ const title_change = () => {
         }
     }
 };
+
+const name_change = (val: string) => {
+    all_form_value.value.form_name = val;
+}
 
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

@@ -58,6 +58,7 @@ declare module 'vue' {
     ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FormError: typeof import('./../components/common/form-error/index.vue')['default']
+    FormName: typeof import('./../components/common/form-name/index.vue')['default']
     FormTitle: typeof import('./../components/common/form-title/index.vue')['default']
     FormUploadCategory: typeof import('./../components/common/upload/form-upload-category.vue')['default']
     HelpConfig: typeof import('./../components/common/help-config/index.vue')['default']

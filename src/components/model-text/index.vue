@@ -4,7 +4,7 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="oh text-word-break" :style="frame_style + 'width:100%;height: 100%;color: ' + form.text_color">
-                    {{ isEmpty(form.form_value) ? '请输入文本' : form.form_value }}
+                    {{ isEmpty(form.form_value) ? isShow ? '没有内容' : '请输入文本' : form.form_value }}
                 </div>
             </div>
         </div>
@@ -21,6 +21,10 @@ const props = defineProps({
         default: () => ({}),
     },
     isCustom: {
+        type: Boolean,
+        default: false,
+    },
+    isShow: {
         type: Boolean,
         default: false,
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area w h">
-        <div class="form-group w h" :style="common_store.layout_style">
-            <form-title v-if="!isCustom" :value="props.value"></form-title>
+        <div class="form-group w h" :style="common_store.layout_style + layout_style">
+            <form-title v-if="!isCustom" :value="props.value" :style="title_style"></form-title>
             <div class="content w h">
                 <div class="re oh" :style="video_style">
                     <video v-show="is_video_play" ref="videoPlayer" :src="form.video[0]?.url || ''" controls class="w h"></video>
@@ -35,6 +35,8 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const video_src = ref(common_store.common.config.attachment_host + `/static/diy/images/components/model-video/video.png`);
+const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:2px;' : '');
 
 const video_style = computed(() => {
     if (!props.isCustom) {
@@ -54,10 +56,12 @@ const video_style = computed(() => {
 const videoPlayer = ref<HTMLVideoElement | null>(null);
 const is_video_play = ref(false);
 const video_change = () => { 
-    const videoEl = videoPlayer.value;
-    if (videoEl) {
-        is_video_play.value = true;
-        videoEl.play();
+    if (!isEmpty(form.value.video[0].url)) {
+        const videoEl = videoPlayer.value;
+        if (videoEl) {
+            is_video_play.value = true;
+            videoEl.play();
+        }
     }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area w h">
-        <div class="form-group w h" :style="common_store.layout_style">
-            <form-title v-if="!isCustom" :value="props.value"></form-title>
+        <div class="form-group w h" :style="common_store.layout_style + layout_style">
+            <form-title v-if="!isCustom" :value="props.value" :style="title_style"></form-title>
             <div class="content w h">
                 <image-empty v-model="form.img_src[0]" :style="img_style"></image-empty>
             </div>
@@ -22,6 +22,8 @@ const props = defineProps({
     }
 });
 const form = computed(() => props.value);
+const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
+const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:2px;' : '');
 
 const img_style = computed(() => {
     if (!props.isCustom) {

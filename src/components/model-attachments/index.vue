@@ -18,7 +18,7 @@
                     </div>
                 </template>
                 <template v-else>
-                    <span class="file-title">暂无文件</span>
+                    <span class="file-title" :style="common_store.frame_style + 'width:100%;height:100%'">暂无文件</span>
                 </template>
             </div>
         </div>
@@ -70,7 +70,7 @@ const download = (name: string, url: string) => {
 .file-title {
     font-weight: 400;
     font-size: 1.2rem;
-    color: #333333;
+    color: #666666;
     line-height: 1.7rem;
     font-style: normal;
 }

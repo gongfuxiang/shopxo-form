@@ -4,7 +4,7 @@
             <form-title :value="props.value"></form-title>
             <div class="content w">
                 <div class="flex-col gap-10 align-c" :style="frame_style + 'height: 100%;'">
-                    <el-cascader v-model="form.form_value" :options="common_store.address_list" class="border-focus" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check" />
+                    <el-cascader v-model="form.form_value" :options="common_store.address_list" :class="`border-focus ${ frame_class }`" :style="frame_style + style_container" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="data_check" />
                     <template v-if="form.address_type == 'detailed'">
                         <el-input v-model="form.detailed_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height:100%;'" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入详细地址"></el-input>
                     </template>
@@ -26,11 +26,20 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false,
-    }
+    },
 });
 
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
-
+const frame_class = computed(() => {
+    const title_size_type = common_store.form_layout?.computer?.filed_title_size_type || 'small';
+    if (title_size_type == 'big') {
+        return 'cascader_big';
+    } else if (title_size_type == 'middle') {
+        return 'cascader_middle';
+    } else {
+        return 'cascader_small';
+    }
+});
 const form = computed(() => props.value);
 const data_check = () => {
     get_format_checks(form.value, false, 'address');

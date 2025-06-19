@@ -61,7 +61,7 @@
     </template>
     <!-- 文本 -->
     <template v-if="form.key == 'text'">
-        <model-text :value="form.com_data" :is-custom="isCustom"></model-text>
+        <model-text :value="form.com_data" :is-custom="isCustom" :is-show="isShow"></model-text>
     </template>
     <!-- 图片 -->
     <template v-if="form.key == 'img'">
@@ -92,6 +92,10 @@ const props = defineProps({
         default: false,
     },
     isPreview: {
+        type: Boolean,
+        default: false,
+    },
+    isShow: {
         type: Boolean,
         default: false,
     }
