@@ -18,6 +18,16 @@
             <div class="nav-tabs">表单发布</div>
         </div>
         <div class="nav-right">
+            <el-dropdown @visible-change="visible_change">
+                <el-button plain type="primary" class="nav-right-dropdown-button"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
+                <template #dropdown>
+                    <el-dropdown-menu>
+                    <el-dropdown-item @click="import_click">导入</el-dropdown-item>
+                    <el-dropdown-item @click="export_click">导出</el-dropdown-item>
+                    <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
+                    </el-dropdown-menu>
+                </template>
+            </el-dropdown>
             <el-button plain type="primary" @click="form_config_event">表单配置</el-button>
             <el-button plain type="primary" @click="preview_event">预览</el-button>
             <el-button plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">仅保存</el-button>
@@ -90,7 +100,7 @@ const rules = reactive<FormRules>({
 });
 // #endregion 变量 --------------------end
 
-const emit = defineEmits(['formConfig', 'preview', 'save', 'saveClose']);
+const emit = defineEmits(['formConfig', 'preview', 'save', 'saveClose', 'export', 'import', 'clear']);
 
 // * 点击表单配置时的事件处理函数。
 const form_config_event = () => {
@@ -124,6 +134,24 @@ const confirm_event = async (formEl: FormInstance | undefined) => {
         // }
     });
 };
+//#region 导出导入清空 --------------------start
+const is_dropdown_show = ref(false);
+const visible_change = (val: boolean) => {
+    is_dropdown_show.value = val;
+}
+//导出
+const export_click = () => {
+    emit('export');
+};
+// 导入
+const import_click = () => {
+    emit('import');
+};
+// 清空列表
+const clear_click = () => {
+    emit('clear');
+};
+//#endregion
 </script>
 <style lang="scss" scoped>
 .navbar {
@@ -175,6 +203,14 @@ const confirm_event = async (formEl: FormInstance | undefined) => {
     }
     .el-button--primary.is-plain {
         --el-button-bg-color: #fff;
+    }
+    .nav-right-dropdown-button {
+        .iconfont {
+            color: $cr-main;
+        }
+        &:hover .iconfont {
+            color: #fff;
+        }
     }
 }
 </style>

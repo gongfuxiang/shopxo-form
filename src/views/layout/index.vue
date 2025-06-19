@@ -2,7 +2,7 @@
     <div v-loading.fullscreen.lock="loading" element-loading-background="rgba(255,255,255,1)" element-loading-custom-class="loading-custom" class="layout">
         <template v-if="!loading_content">
             <template v-if="!is_empty">
-                <navbar v-model="form.model" :save-disabled="save_disabled" @form-config="form_config_event" @preview="preview_event" @save="save_event" @save-close="save_close_event"/>
+                <navbar v-model="form.model" :save-disabled="save_disabled" @form-config="form_config_event" @preview="preview_event" @save="save_event" @save-close="save_close_event" @export="export_data_event" @import="import_data_event" @clear="clear_event" />
                 <div class="content flex-1 flex-row">
                     <div v-if="form.overall_config.type_value == 'default'" class="flex-1 main-style">
                         <mains :diy-data="form.diy_data" @update-setting="update_setting"></mains>
@@ -18,6 +18,7 @@
             </template>
         </template>
         <preview :key="previewKey" v-model:visible="previewVisible" :value="form.diy_data"></preview>
+        <template-import v-model="import_temp_visible_dialog" @confirm="handleImportConfirm"></template-import>
     </div>
 </template>
 
@@ -29,6 +30,7 @@ import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form';
 import { commonStore } from '@/store';
 import { get_cookie, get_id, is_obj, set_cookie } from '@/utils';
 const common_store = commonStore();
+const app = getCurrentInstance();
 const form = ref<form_data_item>({
     id: '',
     model: {
@@ -175,7 +177,7 @@ const previewVisible = ref(false);
 const previewKey = ref('');
 const preview_event = () => {
     save_disabled.value = true;
-    save_formmat_form_data(form.value, false, true);
+    save_formmat_form_data(form.value, false, false, true);
 }
 // 模式切换的时候清空缓存数据
 const type_change = () => {
@@ -193,8 +195,26 @@ const save_close_event = () => {
     save_disabled.value = true;
     save_formmat_form_data(form.value);
 }
+const export_data_event = () => {
+    save_formmat_form_data(form.value, false, true);
+}
+const import_temp_visible_dialog = ref(false);
+// 导入数据
+const import_data_event = () => {
+    import_temp_visible_dialog.value = true;
+};
+const handleImportConfirm = () => {
+    // 导入成功
+    init();
+};
+const clear_event = () => {
+    app?.appContext.config.globalProperties.$common.message_box('清空后不可恢复，确定继续吗?', 'warning').then(() => {
+        diy_data_item.value = {};
+        form.value.diy_data = [];
+    });
+}
 // save_formmat_form_data: 保存数据， data： 数据， close： 是否关闭， is_export： 是否导出， is_preview： 是否预览
-const save_formmat_form_data = (data: form_data_item, close: boolean = false, is_preview: boolean = false) => {
+const save_formmat_form_data = (data: form_data_item, close: boolean = false, is_export: boolean = false, is_preview: boolean = false) => {
     ElMessage({
         message: '保存中',
         type: 'success',
@@ -213,8 +233,8 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
             }, 500);
             ElMessage.closeAll();
             setTimeout(() => {
-            // 如果是导出或预览模式，则不显示保存成功的消息
-                if (!is_preview) {
+                // 如果是导出或预览模式，则不显示保存成功的消息
+                if (!(is_export || is_preview)) {
                     ElMessage.success('保存成功');
                 }
             }, 100);
@@ -226,6 +246,13 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                     })
                     .catch(() => {});
             } else {
+                 // 判断是否需要导出
+                 if (is_export) {
+                    const index = window.location.href.lastIndexOf('?s=');
+                    const pro_url = window.location.href.substring(0, index);
+                    const new_url = import.meta.env.VITE_APP_BASE_API == '/dev-api' ? import.meta.env.VITE_APP_BASE_API_URL : pro_url;
+                    window.open(new_url + '?s=forminputapi/forminputdownload/id/' + res.data + '.html', '_blank');
+                }
                 if (is_preview) {
                     previewVisible.value = true;
                 }
