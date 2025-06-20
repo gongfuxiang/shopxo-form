@@ -42,11 +42,11 @@
                                         <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="10"/>
                                     </div>
                                     <span class="divider"></span>
-                                    <div class="icon" @click="on_del(index)">
+                                    <div class="icon" @click.stop="on_del(index)">
                                         <icon name="del" size="10"></icon>
                                     </div>
                                     <span class="divider"></span>
-                                    <div class="icon" @click="on_copy(index)">
+                                    <div class="icon" @click.stop="on_copy(index)">
                                         <icon name="copy" size="10"></icon>
                                     </div>
                                 </div>
@@ -234,7 +234,7 @@ const on_copy = (index: number) => {
         form_name: new_id,
     };
     // 在当前位置下插入数据
-    diy_data.value.splice(index, 0, new_data);
+    diy_data.value.splice(index + 1, 0, new_data);
     set_show_tabs(index + 1);
 };
 // 获取当前传递过来的index对应的diy_data中的数据

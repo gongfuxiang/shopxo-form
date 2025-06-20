@@ -6,11 +6,11 @@
                     <icon :name="`${item.is_enable == '1' ? 'eye' : 'eye-close'}`" size="14"/>
                 </div>
                 <span class="divider"></span>
-                <div class="icon" @click="on_del(index)">
+                <div class="icon" @click.stop="on_del(index)">
                     <icon name="del" size="14"></icon>
                 </div>
                 <span class="divider"></span>
-                <div class="icon" @click="on_copy(index)">
+                <div class="icon" @click.stop="on_copy(index)">
                     <icon name="copy" size="14"></icon>
                 </div>
             </div>
