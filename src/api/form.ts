@@ -78,7 +78,10 @@ export interface formConfig {
         custom_width: number,
         custom_height: number,
         is_style_settings: string;
-        style_settings: object, 
+        style_settings: {
+            computer: object,
+            mobile: object
+        }, 
         is_front_end_cache: string,
         is_show_submit: string,
         submit_title: string,
@@ -105,7 +108,10 @@ export interface form_data_item {
         custom_width: number,
         custom_height: number,
         is_style_settings: string;
-        style_settings: object, 
+        style_settings: {
+            computer: object,
+            mobile: object
+        }, 
         is_front_end_cache: string,
         is_show_submit: string,
         submit_title: string,

@@ -24,11 +24,12 @@
 
 <script setup lang="ts">
 import { cloneDeep, isEmpty } from 'lodash';
-import { layout_settings, style_settings } from '@/utils/common';
+import { style_settings } from '@/utils/common';
 import CommonAPI from '@/api/common';
 import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
 import { commonStore } from '@/store';
 import { get_cookie, get_id, is_obj, set_cookie } from '@/utils';
+import defaultSettings from './index';
 const common_store = commonStore();
 const app = getCurrentInstance();
 const form = ref<form_data_item>({
@@ -105,7 +106,13 @@ const init = () => {
         ForminputAPI.getInit({ id: get_id() }).then((res: any) => {
             const new_data = res.data?.data || undefined;
             if (new_data) {
-                form.value = form_data_transfor_diy_data(new_data);
+                let data = form_data_transfor_diy_data(new_data);
+                // 配置信息
+                data.overall_config = Object.assign({}, cloneDeep(form.value.overall_config), data.overall_config);
+                data.overall_config.style_settings = overall_config_merge(data.overall_config.style_settings);
+                // 详细数据新增字段添加
+                data.diy_data = data_merge(data.diy_data);
+                form.value = data;
                 // 公共配置信息
                 common_store.set_form_layout(form.value.overall_config.style_settings);
                 common_store.set_config(form.value.overall_config);
@@ -123,7 +130,31 @@ const init = () => {
         loading_event();
     }
 };
-
+const data_merge = (list: string[]) => {
+    list.forEach((item: any) => {
+        item.com_data = default_merge(item.com_data, item.key);
+    });
+    return list;
+};
+// 浅层数据合并
+const default_merge = (data: any, key: string) => {
+    if (data) {
+        data = Object.assign({}, cloneDeep((defaultSettings as any)[key.replace(/-/g, '_')]), data);
+    } else {
+        data = cloneDeep((defaultSettings as any)[key.replace(/-/g, '_')]);
+    }
+    return data;
+};
+// 表单配置数据更新
+const overall_config_merge = (data: any) => {
+    if (data) {
+        data.computer = Object.assign({}, cloneDeep(form.value.overall_config.style_settings.computer), data.computer);
+        data.mobile = Object.assign({}, cloneDeep(form.value.overall_config.style_settings.mobile), data.mobile);
+    } else {
+        data = cloneDeep(form.value.overall_config.style_settings);
+    }
+    return data;
+};
 const form_data_transfor_diy_data = (clone_form: formData) => {
     let temp_config = clone_form.config;
     let new_tem_form = cloneDeep(form.value);
