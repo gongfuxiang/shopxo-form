@@ -306,6 +306,11 @@ const submit_data_parameter_handle = () => {
                                 data[`${ subform_name }_province_id`] = subform_value[0] || '';
                                 data[`${ subform_name }_city_id`] = subform_value[1] || '';
                                 data[`${ subform_name }_county_id`] = subform_value[2] || '';
+                                // 省市区中文名称
+                                const address_name = get_region_names_by_id(common_store.address_list, subform_value);
+                                submit_data[`${ name }_province_name`] = address_name[0] || '';
+                                submit_data[`${ name }_city_name`] = address_name[1] || ''
+                                submit_data[`${ name }_county_name`] = address_name[2] || ''
                             } else {
                                 data[subform_name] = subform_value;
                             }
@@ -314,15 +319,20 @@ const submit_data_parameter_handle = () => {
                     return data;
                 });
             } else if (item.key ==='phone') {
-                submit_data[`${ name }_phone`] = value || '';
+                submit_data[`${ name }`] = value || '';
                 // 判断是否需要发送短信验证码
                 if (com_data.is_sms_verification == '1') {
-                    submit_data[`${ name }_sms_code`] = com_data?.form_value_code || '';
+                    submit_data[`${ name }_verify`] = com_data?.form_value_code || '';
                 }
             } else if (item.key == 'address') {
                 submit_data[`${ name }_province_id`] = value[0] || '';
                 submit_data[`${ name }_city_id`] = value[1] || '';
                 submit_data[`${ name }_county_id`] = value[2] || '';
+                // 省市区中文名称
+                const address_name = get_region_names_by_id(common_store.address_list, value);
+                submit_data[`${ name }_province_name`] = address_name[0] || '';
+                submit_data[`${ name }_city_name`] = address_name[1] || ''
+                submit_data[`${ name }_county_name`] = address_name[2] || ''
                 // 判断类型是否包含详细地址
                 if (com_data.address_type == 'detailed') {
                     submit_data[`${ name }_address`] = com_data?.detailed_value || '';
@@ -339,6 +349,37 @@ const submit_data_parameter_handle = () => {
     formSaveAPI.dataSave(params).then((res: any) => {
         ElMessage.success('提交成功');
     })
+}
+
+interface RegionItem {
+  id: string | number;
+  name: string;
+  items?: RegionItem[];
+}
+
+/**
+ * 根据省市区ID数组获取对应的名称路径
+ * @param data 级联数据数组
+ * @param ids 要查找的ID数组 [省ID, 市ID, 区ID]
+ * @returns 包含省市区名称的数组，如果未找到则返回空数组
+ */
+const get_region_names_by_id = (data: RegionItem[], ids: (string | number)[]): string[] => {
+  if (!data || !ids || ids.length === 0) {
+    return [];
+  }
+
+  const result: string[] = [];
+  let currentData = data;
+  
+  for (const id of ids) {
+    const foundItem = currentData.find(item => item.id === id);
+    if (!foundItem) {
+      return [];
+    }
+    result.push(foundItem.name);
+    currentData = foundItem.items || [];
+  }
+  return result;
 }
 // 处理手机号验证逻辑
 const handlePhoneValidation = (com_data: any) => {

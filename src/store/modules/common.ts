@@ -96,6 +96,7 @@ export const commonStore = defineStore('common', () => {
     };
     const get_address = () => {
         CommonAPI.getAddress().then((res: any) => {
+            console.log(res.data);
             address_list.value = res.data;
         });
     };
