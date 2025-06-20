@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <upload-setting :value="form.form_value" :accept-type="acceptType" :file-size-limit="form.is_limit_size == '1' ? form.upload_size : ''" :limit="form.is_limit_num == '1' ? form.limit : ''" :upload-style="frame_style + style_container" @change="change" />
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>

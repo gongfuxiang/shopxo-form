@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <el-input v-model="form.form_value" :type="is_show ? 'password' : ''" class="border-focus" autocomplete="off" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                     <template #prefix>
                         <icon :name="form.icon_name" color="#999"></icon>

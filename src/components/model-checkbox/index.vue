@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style + layout_style">
             <form-title :value="props.value" :style="title_style"></form-title>
-            <div class="content w flex-col gap-10">
+            <div class="content w flex-1 flex-col gap-10">
                 <template v-if="form.type == 'checkbox'">
                     <el-checkbox-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]" @change="data_check">
                         <el-checkbox v-for="item in form.option_list" :key="item.value" :value="item.value"><div :style="option_style(item)">{{ item.name }}</div></el-checkbox>

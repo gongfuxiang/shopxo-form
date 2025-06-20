@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style + layout_style">
             <form-title :value="props.value" :style="title_style"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <editor-config v-model="form.form_value" :placeholder="form.placeholder" :new-style="frame_style + style_container"></editor-config>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>

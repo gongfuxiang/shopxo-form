@@ -24,13 +24,13 @@
                             </div>
                         </div>
                     </template>
-                    <div class="flex-col gap-10 w h">
+                    <!-- <div class="flex-col gap-10 w h">
                         <div class="new_title">布局设置</div>
                         <div class="flex-row jc-sb align-c gap-10 layout-style">
                             <div class="title">{{ form.is_layout_settings == '0' ? '未设置' : '已设置' }}</div>
                             <icon class="layout-style-setting" name="setup" size="18" @click="open_dialog('layout')"/>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="flex-col gap-10 w h">
                         <div class="new_title">表单样式</div>
                         <div class="flex-row jc-sb align-c gap-10 layout-style">
@@ -59,12 +59,12 @@
                 <right-side-parameter-config v-model="model_value" :is-custom="isCustom"></right-side-parameter-config>
             </div>
         </el-scrollbar>
-        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="dialog_type == 'layout' ? form.layout_settings : form.style_settings" @handle-close="handleClose"></layout-index>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="form.style_settings" @handle-close="handleClose"></layout-index>
     </div>
 </template>
 
 <script setup lang="ts">
-import { layout_settings, style_settings } from '@/utils/common';
+import { style_settings } from '@/utils/common';
 import { isEqual, cloneDeep } from "lodash";
 const app = getCurrentInstance();
 const props = defineProps({
@@ -113,19 +113,19 @@ const open_dialog = (value: string) => {
 };
 // 关闭之后判断是否有更改
 const handleClose = () => {
-    if (dialog_type.value == 'layout') {
-        if (isEqual(form.value.layout_settings, layout_settings) ) {
-            form.value.is_layout_settings = '0';
-        } else {
-            form.value.is_layout_settings = '1';
-        }
+    // if (dialog_type.value == 'layout') {
+    //     if (isEqual(form.value.layout_settings, layout_settings) ) {
+    //         form.value.is_layout_settings = '0';
+    //     } else {
+    //         form.value.is_layout_settings = '1';
+    //     }
+    // } else {
+    if (isEqual(form.value.style_settings, style_settings) ) {
+        form.value.is_style_settings = '0';
     } else {
-        if (isEqual(form.value.style_settings, style_settings) ) {
-            form.value.is_style_settings = '0';
-        } else {
-            form.value.is_style_settings = '1';
-        }
+        form.value.is_style_settings = '1';
     }
+    // }
 };
 
 const option_list = [

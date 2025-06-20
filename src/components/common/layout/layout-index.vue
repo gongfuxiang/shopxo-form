@@ -52,7 +52,7 @@
                         <el-radio-button class="radio-item" value="mobile">移动端</el-radio-button>
                     </el-radio-group>
                 </div>
-                <div class="ptb-20 plr-12">
+                <div class="layout-index ptb-20 plr-12">
                     <layout-right :config-type="configType" :port-type="type_value" :value="type_value == 'computer' ? form.computer : form.mobile" />
                 </div>
             </div>
@@ -220,13 +220,14 @@ const handleClose = () => {
 .title-location-icon.active {
     border: 0.1rem solid #2A94FF;
 }
-.head-title { 
-    word-wrap: break-word;
-    font-size: 20px;
-    padding: 18px 30px 0;
-    word-break: break-word;
-}
 .dialog-main-header {
     background: #fff;
+}
+.main-overflow {
+    overflow-x: hidden;
+}
+.layout-index {
+    height: calc(100% - 13rem);
+    overflow-y: auto;
 }
 </style>

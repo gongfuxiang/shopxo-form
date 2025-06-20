@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <custom-rate v-model="form.form_value" :max="form.total" :select-color="form.select_color" :type="form.score_type" :style="frame_style" size="16" @change="data_check"/>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>

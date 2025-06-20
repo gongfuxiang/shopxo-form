@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area w">
         <div class="form-group" :style="common_store.layout_style">
-            <div class="content w flex-row" :style="frame_style + 'height: 100%;' + line_location">
+            <div class="content w flex-1 flex-row" :style="frame_style + 'height: 100%;' + line_location">
                 <div :style="border_style"></div>
             </div>
         </div>

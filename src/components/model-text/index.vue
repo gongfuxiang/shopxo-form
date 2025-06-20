@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <div class="oh text-word-break" :style="frame_style + 'width:100%;height: 100%;color: ' + form.text_color">
                     {{ isEmpty(form.form_value) ? isShow ? '没有内容' : '请输入文本' : form.form_value }}
                 </div>

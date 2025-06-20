@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <div class="flex-col gap-10" :style="frame_style + 'height: 100%;'">
                     <el-input v-model="form.form_value" class="border-focus" :style="frame_style + style_container" :placeholder="form.placeholder" @change="data_check">
                         <template #prefix>

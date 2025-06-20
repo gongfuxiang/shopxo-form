@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group flex-col gap-10">
             <form-title :value="props.value" :is-subform="true"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <template v-if="children.length > 0">
                     <subform-handle :key="get_math" :value="form" :is-preview="isPreview" :custom-height="custom_height"></subform-handle>
                     <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>

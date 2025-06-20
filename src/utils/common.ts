@@ -24,22 +24,22 @@ export const old_margin = { margin: 0, margin_top: 0, margin_bottom: 0, margin_l
 
 export const old_border_and_box_shadow = { border_is_show: '0', border_color: '#FF3F3F', border_style: 'solid',border_size: { padding: 1, padding_top: 1, padding_right: 1, padding_bottom: 1, padding_left: 1, }, box_shadow_color: '', box_shadow_x: 0, box_shadow_y: 0, box_shadow_blur: 0, box_shadow_spread: 0 };
 
-export const layout_settings = {
-    computer: {
-        flex_direction: 'column',
-        filed_title_width: 100,
-        filed_title_justification: 'flex-start',
-        filed_title_size_type: 'small',
-        input_width_type: 'default',
-    },
-    mobile: {
-        flex_direction: 'column',
-        filed_title_width: 100,
-        filed_title_justification: 'flex-start',
-        filed_title_size_type: 'small',
-        input_width_type: 'default',
-    }
-};
+// export const layout_settings = {
+//     computer: {
+//         flex_direction: 'column',
+//         filed_title_width: 100,
+//         filed_title_justification: 'flex-start',
+//         filed_title_size_type: 'small',
+//         input_width_type: 'default',
+//     },
+//     mobile: {
+//         flex_direction: 'column',
+//         filed_title_width: 100,
+//         filed_title_justification: 'flex-start',
+//         filed_title_size_type: 'small',
+//         input_width_type: 'default',
+//     }
+// };
 
 export const style_settings = {
     computer: {
@@ -55,6 +55,11 @@ export const style_settings = {
         heading_title_font_weight: '400',
         heading_title_color: '#000000',
         submit_color: '#2A94FF',
+        flex_direction: 'column',
+        filed_title_width: 100,
+        filed_title_justification: 'flex-start',
+        filed_title_size_type: 'small',
+        input_width_type: 'default',
     },
     mobile: {
         background_type: 'color',
@@ -69,6 +74,11 @@ export const style_settings = {
         heading_title_font_weight: '400',
         heading_title_color: '#000000',
         submit_color: '#2A94FF',
+        flex_direction: 'column',
+        filed_title_width: 100,
+        filed_title_justification: 'flex-start',
+        filed_title_size_type: 'small',
+        input_width_type: 'default',
     }
 }
 // 只好设置

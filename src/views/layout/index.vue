@@ -41,11 +41,11 @@ const form = ref<form_data_item>({
     },
     overall_config: {
         type_value: 'default',
-        is_layout_settings: '0',
+        // is_layout_settings: '0',
         custom_size_type: 'A3',
         custom_width: 842,
         custom_height: 1191,
-        layout_settings: cloneDeep(layout_settings),
+        // layout_settings: cloneDeep(layout_settings),
         is_style_settings: '0',
         style_settings: cloneDeep(style_settings), 
         is_front_end_cache: '1',
@@ -107,7 +107,7 @@ const init = () => {
             if (new_data) {
                 form.value = form_data_transfor_diy_data(new_data);
                 // 公共配置信息
-                common_store.set_form_layout(form.value.overall_config.layout_settings);
+                common_store.set_form_layout(form.value.overall_config.style_settings);
                 common_store.set_config(form.value.overall_config);
                 common_store.set_model_config(form.value.model);
             } else {
@@ -117,7 +117,7 @@ const init = () => {
         });
     } else {
         // 公共配置信息
-        common_store.set_form_layout(form.value.overall_config.layout_settings);
+        common_store.set_form_layout(form.value.overall_config.style_settings);
         common_store.set_config(form.value.overall_config);
         common_store.set_model_config(form.value.model);
         loading_event();

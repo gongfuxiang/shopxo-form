@@ -24,6 +24,11 @@ const heading_title_style = computed(() => {
 })
 </script>
 
-<style lang="less" scoped>
-
+<style lang="scss" scoped>
+.head-title { 
+    word-wrap: break-word;
+    font-size: 20px;
+    padding: 18px 30px 0;
+    word-break: break-word;
+}
 </style>

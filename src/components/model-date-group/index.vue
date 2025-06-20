@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
             <form-title :value="props.value"></form-title>
-            <div class="content w">
+            <div class="content w flex-1">
                 <template v-if="['option1', 'option2'].includes(form.date_type)">
                     <div class="re w h border-focus" :style="frame_style + style_container + 'height: 100%'">
                         <el-time-picker v-model="form.form_value" class="model-date" :style="frame_style + 'width:100%;box-sizing:border-box;'" is-range clearable :start-placeholder="form.start_placeholder" :end-placeholder="form.end_placeholder" :format="date_style_format" @focus="time_focus" @blur="time_blur" />

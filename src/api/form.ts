@@ -72,8 +72,8 @@ export interface formData {
 export interface formConfig {
     overall_config: {
         type_value: string;
-        is_layout_settings: string;
-        layout_settings: object,
+        // is_layout_settings: string;
+        // layout_settings: object,
         custom_size_type: string,
         custom_width: number,
         custom_height: number,
@@ -99,8 +99,8 @@ export interface form_data_item {
     };
     overall_config: {
         type_value: string;
-        is_layout_settings: string;
-        layout_settings: object,
+        // is_layout_settings: string;
+        // layout_settings: object,
         custom_size_type: string,
         custom_width: number,
         custom_height: number,

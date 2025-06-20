@@ -2,7 +2,7 @@
     <div class="rendering-area w h">
         <div class="form-group w h" :style="common_store.layout_style + layout_style">
             <form-title v-if="!isCustom" :value="props.value" :style="title_style"></form-title>
-            <div class="content w h">
+            <div class="content w h flex-1">
                 <div class="re oh" :style="video_style">
                     <video v-show="is_video_play" ref="videoPlayer" :src="form.video[0]?.url || ''" controls class="w h"></video>
                     <template v-if="!is_video_play">

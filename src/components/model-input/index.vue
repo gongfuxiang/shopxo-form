@@ -2,7 +2,7 @@
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style + layout_style">
             <form-title :value="props.value" :style="title_style"></form-title>
-            <div class="content">
+            <div class="content flex-1">
                 <template v-if="form.type == 'radio-btns'">
                     <el-radio-group v-model="form.form_value" :class="['adaptive-height', { 'vertical-group' : form.arrangement == 'vertical' }]" @change="data_check(false, 'radio')">
                         <el-radio v-for="item in form.option_list" :key="item.value" :value="item.value">
