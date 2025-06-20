@@ -338,9 +338,7 @@ const submit_data_parameter_handle = () => {
     }
     formSaveAPI.dataSave(params).then((res: any) => {
         ElMessage.success('提交成功');
-    }).catch((err: any) => {
-        ElMessage.error(err.message);
-    });
+    })
 }
 // 处理手机号验证逻辑
 const handlePhoneValidation = (com_data: any) => {
