@@ -32,7 +32,7 @@
                         </div>
                     </div> -->
                     <div class="flex-col gap-10 w h">
-                        <div class="new_title">表单设置</div>
+                        <div class="new_title">表单样式</div>
                         <div class="flex-row jc-sb align-c gap-10 layout-style">
                             <div class="title">{{ form.is_style_settings == '0' ? '未设置' : '已设置' }}</div>
                             <icon class="layout-style-setting" name="setup" size="18" @click="open_dialog('style')"/>

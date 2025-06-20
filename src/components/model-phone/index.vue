@@ -11,7 +11,7 @@
                     </el-input>
                     <div v-if="form.is_sms_verification == '1'" class="flex-row gap-10 align-c">
                         <el-input v-model="form.form_value_code" :disabled="isEmpty(form.form_value)" class="border-focus flex-1" :style="frame_style + style_container" placeholder="请输入短信验证码" @change="data_code_check"></el-input>
-                        <el-button style="width:100px;" :disabled="isEmpty(form.form_value) || verify_disabled" @click="open_dialog">{{ verify_txt }}</el-button>
+                        <el-button :style="frame_style + button_style + 'width:100px;'" :disabled="isEmpty(form.form_value) || verify_disabled" @click="open_dialog">{{ verify_txt }}</el-button>
                     </div>
                 </div>
                 <!-- 默认内容设置 -->
@@ -53,6 +53,7 @@ const props = defineProps({
 });
 const form = computed(() => props.value);
 const frame_style = computed(() => common_store.frame_style + `${ props.isCustom ? `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);` : '' }`);
+const button_style = computed(() => `height:${common_store.form_config.style_settings.computer.filed_title_size_type == 'big' ? 56 : common_store.form_config.style_settings.computer.filed_title_size_type == 'middle' ? 42 : 32}px;`);
 //#region 图片验证码内容
 const dialogVisible = ref(false);
 const dialog_value  = ref('');

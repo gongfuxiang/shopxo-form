@@ -23,7 +23,7 @@
                     <el-radio value="img">图片</el-radio>
                 </el-radio-group>
                 <el-form-item v-if="form.heading_type == 'color'">
-                    <color-picker v-model="form.heading_color" default-color="#C1EBFF" ></color-picker>
+                    <color-picker v-model="form.heading_color"></color-picker>
                 </el-form-item>
                 <el-form-item v-else>
                     <upload v-model="form.heading_image" :limit="1" size="50"></upload>

@@ -3,7 +3,7 @@
         <template v-if="config_value.heading_type == 'img' && config_value.heading_image.length > 0">
             <image-empty v-model="config_value.heading_image[0]" error-style="width:100%;height:3.2rem;"></image-empty>
         </template>
-        <template v-else>
+        <template v-else-if="!isEmpty(config_value.heading_color)">
             <div :style="`height:3.2rem;width:100%;background:${ config_value.heading_color }`"></div>
         </template>
         <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="heading_title_style">{{ common_store.form_model_config.name }}</div>
@@ -12,6 +12,7 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
+import { isEmpty } from "@/utils";
 const common_store = commonStore();
 
 const config_type = defineModel({ type: String, default: () => 'computer' });
