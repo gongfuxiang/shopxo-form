@@ -155,7 +155,7 @@ const temp_change = (val: any) => {
     temp_active.value = val;
 };
 const more_link = computed(() => {
-    return common_store.common.config.store_diy_url || '';
+    return common_store.common.config.store_forminput_url || '';
 });
 //导入
 const exts_text = ref('.zip');

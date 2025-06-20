@@ -18,11 +18,11 @@
                 <div class="new_title mb-10">校验</div>
                 <div><el-checkbox v-model="form.is_required" label="必填" true-value="1" false-value="0" /></div>
                 <div class="flex-col gap-10">
-                    <el-checkbox v-model="form.is_limit_num" :label="`最多${name}数`" true-value="1" false-value="0" />
+                    <div><el-checkbox v-model="form.is_limit_num" :label="`最多${name}数`" true-value="1" false-value="0" /></div>
                     <div v-if="form.is_limit_num == '1'" class="flex-row gap-10"><input-number v-model="form.limit" :min="1" :max="100" /><span class="desc-title">{{ props.acceptType == 'img' ? '张' : '个' }}</span></div>
                 </div>
                 <div class="flex-col gap-10">
-                    <el-checkbox v-model="form.is_limit_size" :label="`设置单个${name}大小上限`" true-value="1" false-value="0" />
+                    <div><el-checkbox v-model="form.is_limit_size" :label="`设置单个${name}大小上限`" true-value="1" false-value="0" /></div>
                     <div v-if="form.is_limit_size == '1'" class="flex-row gap-10"><input-number v-model="form.upload_size" :min="1" :max="1000" /><span class="desc-title">MB</span></div>
                 </div>
             </div>

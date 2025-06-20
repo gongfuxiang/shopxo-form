@@ -569,3 +569,7 @@
         transform: rotate(360deg);
     }
 }
+
+.el-button:focus-visible {
+    outline: none;
+}
