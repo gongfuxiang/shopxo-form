@@ -52,7 +52,6 @@ const copy = (url: string) => {
     } catch (err) {
         console.error('复制失败', err);
     }
-
     document.body.removeChild(textarea);
 }
 // 文件下载

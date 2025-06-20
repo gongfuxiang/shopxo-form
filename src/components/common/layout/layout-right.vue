@@ -59,10 +59,7 @@
                     </div>
                 </div>
                 <div class="flex-row gap-10 align-b form-title mb-10">
-                    <span class="mt-4">字号</span>
-                    <div class="flex-1">
-                        <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
-                    </div>
+                    <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
                 </div>
             </template>
         </div>
