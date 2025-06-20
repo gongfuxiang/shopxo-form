@@ -58,8 +58,8 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
-import { checkbox_range_handle, get_format_checks, get_format_checks_v2, isEmpty, number_range_handle } from "@/utils";
-import { fa } from "element-plus/es/locale";
+import { checkbox_range_handle, get_format_checks, get_format_checks_v2, get_id, isEmpty, number_range_handle } from "@/utils";
+import formSaveAPI from "@/api/formSave";
 import { cloneDeep } from "lodash";
 const common_store = commonStore();
 interface DiyItem {
@@ -186,17 +186,10 @@ const fieldCheckMap: arrayIndex = {
     'upload-img': { is_format: false, type: 'upload' },
     'upload-video': { is_format: false, type: 'upload' }
 };
-/**
- * 提交表单数据并进行验证
- * 
- * 功能说明：
- * 1. 遍历过滤后的自定义数据，对必填字段进行验证
- * 2. 处理特殊字段（如手机号）的验证
- * 3. 处理子表单的验证逻辑，包括必填项检查和格式验证
- */
- const submit = () => {
-    // 遍历所有过滤后的自定义数据项
-    filteredDiyData.value?.forEach((item: any) => {
+// 提交数据校验
+const submit_data_check = () => {
+     // 遍历所有过滤后的自定义数据项
+     filteredDiyData.value?.forEach((item: any) => {
         const com_data = item.com_data;
         // 跳过非必填项
         if (com_data.is_required === '1') {
@@ -265,6 +258,19 @@ const fieldCheckMap: arrayIndex = {
             }
         }
     });
+} 
+/**
+ * 提交表单数据并进行验证
+ * 
+ * 功能说明：
+ * 1. 遍历过滤后的自定义数据，对必填字段进行验证
+ * 2. 处理特殊字段（如手机号）的验证
+ * 3. 处理子表单的验证逻辑，包括必填项检查和格式验证
+ */
+ const submit = () => {
+    // 校验所有的必填项和逻辑
+    submit_data_check();
+    // 处理所有的错误项
     const data = filteredDiyData.value.find((item: any) => item.com_data.common_config.is_error === '1' || (item.key === 'subform' && item.com_data.form_error_list.some((item1: any) => item1[Object.keys(item1)[0]].common_config.is_error === '1')));
     if (!isEmpty(data)) {
         if (data.key === 'subform') {
@@ -277,8 +283,64 @@ const fieldCheckMap: arrayIndex = {
             ElMessage.error(`${data.com_data.title}「${data.com_data.common_config.error_text}」`);
         }
     } else {
-        
+        submit_data_parameter_handle();
     }
+}
+const submit_data_parameter_handle = () => {
+    const submit_data: arrayIndex = {};
+    const filter_data = ['video', 'img', 'auxiliary-line', 'position', 'rect', 'round', 'text', 'attachments'];
+    // 规整字段信息
+    filteredDiyData.value.forEach((item: any) => {
+        if (!filter_data.includes(item.key)) {
+            const name = isEmpty(item.form_name) ? item.id : item.form_name;
+            const value = isEmpty(item.com_data.form_value) ? '' : item.com_data.form_value;
+            const com_data = item.com_data;
+            if (item.key ==='subform') {
+                submit_data[name] = com_data.form_value.map((subform_item: any) => {
+                    const data: any = {};
+                    com_data.children.forEach((item1: any) => {
+                        const subform_name = isEmpty(item1.form_name) ? item1.id : item1.form_name;
+                        const subform_value = isEmpty(subform_item[item1.id]) ? '' : subform_item[item1.id];
+                        if (!filter_data.includes(item1.key)) {
+                            if (item1.key == 'address') {
+                                data[`${ subform_name }_province_id`] = subform_value[0] || '';
+                                data[`${ subform_name }_city_id`] = subform_value[1] || '';
+                                data[`${ subform_name }_county_id`] = subform_value[2] || '';
+                            } else {
+                                data[subform_name] = subform_value;
+                            }
+                        }
+                    });
+                    return data;
+                });
+            } else if (item.key ==='phone') {
+                submit_data[`${ name }_phone`] = value || '';
+                // 判断是否需要发送短信验证码
+                if (com_data.is_sms_verification == '1') {
+                    submit_data[`${ name }_sms_code`] = com_data?.form_value_code || '';
+                }
+            } else if (item.key == 'address') {
+                submit_data[`${ name }_province_id`] = value[0] || '';
+                submit_data[`${ name }_city_id`] = value[1] || '';
+                submit_data[`${ name }_county_id`] = value[2] || '';
+                // 判断类型是否包含详细地址
+                if (com_data.address_type == 'detailed') {
+                    submit_data[`${ name }_address`] = com_data?.detailed_value || '';
+                }
+            } else {
+                submit_data[name] = value;
+            }
+        }
+    });
+    const params = {
+        forminput_id: get_id(),
+        ...submit_data
+    }
+    formSaveAPI.dataSave(params).then((res: any) => {
+        ElMessage.success('提交成功');
+    }).catch((err: any) => {
+        ElMessage.error(err.message);
+    });
 }
 // 处理手机号验证逻辑
 const handlePhoneValidation = (com_data: any) => {

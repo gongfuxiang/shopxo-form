@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
 
@@ -53,15 +53,21 @@ const validateInput = () => {
 };
 
 const submit = () => {
-    // 取出不是当前数据的内容
-    const old_diy_data = show_hidden_operate_list.value.filter((item:any) => item.id !== props.modelId && item.form_name == name.value);
-    // 如果有重复的，提示用户
-    if (old_diy_data.length > 0) {
-        ElMessage.error('FROM名称重复，请重新输入');
+    if (!isEmpty(name.value)) {
+        // 取出不是当前数据的内容
+        const old_diy_data = show_hidden_operate_list.value.filter((item:any) => item.id !== props.modelId && item.form_name == name.value);
+        // 如果有重复的，提示用户
+        if (old_diy_data.length > 0) {
+            ElMessage.error('FROM名称重复，请重新输入');
+            name.value = cloneDeep(old_name.value);
+            return;
+        } else {
+            emit('name_change', name.value);
+        }
+    } else {
+        ElMessage.error('FROM名称不能为空，请重新输入');
         name.value = cloneDeep(old_name.value);
         return;
-    } else {
-        emit('name_change', name.value);
     }
 };
 </script>

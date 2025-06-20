@@ -271,7 +271,9 @@ const data_check = (is_format: boolean = false, type: string = '') => {
 };
 const select_change = (val: any) => {
     form_value.value = Array.isArray(val) ? val[0] : val;
-    emit('data_check', { is_format: false, type: 'select' });
+    setTimeout(() => {
+        emit('data_check', { is_format: false, type: 'select' });
+    }, 0);
 }
 // 关闭下拉框
 const selectRef = ref<InstanceType<typeof ElSelect> | null>(null);

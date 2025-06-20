@@ -50,9 +50,9 @@ const visible_change = (val: boolean) => {
 .dialog-add {
     background: #F6F6F6;
     text-align: center;
-    font-size: 1.2rem;
-    color: #333;
-    height: 2.4rem;
+    font-size: 1rem;
+    color: #606266;
+    height: 2rem;
     width: 10rem;
     border: 0;
     display: flex;
