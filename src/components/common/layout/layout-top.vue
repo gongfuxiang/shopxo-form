@@ -1,11 +1,14 @@
 <template>
     <div class="dialog-main-header">
-        <template v-if="config_value.heading_type == 'img' && config_value.heading_image.length > 0">
+        <!-- <template v-if="config_value.heading_type == 'img' && config_value.heading_image.length > 0">
             <image-empty v-model="config_value.heading_image[0]" error-style="width:100%;height:3.2rem;"></image-empty>
         </template>
         <template v-else-if="!isEmpty(config_value.heading_color)">
             <div :style="`height:3.2rem;width:100%;background:${ config_value.heading_color }`"></div>
-        </template>
+        </template> -->
+        <div class="w h" :style="content_style">
+            <image-empty v-if="!isEmpty(config_value.heading_image[0])" v-model="config_value.heading_image[0]" fit="contain" error-style="width:100%;height:3.2rem;"></image-empty>
+        </div>
         <div v-if="config_value.is_show_heading_title == '1'" class="head-title flex-row" :style="heading_title_style">{{ common_store.form_model_config.name }}</div>
     </div>
 </template>
@@ -23,6 +26,8 @@ const heading_title_style = computed(() => {
     const { heading_title_location, heading_title_color, heading_title_size, heading_title_font_weight } = config_value.value;
     return `justify-content:${ heading_title_location };color:${ heading_title_color };font-size:${ heading_title_size }px;font-weight:${ heading_title_font_weight };`
 })
+
+const content_style = computed(() => `min-height:3.2rem;width:100%;background:${ config_value.value.heading_color }`);
 </script>
 
 <style lang="scss" scoped>

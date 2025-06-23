@@ -3,14 +3,14 @@
         <div class="flex-col gap-10 w h">
             <div class="new_title">页面背景</div>
             <div class="flex-col gap-10">
-                <el-radio-group v-model="form.background_type">
+                <!-- <el-radio-group v-model="form.background_type">
                     <el-radio value="color">颜色</el-radio>
                     <el-radio value="img">图片</el-radio>
-                </el-radio-group>
-                <el-form-item v-if="form.background_type == 'color'">
+                </el-radio-group> -->
+                <el-form-item label="颜色" class="form-item-child-label">
                     <color-picker v-model="form.background_color" default-color="#f8f8f8" ></color-picker>
                 </el-form-item>
-                <el-form-item v-else>
+                <el-form-item label="图片" class="form-item-child-label">
                     <upload v-model="form.background_image" :limit="1" size="50"></upload>
                 </el-form-item>
             </div>
@@ -18,14 +18,14 @@
         <div class="flex-col gap-10 w h">
             <div class="new_title">表头样式</div>
             <div class="flex-col gap-10">
-                <el-radio-group v-model="form.heading_type">
+                <!-- <el-radio-group v-model="form.heading_type">
                     <el-radio value="color">颜色</el-radio>
                     <el-radio value="img">图片</el-radio>
-                </el-radio-group>
-                <el-form-item v-if="form.heading_type == 'color'">
+                </el-radio-group> -->
+                <el-form-item label="颜色" class="form-item-child-label">
                     <color-picker v-model="form.heading_color"></color-picker>
                 </el-form-item>
-                <el-form-item v-else>
+                <el-form-item label="图片" class="form-item-child-label">
                     <upload v-model="form.heading_image" :limit="1" size="50"></upload>
                 </el-form-item>
             </div>

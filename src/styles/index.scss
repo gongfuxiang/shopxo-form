@@ -338,3 +338,10 @@ p {
         gap: 1rem;
     }
 }
+
+.form-item-child-label {
+    .el-form-item__label {
+        color: #666666;
+        font-size: 1.2rem;
+    }
+}

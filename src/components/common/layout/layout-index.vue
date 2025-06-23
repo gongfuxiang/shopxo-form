@@ -2,15 +2,11 @@
     <layout-dialog v-model:visible="dialogVisible" :title="configType == 'layout' ? '表单布局' : '表单样式'" @handle-close="handleClose">
         <div class="flex-row h w">
             <div class="flex-1 re w h">
-                <div class="abs w h">
+                <div class="abs w h" :style="content_style">
                     <!-- 背景信息 -->
-                    <template v-if="config_value.background_type == 'img' && config_value.background_image.length > 0">
-                        <image-empty v-model="config_value.background_image[0]" error-style="width:100%;height:100%;"></image-empty>
-                    </template>
-                    <template v-else>
-                        <div :style="`height:100%;width:100%;background:${ config_value.background_color }`"></div>
-                    </template>
+                    <image-empty v-if="!isEmpty(config_value.background_image[0])" v-model="config_value.background_image[0]" fit="contain" error-style="width:100%;height:100%;"></image-empty>
                 </div>
+
                 <!-- 内容信息 -->
                 <div v-if="type_value == 'computer'" class="dialog-main re z-i w h flex-row align-c jc-c">
                     <!-- 表单数据 -->
@@ -62,6 +58,7 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
+import { isEmpty } from "@/utils";
 const common_store = commonStore();
 interface DiyItem {
     id: number | string;
@@ -174,6 +171,8 @@ const handleClose = () => {
     dialogVisible.value = false;
     emit('handleClose');
 };
+
+const content_style = computed(() => `background:${ config_value.value.background_color }`);
 </script>
 
 <style lang="scss" scoped>

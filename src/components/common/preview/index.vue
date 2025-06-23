@@ -11,14 +11,9 @@
             </el-radio-group>
         </template>
         <div class="flex-row h w re">
-            <div class="abs w h">
+            <div class="abs w h" :style="content_style">
                 <!-- 背景信息 -->
-                <template v-if="config_value.background_type == 'img' && config_value.background_image.length > 0">
-                    <image-empty v-model="config_value.background_image[0]" error-style="width:100%;height:100%;"></image-empty>
-                </template>
-                <template v-else>
-                    <div :style="`height:100%;width:100%;background:${ config_value.background_color }`"></div>
-                </template>
+                <image-empty v-if="!isEmpty(config_value.background_image[0])" v-model="config_value.background_image[0]" fit="contain" error-style="width:100%;height:100%;"></image-empty>
             </div>
             <div v-if="type_value == 'computer'" class="flex-1 dialog-main z-i re z-i w h flex-row align-c jc-c">
                 <!-- 表单数据 -->
@@ -466,6 +461,8 @@ const subform_data_check = (is_format: boolean, type: string, index: number, id:
 //#endregion
 // 配置信息，区分是手机端数据还是电脑端数据
 const config_value = computed(() => type_value.value == 'computer' ? common_store.form_config.style_settings.computer : common_store.form_config.style_settings.mobile);
+
+const content_style = computed(() => `background:${ config_value.value.background_color }`);
 </script>
 
 <style lang="scss" scoped>
