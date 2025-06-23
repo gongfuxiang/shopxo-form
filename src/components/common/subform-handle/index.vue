@@ -50,7 +50,7 @@
                                                     <el-button type="danger" size="small" @click="confirm">确定</el-button>
                                                 </template>
                                             </el-popconfirm>
-                                            <el-dropdown placement="bottom">
+                                            <el-dropdown :key="index + get_math()" placement="bottom">
                                                 <icon name="more-o" size="14" color="primary"></icon>
                                                 <template #dropdown>
                                                     <el-dropdown-menu>

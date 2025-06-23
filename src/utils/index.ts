@@ -161,7 +161,7 @@ export function gradient_handle(color_list: color_list[], direction: string, is_
  * @returns 返回一个字符串，包含了计算后的样式定义，可以被直接应用于组件的样式属性。
  */
 export function common_styles_computer(new_style: componentsCommonCommonStyle) {
-    return radius_computer(new_style.border_radius) + border_computer(new_style) + `overflow:hidden;`;
+    return radius_computer(new_style.border_radius) + border_computer(new_style) + `background:#fff;overflow:hidden;`;
 }
 /**
  * 设置内边距的方法
@@ -525,10 +525,9 @@ export const get_color_style = (config: any) => {
 export const get_frame_style = (config: any) => {
     // 提取配置对象中的计算机相关数据
     const data = config.computer;
-
     // 根据字段标题字体大小动态生成框架的样式
     // 字体大小和高度根据配置的不同而变化
-    return `width:100%;max-width:${data.input_width_type == 'default' ? '354px' : '100%'};height:${data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ? 40 : 30}px;font-size:${data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ? 14 : 12}px;`;
+    return `width:100%;max-width:${data.input_width_type == 'default' ? `${ data.input_width }px;` : '100%'};height:${data.filed_title_size_type == 'big' ? 54 : data.filed_title_size_type == 'middle' ? 40 : 30}px;font-size:${data.filed_title_size_type == 'big' ? 16 : data.filed_title_size_type == 'middle' ? 14 : 12}px;`;
 };
 
 export const get_frame_size = (config: any) => {

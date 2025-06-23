@@ -24,7 +24,7 @@ const props = defineProps({
     }
 });
 const form = computed(() => props.value);
-const frame_style = computed(() => `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);height: 500px;`);
+const frame_style = computed(() => `max-width:100%;width:calc(100% - ${ get_border_left_right_size(form.value.common_config) }px);height: 350px;`);
 const layout_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row'  ? 'align-items:flex-start;' : '');
 const title_style = computed(() => common_store.form_layout?.computer?.flex_direction == 'row' ? 'margin-top:4px;' : '');
 // 用于样式显示

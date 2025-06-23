@@ -129,6 +129,7 @@ watch(() => [props.decimalNum, props.isThousandthsSymbol, props.format], () => {
 .percent-input {
     width: 100%;
     height: 100%;
+    background: #fff;
     display: flex;
     flex-direction: row;
     align-items: center;

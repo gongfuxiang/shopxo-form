@@ -1,5 +1,5 @@
 <template>
-    <div class="br-c pr z-deep w h oh border-focus" :style="props.newStyle">
+    <div class="br-c pr w h oh border-focus" :style="props.newStyle">
         <!-- 工具栏 -->
         <Toolbar id="toolbar-container" :editor="editor_ref" :default-config="toolbar_config" :mode="mode" />
         <!-- 编辑器 -->
@@ -142,5 +142,8 @@ onBeforeUnmount(() => {
 }
 .upload-visiable {
     visibility: hidden;
+}
+.border-focus {
+    z-index: 99;
 }
 </style>

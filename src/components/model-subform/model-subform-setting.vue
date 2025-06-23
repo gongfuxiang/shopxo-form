@@ -191,9 +191,11 @@ const children_List = [
     { name: '文件', key: 'attachments', data: [] },
 ]
 const dropdown_click = (item: { name: string; key: string }) => {
+    const new_id = get_math();
     const new_item = {
         name: item.name,
-        id: get_math(),
+        id: new_id,
+        form_name: new_id,
         mark_name: '',
         location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
         show_tabs: '0',

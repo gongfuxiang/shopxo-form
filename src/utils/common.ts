@@ -60,6 +60,7 @@ export const style_settings = {
         filed_title_justification: 'flex-start',
         filed_title_size_type: 'small',
         input_width_type: 'default',
+        input_width: 354,
     },
     mobile: {
         background_type: 'color',
@@ -79,6 +80,7 @@ export const style_settings = {
         filed_title_justification: 'flex-start',
         filed_title_size_type: 'small',
         input_width_type: 'default',
+        input_width: 354,
     }
 }
 // 只好设置

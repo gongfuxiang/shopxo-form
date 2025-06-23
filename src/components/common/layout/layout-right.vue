@@ -112,6 +112,11 @@
                 <el-radio-button value="default">标准</el-radio-button>
                 <el-radio-button value="auto">自动</el-radio-button>
             </el-radio-group>
+            <template v-if="form.input_width_type == 'default'">
+                <div class="flex-row align-c gap-10">
+                   <input-number v-model="form.input_width" class="w h" :min="1" :max="600" placeholder="请输入输入框宽度" @change="handle_input_width_change"></input-number>px
+               </div>
+            </template>
         </div>
         <div class="flex-col gap-10 w h">
             <div class="new_title">大小</div>
@@ -146,9 +151,15 @@ const form = ref(props.value);
 watch(() => props.value, () => {
     form.value = props.value;
 });
-const type_value = ref('computer');
 // 弹出框显示逻辑
 const dialogVisible = defineModel('visible', { type: Boolean, default: false });
+// 监听输入框宽度变化
+const handle_input_width_change = () => {
+    if (form.value.input_width == null || form.value.input_width <= 0) {
+        form.value.input_width = 354;
+        return;
+    }
+};
 // #region 表单布局的显示逻辑
 const type_change = (val: string) => {
     form.value.flex_direction = val;
