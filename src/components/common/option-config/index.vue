@@ -83,7 +83,11 @@
     </el-form-item>
     <el-dialog v-model="dialogVisible" title="批量编辑" width="40%" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body>
         <div class="flex-col gap-10 mtb-20">
-            <div class="dialog-desc">每行对应一个选项</div>
+            <div class="dialog-desc">
+                1. 每行对应一个选项，每行的格式：标识:名称.<br/>
+                2. 列子：id:名称，标识字符格式（字母、数字、下划线）<br/>
+                3. 其他字符会自动过滤，如果不加 标识:  只写名称 则标识自动生成。<br/>
+            </div>
             <el-input v-model="textarea" :rows="20" type="textarea" />
         </div>
         <template #footer>
@@ -236,9 +240,14 @@ const submit = () => {
                 }
             } else {
                 const [value, name] = item.split(':');
+                // 过滤掉不需要的字符
+                let new_value = value.replace(/[^a-zA-Z0-9_]/g, '');
+                if (isEmpty(new_value)) {
+                    new_value = get_math();
+                }
                 return {
                     name,
-                    value,
+                    value: new_value,
                     color: color_change(index),
                 }
             }
@@ -311,7 +320,7 @@ const validateInput = (val: string, index: number) => {
     const regex = /^[a-zA-Z0-9_]*$/;
     if (!regex.test(val)) {
         // 若输入不合法，移除非法字符
-        drag_list.value[index].value = val.replace(/[^a-zA-Z0-9_]/g, '');;
+        drag_list.value[index].value = val.replace(/[^a-zA-Z0-9_]/g, '');
     }
 };
 
@@ -362,8 +371,8 @@ watch(() => drag_list.value, (new_value) => {
     color: #B5B8BE;
 }
 .dialog-desc {
-    font-size: 1.4rem;
-    line-height: 2.2rem;
+    font-size: 1.2rem;
+    line-height: 1.8rem;
     color: #838892;
 }
 .is-error {
