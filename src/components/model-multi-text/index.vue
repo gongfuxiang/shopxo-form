@@ -3,7 +3,7 @@
         <div class="form-group" :style="common_store.layout_style + layout_style">
             <form-title :value="props.value" :style="title_style"></form-title>
             <div class="content w flex-1">
-                <el-input v-model="form.form_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :show-word-limit="form.is_limit_num == '1' && isEmpty(form.max_num)" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check" @change="data_check"></el-input>
+                <el-input v-model="form.form_value" type="textarea" class="border-focus" :style="frame_style + style_container + 'height:100%;'" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" :show-word-limit="form.is_limit_num == '1' && !isEmpty(form.max_num)" :autosize="{ minRows: 4, maxRows: 8 }" :placeholder="form.placeholder" @blur="data_check" @change="data_check"></el-input>
                 <form-error v-if="form.common_config.is_error == '1'" v-model="form.common_config.error_text"></form-error>
             </div>
         </div>
