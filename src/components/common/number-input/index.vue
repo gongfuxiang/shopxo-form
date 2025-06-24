@@ -3,7 +3,7 @@
         <div class="percent-input">
             <el-input ref="el_input" v-model="form_value" :style="newStyle" :placeholder="placeholder" @focus="focus_input" @blur="blur_input">
                 <template v-if="!isEmpty(moneySign)" #prefix>{{ moneySign }}</template>
-                <template #suffix>%</template>
+                <template v-if="isPercentage" #suffix>%</template>
             </el-input>
         </div>
     </div>
