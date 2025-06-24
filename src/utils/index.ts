@@ -465,7 +465,7 @@ export const get_title_style = (config: any) => {
     const data = config.computer;
     // 标题大小控制
     // 根据配置中的filed_title_size_type字段决定标题字体大小
-    let style = `font-weight: 700;font-size:${data.filed_title_size_type == 'big' ? 22 : data.filed_title_size_type == 'middle' ? 16 : 12}px;color:#333;`;
+    let style = `font-weight: blod;font-size:${data.filed_title_size_type == 'big' ? 22 : data.filed_title_size_type == 'middle' ? 16 : 12}px;color:#333;`;
     //标题宽度控制
     // 根据flex_direction字段决定标题的对齐方式和宽度
     if (data.flex_direction == 'column') {
