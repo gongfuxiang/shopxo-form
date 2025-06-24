@@ -1,6 +1,6 @@
 <template>
     <el-form-item label-width="0">
-        <div class="flex-col gap-10 w h">
+        <div class="flex-col gap-10 w h option-group">
             <div class="new_title flex-row align-c jc-sb">选项
                 <div class="flex-row align-c gap-5 right-title">彩色<el-switch v-model="multicolour" active-value="1" inactive-value="0"></el-switch></div>
             </div>
@@ -9,20 +9,30 @@
                     <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-checkbox :value="row.value" class="option-width">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
-                                </el-tooltip>
+                                <div class="flex-row gap-2">
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项值" popper-class="custom-error-tooltip" :disabled="!is_value_error(row.value)" :show-arrow="false" raw-content placement="top-start">
+                                        <el-input v-model="row.value" :class="['option-width', {'is-error': is_value_error(row.value)}]" @input="validateInput($event, index)" @blur="value_change(row.value, index)"></el-input>
+                                    </el-tooltip>
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项名称" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
+                                        <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
+                                    </el-tooltip>
+                                </div>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
                                 </template>
                             </el-checkbox>
                         </template>
                     </drag>
-                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
+                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-10 sort-target w mt-10">
                         <el-checkbox :value="last_drag_item.value" class="option-width">
-                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
-                            </el-tooltip>
+                            <div class="flex-row gap-2">
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项值" popper-class="custom-error-tooltip" :disabled="!is_value_error(last_drag_item.value)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="last_drag_item.value" :class="['option-width', {'is-error': is_value_error(last_drag_item.value)}]" @input="validateInput($event, drag_list.length - 1)" @blur="value_change(last_drag_item.value, drag_list.length - 1)"></el-input>
+                                </el-tooltip>
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项名称" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                                </el-tooltip>
+                            </div>
                         </el-checkbox>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>
                     </div>
@@ -33,20 +43,30 @@
                     <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-radio :value="row.value" class="option-width">
-                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
-                                    <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
-                                </el-tooltip>
+                                <div class="flex-row gap-2">
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项值" popper-class="custom-error-tooltip" :disabled="!is_value_error(row.value)" :show-arrow="false" raw-content placement="top-start">
+                                        <el-input v-model="row.value" :class="['option-width', {'is-error': is_value_error(row.value)}]" @input="validateInput($event, index)" @blur="value_change(row.value, index)"></el-input>
+                                    </el-tooltip>
+                                    <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项名称" popper-class="custom-error-tooltip" :disabled="!is_error(row.name)" :show-arrow="false" raw-content placement="top-start">
+                                        <el-input v-model="row.name" :class="['option-width', {'is-error': is_error(row.name)}]" @change="input_change(row.name, index)"></el-input>
+                                    </el-tooltip>
+                                </div>
                                 <template v-if="multicolour == '1'">
                                     <el-color-picker v-model="row.color" :predefine="predefine_colors" @click.prevent />
                                 </template>
                             </el-radio>
                         </template>
                     </drag>
-                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-16 sort-target w mt-10">
+                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-10 sort-target w mt-10">
                         <el-radio :value="last_drag_item.value" class="option-width">
-                            <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
-                                <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
-                            </el-tooltip>
+                            <div class="flex-row gap-2">
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项值" popper-class="custom-error-tooltip" :disabled="!is_value_error(last_drag_item.value)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="last_drag_item.value" :class="['option-width', {'is-error': is_value_error(last_drag_item.name)}]" @input="validateInput($event, drag_list.length - 1)" @blur="value_change(last_drag_item.value, drag_list.length - 1)"></el-input>
+                                </el-tooltip>
+                                <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项名称" popper-class="custom-error-tooltip" :disabled="!is_error(last_drag_item.name)" :show-arrow="false" raw-content placement="top-start">
+                                    <el-input v-model="last_drag_item.name" :class="['option-width', {'is-error': is_error(last_drag_item.name)}]" @change="input_change(last_drag_item.name, drag_list.length - 1)"></el-input>
+                                </el-tooltip>
+                            </div>
                         </el-radio>
                         <icon name="delete-o" size="18" color="6" @click="remove(drag_list.length - 1)"/>
                     </div>
@@ -135,7 +155,7 @@ const add = () => {
     }
     const data = {
         name: '选项' + (length + 1),
-        value: 'option' + get_math(),
+        value: get_math(),
         color: color_change(length),
     }
     // 判断最后一个是否是其他
@@ -144,15 +164,18 @@ const add = () => {
     } else {
         drag_list.value.push(data);
     }
+    old_drag_list_handle(drag_list.value);
 };
 const add_outer = () => {
     if (!is_drag_outer.value) {
         drag_list.value.push(outer_data);
     }
+    old_drag_list_handle(drag_list.value);
 }
 // #endregion
 // #region 输入框操作逻辑和校验
 const last_drag_item = computed(() => drag_list.value[drag_list.value.length - 1]);
+// name为空处理
 const input_change = (val: string, index: number) => {
     if (!isEmpty(val)) {
         drag_list.value[index].name = val;
@@ -160,9 +183,24 @@ const input_change = (val: string, index: number) => {
         drag_list.value[index].name = '选项';
     }
 }
+// value为空处理
+const value_change = (val: string, index: number) => {
+    if (!isEmpty(val)) {
+        drag_list.value[index].value = val;
+    } else {
+        drag_list.value[index].value = old_drag_list.value[index].value;
+    }
+}
+// 选项名称是否重复
 const is_error = computed(() => {
     return (val: string) => {
         return drag_list.value.filter(item => item.name === val).length > 1;
+    }
+});
+// 选项value是否重复
+const is_value_error = computed(() => {
+    return (val: string) => {
+        return drag_list.value.filter(item => item.value === val).length > 1;
     }
 });
 //#endregion
@@ -176,7 +214,7 @@ const bulk_edit = () => {
     if (is_drag_outer.value) {
         old_data.splice(drag_list.value.length - 1, 1);
     }
-    const names = old_data.map(item => item.name ?? '').join('\n');
+    const names = old_data.map(item => (item.value || '') + ':' + (item.name ?? '')).join('\n');
     textarea.value = names;
     dialogVisible.value = true;
 }
@@ -190,17 +228,28 @@ const submit = () => {
     let data: any[] = []
     if (textarea_value.length > 0) {
         data = textarea_value.map((item: any, index: number) => {
-            return {
-                name: item,
-                value: 'option' + get_math(),
-                color: color_change(index),
+            if (item.indexOf(':') === -1) {
+                return {
+                    name: item,
+                    value: get_math(),
+                    color: color_change(index),
+                }
+            } else {
+                const [value, name] = item.split(':');
+                return {
+                    name,
+                    value,
+                    color: color_change(index),
+                }
             }
         });
     }
     if (is_drag_outer.value) {
         const new_data = cloneDeep([...data, outer_data]);
+        old_drag_list_handle(new_data);
         emits('onsort', new_data);
     } else {
+        old_drag_list_handle(data);
         emits('onsort', data);
     }
     // 批量编辑之后清除数据
@@ -218,8 +267,10 @@ const submit = () => {
 const on_sort = (item: any) => {
     if (is_drag_outer.value) {
         const new_data = cloneDeep([...item, outer_data]);
+        old_drag_list_handle(new_data);
         emits('onsort', new_data);
     } else {
+        old_drag_list_handle(item);
         emits('onsort', item);
     }
 };
@@ -231,6 +282,7 @@ const remove = (index: number) => {
     }
     // 先删除数据，然后判断是否存在
     drag_list.value.splice(index, 1);
+    old_drag_list_handle(drag_list.value);
     const new_data = cloneDeep(drag_list.value.map(item => item.value ?? ''));
     if (props.multiple) {
         if (!isEmpty(checkValue.value)) {
@@ -247,11 +299,28 @@ const remove = (index: number) => {
     }
 };
 //#endregion
+//#region 存储历史数据的内容
+// 存储历史数据的显示
+const old_drag_list = ref(cloneDeep(props.list));
+const old_drag_list_handle = (new_data: string[]) => { 
+    old_drag_list.value = cloneDeep(new_data);
+};
+//#endregion
+// 输入校验函数
+const validateInput = (val: string, index: number) => {
+    const regex = /^[a-zA-Z0-9_]*$/;
+    if (!regex.test(val)) {
+        // 若输入不合法，移除非法字符
+        drag_list.value[index].value = val.replace(/[^a-zA-Z0-9_]/g, '');;
+    }
+};
 
 watch(() => drag_list.value, (new_value) => {
+    // 判断去除重复之后的列表长度是否一致
     const newListLength = new Set(new_value.map(item => item.name)).size;
+    const newListValueLength = new Set(new_value.map(item => item.value)).size;
     const listLength = new_value.length;
-    if(listLength > newListLength){
+    if(listLength > newListLength || listLength > newListValueLength){
         emits('option-change', false);
     } else {
         emits('option-change', true);
@@ -300,6 +369,17 @@ watch(() => drag_list.value, (new_value) => {
 .is-error {
     :deep(.el-input__wrapper) {
         box-shadow: #D8423A 0px 0px 0px 1px inset;
+    }
+}
+.option-group {
+    :deep(.gap-y-16) {
+        column-gap: 1rem;
+    }
+}
+:deep(.el-color-picker__trigger) {
+    width: 3.2rem;
+    .el-color-picker__icon {
+        display: none;
     }
 }
 </style>

@@ -332,6 +332,12 @@ const submit_data_parameter_handle = () => {
                 if (com_data.address_type == 'detailed') {
                     submit_data[`${ name }_address`] = com_data?.detailed_value || '';
                 }
+            } else if (['select', 'radio-btns'].includes(item.key)) {
+                submit_data[name] = value;
+                const value_list = com_data.option_list.filter((item: any) => item.is_outer == '1');
+                if (value_list.length > 0) {
+                   submit_data[`${ name }_outer_value`] = com_data?.outer_value || '';
+                }
             } else {
                 submit_data[name] = value;
             }

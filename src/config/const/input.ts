@@ -1,3 +1,4 @@
+import { get_math } from '@/utils';
 import defaultCommon from './index';
 type show_hidden = {
     value: string;
@@ -33,7 +34,7 @@ interface DefaultInput {
 
 const defaultInput: DefaultInput = {
     type: 'single-text',
-    option_list: [{ name: '选项1', value: 'option1', color: '#eb5050' }, { name: '选项2', value: 'option2', color: '#f0a800' }, { name: '选项3', value: 'option3', color: '#46c26f' }],
+    option_list: [{ name: '选项1', value: get_math(), color: '#eb5050' }, { name: '选项2', value: get_math(), color: '#f0a800' }, { name: '选项3', value: get_math(), color: '#46c26f' }],
     show_hidden_list: [],
     title: '单行文本',
     form_value: '',

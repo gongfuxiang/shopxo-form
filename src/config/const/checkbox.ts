@@ -1,3 +1,4 @@
+import { get_math } from '@/utils';
 import defaultCommon from './index';
 
 interface option {
@@ -30,7 +31,7 @@ const defaultInput: DefaultInput = {
     title: '多选按钮组',
     form_value: [],
     is_multicolour: '0',
-    option_list: [{ name: '选项1', value: 'option1', color: '#eb5050' }, { name: '选项2', value: 'option2', color: '#f0a800' }, { name: '选项3', value: 'option3', color: '#46c26f' }],
+    option_list: [{ name: '选项1', value: get_math(), color: '#eb5050' }, { name: '选项2', value: get_math(), color: '#f0a800' }, { name: '选项3', value: get_math(), color: '#46c26f' }],
     custom_option_list: [],
     placeholder: '请选择内容',
     is_required: '0',

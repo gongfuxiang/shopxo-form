@@ -1,3 +1,4 @@
+import { get_math } from '@/utils';
 import defaultCommon from './index';
 type show_hidden = {
     value: string;
@@ -28,7 +29,7 @@ interface DefaultRadio {
 
 const defaultRadio: DefaultRadio = {
     type: 'radio-btns',
-    option_list: [{ name: '选项1', value: 'option1', color: '#eb5050' }, { name: '选项2', value: 'option2', color: '#f0a800' }, { name: '选项3', value: 'option3', color: '#46c26f' }],
+    option_list: [{ name: '选项1', value: get_math(), color: '#eb5050' }, { name: '选项2', value: get_math(), color: '#f0a800' }, { name: '选项3', value: get_math(), color: '#46c26f' }],
     show_hidden_list: [],
     title: '单选按钮组',
     form_value: '',
