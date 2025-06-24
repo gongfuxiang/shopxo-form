@@ -4,7 +4,7 @@ import defaultCommon from './index';
 interface option {
     name: string;   
     value: string;
-    is_outer?: string;
+    is_other?: string;
     color: string;
 }
 interface DefaultSelect {

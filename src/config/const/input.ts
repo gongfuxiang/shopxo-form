@@ -7,14 +7,14 @@ type show_hidden = {
 interface option {
     name: string;   
     value: string;
-    is_outer?: string;
+    is_other?: string;
     color: string;
 }
 interface DefaultInput {
     type: string;   
     title: string;
     form_value: string;
-    outer_value: string;
+    other_value: string;
     option_list: option[];
     placeholder: string;
     is_required: string;
@@ -38,7 +38,7 @@ const defaultInput: DefaultInput = {
     show_hidden_list: [],
     title: '单行文本',
     form_value: '',
-    outer_value: '',
+    other_value: '',
     placeholder: '请输入内容',
     is_required: '0',
     is_limit_num: '0',

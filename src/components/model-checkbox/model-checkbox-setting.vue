@@ -19,7 +19,7 @@
                 <el-input v-model="form.placeholder" placeholder="请输入提示文字" clearable @change="operation_end"></el-input>
             </div>
         </el-form-item>
-        <option-config v-model:multicolour="form.is_multicolour" v-model:check-value="form.form_value" :list="form.option_list" :multiple="true" :is-outer="false" @option-change="option_change" @onsort="option_list_change"></option-config>
+        <option-config v-model:multicolour="form.is_multicolour" v-model:check-value="form.form_value" :list="form.option_list" :multiple="true" :is-other="false" @option-change="option_change" @onsort="option_list_change"></option-config>
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">选项设置</div>

@@ -32,7 +32,7 @@ interface Props {
     isShowCopy?: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-    modelType: 'outer',
+    modelType: 'other',
     modelIndex: 0,
     multipleIcons: false,
     isShowCopy: false,

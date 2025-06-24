@@ -334,9 +334,9 @@ const submit_data_parameter_handle = () => {
                 }
             } else if (['select', 'radio-btns'].includes(item.key)) {
                 submit_data[name] = value;
-                const value_list = com_data.option_list.filter((item: any) => item.is_outer == '1');
+                const value_list = com_data.option_list.filter((item: any) => item.is_other == '1');
                 if (value_list.length > 0) {
-                   submit_data[`${ name }_outer_value`] = com_data?.outer_value || '';
+                   submit_data[`${ name }_other_value`] = com_data?.other_value || '';
                 }
             } else {
                 submit_data[name] = value;

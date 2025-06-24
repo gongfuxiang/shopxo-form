@@ -6,7 +6,7 @@
             </div>
             <template v-if="multiple">
                 <el-checkbox-group v-model="checkValue">
-                    <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
+                    <drag class="w" :data="drag_list.filter(item => item.is_other !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-checkbox :value="row.value" class="option-width">
                                 <div class="flex-row gap-2">
@@ -23,7 +23,7 @@
                             </el-checkbox>
                         </template>
                     </drag>
-                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-10 sort-target w mt-10">
+                    <div v-if="is_drag_other" class="flex-row align-c gap-y-10 sort-target w mt-10">
                         <el-checkbox :value="last_drag_item.value" class="option-width">
                             <div class="flex-row gap-2">
                                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项标识" popper-class="custom-error-tooltip" :disabled="!is_value_error(last_drag_item.value)" :show-arrow="false" raw-content placement="top-start">
@@ -40,7 +40,7 @@
             </template>
             <template v-else>
                 <el-radio-group v-model="radioValue">
-                    <drag class="w" :data="drag_list.filter(item => item.is_outer !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
+                    <drag class="w" :data="drag_list.filter(item => item.is_other !== '1')" :space-col="20" @remove="remove" @on-sort="on_sort">
                         <template #default="{ row, index }">
                             <el-radio :value="row.value" class="option-width">
                                 <div class="flex-row gap-2">
@@ -57,7 +57,7 @@
                             </el-radio>
                         </template>
                     </drag>
-                    <div v-if="is_drag_outer" class="flex-row align-c gap-y-10 sort-target w mt-10">
+                    <div v-if="is_drag_other" class="flex-row align-c gap-y-10 sort-target w mt-10">
                         <el-radio :value="last_drag_item.value" class="option-width">
                             <div class="flex-row gap-2">
                                 <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="不允许重复选项标识" popper-class="custom-error-tooltip" :disabled="!is_value_error(last_drag_item.value)" :show-arrow="false" raw-content placement="top-start">
@@ -74,8 +74,8 @@
             </template>
             <div class="flex-row align-c gap-4 ml-32">
                 <span class="add-title" @click="add">添加选项</span>|
-                <template v-if="isOuter">
-                    <span :class="['add-title', { 'outer-disable': is_drag_outer}]" @click="add_outer">添加其他选项</span>|
+                <template v-if="isOther">
+                    <span :class="['add-title', { 'other-disable': is_drag_other}]" @click="add_other">添加其他选项</span>|
                 </template>
                 <span class="add-title" @click="bulk_edit">批量编辑</span>
             </div>
@@ -108,21 +108,21 @@ const multicolour = defineModel('multicolour', { type: String, default: '0' })
 // 默认值处理
 const radioValue = defineModel('radioValue', { type: String, default: '' });
 const checkValue = defineModel('checkValue', { type: Array as PropType<string[]>, default: [] });
-const outer_data = {
+const other_data = {
     name: '其他',
-    value: 'outer',
-    is_outer: '1',
+    value: 'other',
+    is_other: '1',
     color: '#051e500a',
 }
 interface Props {
     list: any[];
     multiple: boolean;
-    isOuter?: boolean;
+    isOther?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     imgParams: 'cover',
-    isOuter: true,
+    isOther: true,
     multiple: false,
 });
 
@@ -137,7 +137,7 @@ watchEffect(() => {
  * 
  * @returns {boolean} 如果最后一个项目是外部项目，则返回 true；否则返回 false
  */
- const is_drag_outer = computed(() => {
+ const is_drag_other = computed(() => {
     // 获取拖拽列表
     const list = drag_list.value;
     // 如果列表为空或不存在，则认为没有外部项目
@@ -146,7 +146,7 @@ watchEffect(() => {
     // 获取列表中的最后一个项目
     const last = list[list.length - 1];
     // 判断并返回最后一个项目是否为外部项目
-    return last.is_outer === '1';
+    return last.is_other === '1';
 });
 
 const emits = defineEmits(['onsort', 'option-change']);
@@ -154,7 +154,7 @@ const emits = defineEmits(['onsort', 'option-change']);
 const add = () => {
     let length = drag_list.value.length;
     // 判断最后一个是否是其他
-    if (is_drag_outer.value) {
+    if (is_drag_other.value) {
         length = length - 1;
     }
     const data = {
@@ -163,16 +163,16 @@ const add = () => {
         color: color_change(length),
     }
     // 判断最后一个是否是其他
-    if (is_drag_outer.value) {
+    if (is_drag_other.value) {
         drag_list.value.splice(length, 0, data);
     } else {
         drag_list.value.push(data);
     }
     old_drag_list_handle(drag_list.value);
 };
-const add_outer = () => {
-    if (!is_drag_outer.value) {
-        drag_list.value.push(outer_data);
+const add_other = () => {
+    if (!is_drag_other.value) {
+        drag_list.value.push(other_data);
     }
     old_drag_list_handle(drag_list.value);
 }
@@ -215,7 +215,7 @@ const textarea = ref('');
 const bulk_edit = () => {
     let old_data = cloneDeep(Array.isArray(drag_list.value) ? drag_list.value : []);
     // 判断是否有其他内容，如果有的话删除最后一个
-    if (is_drag_outer.value) {
+    if (is_drag_other.value) {
         old_data.splice(drag_list.value.length - 1, 1);
     }
     const names = old_data.map(item => (item.value || '') + ':' + (item.name ?? '')).join('\n');
@@ -253,8 +253,8 @@ const submit = () => {
             }
         });
     }
-    if (is_drag_outer.value) {
-        const new_data = cloneDeep([...data, outer_data]);
+    if (is_drag_other.value) {
+        const new_data = cloneDeep([...data, other_data]);
         old_drag_list_handle(new_data);
         emits('onsort', new_data);
     } else {
@@ -274,8 +274,8 @@ const submit = () => {
 //#region 操作逻辑
 // 拖拽之后的顺序
 const on_sort = (item: any) => {
-    if (is_drag_outer.value) {
-        const new_data = cloneDeep([...item, outer_data]);
+    if (is_drag_other.value) {
+        const new_data = cloneDeep([...item, other_data]);
         old_drag_list_handle(new_data);
         emits('onsort', new_data);
     } else {
@@ -366,7 +366,7 @@ watch(() => drag_list.value, (new_value) => {
     font-size: 1.4rem;
     color: $cr-main;
 }
-.outer-disable {
+.other-disable {
     cursor: no-drop;
     color: #B5B8BE;
 }

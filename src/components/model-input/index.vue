@@ -9,7 +9,7 @@
                             <div class="flex-row gap-10 align-c">
                                 <div :style="option_style(item)">{{ item.name }}</div>
                                 <template v-if="!isEmpty(option_value) && form.form_value == option_value && form.form_value == item.value">
-                                    <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" placeholder="请填写内容"></el-input>
+                                    <el-input v-model="form.other_value" class="border-focus" :style="frame_style + style_container" placeholder="请填写内容"></el-input>
                                 </template>
                             </div>
                         </el-radio>
@@ -29,7 +29,7 @@
                             </template>
                         </el-select>
                         <template v-if="!isEmpty(option_value) && form.form_value == option_value">
-                            <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
+                            <el-input v-model="form.other_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                         </template>
                     </div>
                 </template>
@@ -68,7 +68,7 @@ const data_check = (val: boolean = false, type: string = '') => {
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
 // 判断其他的code值是什么
 const option_value = computed(() => {
-    const value_list = form.value.option_list.filter((item: any) => item.is_outer == '1');
+    const value_list = form.value.option_list.filter((item: any) => item.is_other == '1');
     if (value_list.length > 0) {
         return value_list[0].value;
     }
@@ -76,7 +76,7 @@ const option_value = computed(() => {
 });
 const option_style = (val: any) => {
     if (form.value.is_multicolour == '1') {
-        return `background:${ val.color };color:${ val.is_outer == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
+        return `background:${ val.color };color:${ val.is_other == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
     } else {
         return common_styles.value;
     }

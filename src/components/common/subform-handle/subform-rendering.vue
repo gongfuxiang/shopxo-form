@@ -15,8 +15,8 @@
                             </template>
                         </template>
                     </el-select>
-                    <template v-if="form_value == 'outer'">
-                        <el-input v-model="form.outer_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
+                    <template v-if="form_value == 'other'">
+                        <el-input v-model="form.other_value" class="border-focus" :style="frame_style + style_container" :minlength="form.is_limit_num == '1' ? form.min_num : ''" :maxlength="form.is_limit_num == '1' ? form.max_num : ''" placeholder="请填写内容"></el-input>
                     </template>
                 </div>
             </template>
@@ -261,7 +261,7 @@ watch(() => form_value.value, (val) => {
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
 const option_style = (val: any) => {
     if (form.value.is_multicolour == '1') {
-        return `background:${ val.color };color:${ val.is_outer == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
+        return `background:${ val.color };color:${ val.is_other == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
     } else {
         return common_styles.value;
     }

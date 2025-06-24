@@ -199,7 +199,7 @@ const selected_names = computed(() => {
 const common_styles = computed(() => `${ common_store.color_style };padding-left:0rem;padding-right:0rem;`);
 const option_style = (val: any) => {
     if (form.value.is_multicolour == '1') {
-        return `background:${ val.color };color:${ val.is_outer == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
+        return `background:${ val.color };color:${ val.is_other == '1' ? '#141E31' : '#fff'};border-radius:0.4rem;${ common_store.color_style }`;
     } else {
         return common_styles.value;
     }
