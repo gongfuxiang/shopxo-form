@@ -95,10 +95,26 @@
                             </template>
                             <template v-else>
                                 <div class="flex-col gap-10">
-                                    <span class="size-14 cr-6">数据收起时显示的简报</span>
+                                    <span class="size-12 cr-6 flex-row gap-10">数据收起时显示的简报<tooltip content="简报不显示图片、视频、上传、富文本、密码、辅助线等"></tooltip></span>
                                     <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
                                         <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
                                     </el-select>
+                                    <template v-if="form.mobile.direction_fixed_num == 'custom'">
+                                        <el-select v-model="form.mobile.briefing_field" multiple :multiple-limit="3" popper-class="custom-select" placeholder="请选择简报字段，最多3个" @focus="input_value3 = ''">
+                                            <template #header>
+                                                <el-input v-model="input_value3" class="search-select-input" placeholder="搜索" :prefix-icon="Search" size="large" />
+                                            </template>
+                                            <el-checkbox-group :model-value="form.mobile.briefing_field" :max="3">
+                                                <el-option v-for="item in form.children.filter((item1: any) => item1.com_data.title.includes(input_value3) && item1.is_enable == '1' && !['video', 'img', 'auxiliary-line', 'upload-video', 'upload-attachments', 'upload-img', 'rich-text'].includes(item1.key))" :key="item.id" :value="item.id" :label="item.com_data.title">
+                                                    <el-checkbox :value="item.id" :label="item.com_data.title">{{ item.com_data.title }}</el-checkbox>
+                                                </el-option>
+                                            </el-checkbox-group>
+                                            <!-- 选中之后的效果 -->
+                                            <template #tag>
+                                                <div class="text-line-1 size-12 cr-6">{{ selected_names }}</div>
+                                            </template>
+                                        </el-select>
+                                    </template>
                                 </div>
                             </template>
                         </div>
@@ -275,6 +291,26 @@ const title_change = () => {
     }
 };
 //#endregion
+//#region 手机端字段显示
+const input_value3 = ref('');
+const selected_names = computed(() => {
+    const optionList = form.value?.children || [];
+    const formValue = form.value.mobile.briefing_field || [];
+
+    const valueSet = new Set(formValue);
+    return optionList
+    .filter((item: { id: string }) => valueSet.has(item.id))
+    .map((item: { com_data: { title: string } }) => item.com_data.title)
+    .join(',');
+});
+watch(() => form.value.children, (val) => {
+    // 过滤出来可以选中的字段
+    const new_data = form.value.children.filter((item1: any) => item1.is_enable == '1' && !['video', 'img', 'auxiliary-line', 'upload-video', 'upload-attachments', 'upload-img', 'rich-text'].includes(item1.key));
+    const formValue = cloneDeep(form.value?.mobile?.briefing_field || []);
+    // 判断历史的是否被删除或者隐藏，去除之后过滤出来剩余的数量
+    form.value.mobile.briefing_field = new_data.filter((item: { id: string}) => formValue.includes(item.id)).map((item: { id:string }) => item.id);
+}, {immediate: true, deep: true})
+//#endregion
 const name_change = (val: string) => {
     all_form_value.value.form_name = val;
 }
@@ -356,6 +392,12 @@ const name_change = (val: string) => {
         color: #000 !important;
         box-shadow: none !important;
         background-color: transparent !important;
+    }
+}
+.search-input, .search-select-input {
+    :deep(.el-input__wrapper) {
+        box-shadow: none;
+        border-radius: 0;
     }
 }
 </style>

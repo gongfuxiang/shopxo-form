@@ -17,7 +17,7 @@ const props = defineProps({
     }
 });
 const form = computed(() => props.value);
-const border_style = computed(() => `${ form.value.type == 'rect' ? '' : 'border-radius: 50%;'}border: ${ form.value.border_size }px ${ form.value.border_type } ${ form.value.border_color};`);
+const border_style = computed(() => `${ form.value.type == 'rect' ? '' : 'border-radius: 50%;'}border: ${ form.value.border_size }px ${ form.value.border_style } ${ form.value.border_color};`);
 </script>
 <style lang="scss" scoped>
 </style>

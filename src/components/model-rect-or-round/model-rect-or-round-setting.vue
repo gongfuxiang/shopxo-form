@@ -9,7 +9,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">边框样式</div>
-                <el-radio-group v-model="form.border_type" @change="operation_end">
+                <el-radio-group v-model="form.border_style" @change="operation_end">
                     <el-radio value="dashed"><div class="border-style-item" style="border: 1px dashed #979797"></div></el-radio>
                     <el-radio value="solid"><div class="border-style-item" style="border: 1px solid #979797"></div></el-radio>
                     <el-radio value="dotted"><div class="border-style-item" style="border: 1px dotted #979797"></div></el-radio>

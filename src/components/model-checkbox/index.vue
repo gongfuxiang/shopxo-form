@@ -150,11 +150,10 @@ const confirm = async (formEl: FormInstance | undefined) => {
 const new_option_list = computed(() => {
     if (!isEmpty(input_value.value)) {
         const inputValue = input_value.value.split(' ').filter(item => item !== '');
-        return form.value.option_list.filter((item: { value: string }) => inputValue.some(keyword => item.value.includes(keyword)));
+        return form.value.option_list.filter((item: { name: string }) => inputValue.some(keyword => item.name.includes(keyword)));
     } else {
         return form.value.option_list;
     }
-    
 });
 const selectAll = ref(false);
 const input_value = ref('');

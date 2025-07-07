@@ -85,7 +85,7 @@ declare global {
         background_img_style: string;
     };
 
-    type border_style = { border_is_show: string, border_color: string, border_type: string, border_size: paddingStyle, border_radius: radiusStyle };
+    type border_style = { border_is_show: string, border_color: string, border_style: string, border_size: paddingStyle, border_radius: radiusStyle };
     type componentsTopStyle = {
         time_value: any;
     };
@@ -95,7 +95,7 @@ declare global {
     type componentsCommonCommonStyle = {
         border_is_show: string,
         border_color: string,
-        border_type: string,
+        border_style: string,
         border_size: paddingStyle,
         border_radius: radiusStyle,
         format: string,

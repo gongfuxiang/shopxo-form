@@ -3,6 +3,9 @@ import defaultCommon from './index';
 interface DefaultSelect {
     title: string;
     form_value: string[];
+    province_name: string,
+    city_name: string,
+    county_name: string,
     detailed_value: string;
     address_type: string;
     placeholder: string;
@@ -16,6 +19,9 @@ const defaultSelect: DefaultSelect = {
     title: '地址',
     address_type: 'noDetailed',
     form_value: [],
+    province_name: '',
+    city_name: '',
+    county_name: '',
     detailed_value: '',
     placeholder: '请选择内容',
     is_required: '0',

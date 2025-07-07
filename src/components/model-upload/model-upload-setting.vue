@@ -29,6 +29,7 @@
         </el-form-item>
         <border-config class="mb-18" :value="form.common_config" />
         <help-config class="mb-18" :value="form.common_config" />
+        <div v-if="!['img', 'video'].includes(props.acceptType)" class="new_tips">上传文件只支持PC,H5,微信小程序,QQ小程序, 不支持的平台会直接隐藏</div>
         <template v-if="isSubform">
             <subform-width v-model="form.com_width"></subform-width>
         </template>

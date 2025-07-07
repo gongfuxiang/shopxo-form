@@ -29,20 +29,12 @@ const border_style = computed(() => {
         return `width: ${ form.value.line_width }%;border-bottom: ${ form.value.line_size }px ${ form.value.line_style } ${ form.value.line_color };`;
     } else {
         if (form.value.line_type === 'horizontal') {
-            return `${ set_count() }margin: 5px 0;border-bottom: ${form.value.line_size }px ${form.value.line_style} ${form.value.line_color};`;
+            return `width: ${form.value.com_width}px;margin: 5px 0;border-bottom: ${form.value.line_size }px ${form.value.line_style} ${form.value.line_color};`;
         } else {
-            return `${ set_count() } margin: 0 5px;border-right: ${form.value.line_size }px ${form.value.line_style} ${form.value.line_color};`;
+            return `height: ${form.value.com_height}px;margin: 0 5px;border-right: ${form.value.line_size }px ${form.value.line_style} ${form.value.line_color};`;
         }
     }
 });
-// 不同地方下的宽度显示
-const set_count = () => {
-    if (form.value.line_type === 'horizontal') {
-        return `width: ${form.value.com_width}px;`;
-    } else {
-        return `height: ${form.value.com_height}px;`;
-    }
-};
 </script>
 <style lang="scss" scoped>
 .rich-text-content {

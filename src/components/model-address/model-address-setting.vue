@@ -30,7 +30,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">默认值</div>
-                <el-cascader v-model="form.form_value" :options="common_store.address_list" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable />
+                <el-cascader v-model="form.form_value" :options="common_store.address_list" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="cascader_change" />
                 <template v-if="form.address_type == 'detailed'">
                     <el-input v-model="form.detailed_value" type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入详细地址"></el-input>
                 </template>
@@ -52,6 +52,8 @@
 <script setup lang="ts">
 import { commonStore } from '@/store';
 import { isEmpty, cloneDeep } from 'lodash';
+import { get_region_names_by_id } from '@/utils';
+import { CascaderValue } from 'element-plus';
 const common_store = commonStore();
 const props = defineProps({
     value: {
@@ -93,6 +95,13 @@ const address_type_change = (val: any) => {
 };
 const name_change = (val: string) => {
     all_form_value.value.form_name = val;
+}
+const cascader_change = (val: any) => {
+    // 省市区中文名称
+    const address_name = get_region_names_by_id(common_store.address_list, val);
+    form.value.province_name = address_name[0] || '';
+    form.value.city_name = address_name[1] || '';
+    form.value.county_name = address_name[2] || '';
 }
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

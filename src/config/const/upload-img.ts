@@ -24,7 +24,7 @@ const defaultInput: DefaultInput = {
     com_height: 66,
     common_config: {
         ...defaultCommon,
-        border_type: 'dashed'
+        border_style: 'dashed'
     }
 };
 

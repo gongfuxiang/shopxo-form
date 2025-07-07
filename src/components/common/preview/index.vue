@@ -22,7 +22,7 @@
                         <div class="main-custom-content oh" :style="`margin:0 auto;width: ${ common_store.form_config.custom_width }px;`">
                             <layout-top></layout-top>
                             <div class="re bg-f oh" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
-                                <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :data-location-x="item.location.x" :data-location-y="item.location.y" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ percentage_count(item.location.x, item.com_data.data_follow, 'left') }; top: ${ percentage_count(item.location.y, item.com_data.data_follow, 'top') }; width: ${ percentage_count(item.com_data.com_width, item.com_data.data_follow, 'width', item.com_data.is_width_auto, item.com_data.max_width, item.is_enable) }; height: ${ percentage_count(item.com_data.com_height, item.com_data.data_follow, 'height', item.com_data.is_height_auto, item.com_data.max_height, item.is_enable) };z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index + 1) : -999};`">
+                                <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ item.location.x }px; top: ${ item.location.y }px; width: ${ item.com_data.com_width }px; height: ${ item.com_data.com_height }px;z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index + 1) : -999};`">
                                     <component-show :value="item" :is-custom="true" :is-preview="true" :is-show="true"></component-show>
                                 </div>
                             </div>
@@ -53,7 +53,7 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
-import { checkbox_range_handle, get_format_checks, get_format_checks_v2, get_id, isEmpty, number_range_handle } from "@/utils";
+import { checkbox_range_handle, get_format_checks, get_format_checks_v2, get_id, get_region_names_by_id, isEmpty, number_range_handle } from "@/utils";
 import formSaveAPI from "@/api/formSave";
 import { cloneDeep } from "lodash";
 const common_store = commonStore();
@@ -116,47 +116,6 @@ const filteredDiyData = computed(() => {
         return isShownByRule;
     });
 });
-/**
- * 根据给定的值、跟随数据、类型等参数计算并返回一个表示百分比或特定值的字符串
- * 主要用于计算CSS样式中的尺寸属性值
- * 
- * @param {number} val - 需要转换为百分比或特定值的原始数值
- * @param {Object} data_follow - 包含跟随信息的对象，用于确定是否需要跟随其他元素
- * @param {string} type - 尺寸类型，可以是'left'、'top'、'width'或'height'
- * @param {string} [is_auto] - 可选参数，如果设置为'1'，则根据type和max_size计算自动样式
- * @param {number} [max_size] - 可选参数，用于计算最大宽度或高度
- * @returns {string} - 返回一个表示百分比或特定值的字符串，用于CSS样式
- */
- const percentage_count = (val: number, data_follow: { id: string, type: string }, type: string, is_auto?: string, max_size?: number, is_enable?: string) => {
-    // 检查类型是否为'left'或'top'，如果是，则根据跟随数据计算样式
-    if (['left', 'top'].includes(type)) {
-        const { id = '', type: follow_type = 'left' } = data_follow || { id: '', type: 'left' };
-        // 如果id不为空且follow_type与type匹配，则返回原始值的字符串表示
-        if (id !== '' && follow_type === type) {
-            return `${val}px`;
-        }
-        // 如果条件不满足，则根据比例缩放val并返回
-        return `${val * props.scale}px`;
-    } else {
-        // 如果is_auto设置为'1'，则根据type和max_size计算自动样式
-        if (is_auto === '1') {
-            if (type === 'width' || type === 'height') {
-                if (typeof max_size === 'number' && max_size >= 0) {
-                    const scaledMaxSize = max_size * props.scale;
-                    const autoStyle = 'auto;';
-                    const maxSizeStyle = scaledMaxSize > 0 ? ` max-${type}: ${scaledMaxSize}px;` : '';
-                    const whiteSpaceStyle = type === 'width' && scaledMaxSize <= 0 ? ' white-space:nowrap;' : '';
-                    return `${ autoStyle }${ maxSizeStyle }${ whiteSpaceStyle }`;
-                } else {
-                    return 'auto;';
-                }
-            }
-        } else {
-            // 如果is_auto未设置或条件不满足，则根据比例缩放val并返回
-            return is_enable == '1' ? `${val * props.scale}px` : '0px';
-        }
-    }
-}
 //#region 表单操作逻辑
 // 保存草稿
 const save_draft = () => {
@@ -350,37 +309,6 @@ const submit_data_parameter_handle = () => {
     formSaveAPI.dataSave(params).then((res: any) => {
         ElMessage.success('提交成功');
     })
-}
-
-interface RegionItem {
-  id: string | number;
-  name: string;
-  items?: RegionItem[];
-}
-
-/**
- * 根据省市区ID数组获取对应的名称路径
- * @param data 级联数据数组
- * @param ids 要查找的ID数组 [省ID, 市ID, 区ID]
- * @returns 包含省市区名称的数组，如果未找到则返回空数组
- */
-const get_region_names_by_id = (data: RegionItem[], ids: (string | number)[]): string[] => {
-  if (!data || !ids || ids.length === 0) {
-    return [];
-  }
-
-  const result: string[] = [];
-  let currentData = data;
-  
-  for (const id of ids) {
-    const foundItem = currentData.find(item => item.id === id);
-    if (!foundItem) {
-      return [];
-    }
-    result.push(foundItem.name);
-    currentData = foundItem.items || [];
-  }
-  return result;
 }
 // 处理手机号验证逻辑
 const handlePhoneValidation = (com_data: any) => {

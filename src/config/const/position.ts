@@ -2,7 +2,7 @@ import defaultCommon from './index';
 
 interface DefaultSelect {
     title: string;
-    form_value: string;
+    form_value: object;
     placeholder: string;
     is_required: string;
     is_longitude_and_latitude: string;
@@ -13,7 +13,7 @@ interface DefaultSelect {
 
 const defaultSelect: DefaultSelect = {
     title: '定位',
-    form_value: '',
+    form_value: {},
     placeholder: '请选择内容',
     is_required: '0',
     is_longitude_and_latitude: '0',

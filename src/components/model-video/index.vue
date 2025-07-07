@@ -6,11 +6,18 @@
                 <div class="re oh" :style="video_style">
                     <video v-show="is_video_play" ref="videoPlayer" :src="form.video[0]?.url || ''" controls class="w h"></video>
                     <template v-if="!is_video_play">
-                        <template v-if="(!isEmpty(form.video) && isEmpty(form.video_img))">
-                            <video :src="form.video[0].url" controls class="w h"></video>
+                        <template v-if="isEmpty(form.video) && isEmpty(form.video_img)">
+                            <image-empty v-model="form.video_img" fit="contain" error-img-style="width:60px;height:60px;"></image-empty>
                         </template>
                         <template v-else>
-                            <image-empty v-model="form.video_img[0]" error-img-style="width:60px;height:60px;"></image-empty>
+                            <template v-if="!isEmpty(form.video)">
+                                <video :src="form.video[0].url" controls class="w h"></video>
+                            </template>
+                            <template v-if="!isEmpty(form.video_img)">
+                                <div class="middle w h">
+                                    <image-empty v-model="form.video_img[0]" fit="contain" error-img-style="width:60px;height:60px;"></image-empty>
+                                </div>
+                            </template>
                         </template>
                         <img :src="video_src" class="middle box-shadow-sm round" width="60" height="60" @click="video_change" />
                     </template>
@@ -43,12 +50,12 @@ const video_style = computed(() => {
         const { video_width, video_scale_type } = form.value;
         const height = video_scale_type === '1' ? video_width : video_scale_type == '0' ? (video_width * 9) / 16 : (video_width * 3) / 4;
         return {
-            width: `${form.value.video_width}px`,
+            width: `${video_width}px`,
             height: `${ height }px`,
         };
     } else {
         return {
-            width: '100%;',
+            width: '100%',
             height: '100%',
         };
     }

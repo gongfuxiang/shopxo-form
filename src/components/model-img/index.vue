@@ -30,13 +30,13 @@ const img_style = computed(() => {
         const { img_width, img_scale_type } = form.value;
         const height = img_scale_type === '1' ? img_width : img_scale_type == '0' ? (img_width * 9) / 16 : (img_width * 3) / 4;
         return {
-            width: `${form.value.img_width}px`,
+            width: `${ img_width }px`,
             height: `${ height }px`,
         };
     } else {
         return {
-            width: '100%;',
-            height: '100%;',
+            width: '100%',
+            height: '100%',
         };
     }
 });

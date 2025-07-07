@@ -1,7 +1,7 @@
 const defaultCommon: componentsCommonCommonStyle = {
     border_is_show: '1',
     border_color: '#E3E3E3',
-    border_type: 'solid',
+    border_style: 'solid',
     format: 'none',
     is_error: '0',
     error_text: '',

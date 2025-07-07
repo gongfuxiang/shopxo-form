@@ -36,9 +36,10 @@
         <template v-if="isSubform">
             <subform-width v-model="form.com_width"></subform-width>
         </template>
+        <div class="new_tips">富文本只支持PC,H5,APP,微信小程序,百度小程序, 不支持的平台会直接隐藏</div>
         <!-- 默认内容设置 -->
         <el-dialog v-model="dialogVisible" title="编辑" width="800px" style="height: 610px" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body draggable @close="cancel"> 
-            <div class="w h ptb-20 oh">
+            <div class="w h ptb-20 oh" style="height: 490px;">
                 <editor-config v-model="old_value" :placeholder="form.placeholder" new-style="height: 450px;"></editor-config>
             </div>
             <template #footer>
@@ -108,4 +109,8 @@ const operation_end = () => {
 </script>
 
 <style scoped lang="scss"> 
+.new_tips {
+    color: $cr-error;
+    font-size: 1rem;
+}
 </style>

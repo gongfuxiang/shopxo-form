@@ -201,9 +201,9 @@ export function radius_computer(new_style: radiusStyle, scale: number = 1) {
 }
 
 export const border_computer = (new_style: border_style) => {
-    const { border_is_show = '0', border_color = '', border_type = 'solid', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
+    const { border_is_show = '0', border_color = '', border_style = 'solid', border_size = { padding: 0, padding_bottom: 0, padding_left: 0, padding_right: 0, padding_top: 0 } } = new_style;
     if (border_is_show == '1') {
-        return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${border_type};border-color: ${border_color};box-sizing: content-box;`;
+        return `border-width: ${border_size.padding_top}px ${border_size.padding_right}px ${border_size.padding_bottom}px ${border_size.padding_left}px;border-style: ${border_style};border-color: ${border_color};box-sizing: content-box;`;
     }
     return '';
 };
@@ -259,7 +259,7 @@ export function background_computer(new_style: backgroundImgUrlStyle) {
  * 生成一个随机数学字符串。
  * @returns {string} 一个6位的36进制随机字符串。
  */
-export function get_math() {
+export function get_math(): string {
     // 通过Math.random()生成随机数，并转换为36进制的字符串
     let randomString = Math.random().toString(36);
     // 确保随机字符串至少有6位，因为substring(2)可能会使短于6位的字符串产生错误。
@@ -951,3 +951,33 @@ export const get_id = () => {
         return new_id;
     }
 };
+
+interface RegionItem {
+  id: string | number;
+  name: string;
+  items?: RegionItem[];
+}
+/**
+ * 根据省市区ID数组获取对应的名称路径
+ * @param data 级联数据数组
+ * @param ids 要查找的ID数组 [省ID, 市ID, 区ID]
+ * @returns 包含省市区名称的数组，如果未找到则返回空数组
+ */
+export const get_region_names_by_id = (data: RegionItem[], ids: (string | number)[]): string[] => {
+  if (!data || !ids || ids.length === 0) {
+    return [];
+  }
+
+  const result: string[] = [];
+  let currentData = data;
+  
+  for (const id of ids) {
+    const foundItem = currentData.find(item => item.id === id);
+    if (!foundItem) {
+      return [];
+    }
+    result.push(foundItem.name);
+    currentData = foundItem.items || [];
+  }
+  return result;
+}

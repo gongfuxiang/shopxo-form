@@ -5,7 +5,7 @@
             <div class="content w flex-1">
                 <template v-if="form.file.length > 0">
                     <div class="flex-row gap-20 align-c">
-                        <span class="file-title text-line-1">{{ form.file[0].original || '' }}</span>
+                        <span class="file-title text-line-1" :style="common_store.frame_style + 'width:auto;height:100%'">{{ form.file[0].original || '' }}</span>
                         <div class="oprate">
                             <div class="icon" @click.stop="copy(form.file[0].url)">
                                 <icon name="copy" size="10"/>
