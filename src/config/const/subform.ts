@@ -14,7 +14,7 @@ interface DefaultText {
         arrange: string;
         is_fixed: string;
         horizontal_fixed_num: number;
-        direction_fixed_num: string;
+        direction_fixed: string;
         briefing_field: string[];
     };
     com_width: number;
@@ -38,7 +38,7 @@ const defaultText: DefaultText = {
         arrange: 'horizontal',
         is_fixed: '1',
         horizontal_fixed_num: 1,
-        direction_fixed_num: 'the_first_three',
+        direction_fixed: 'the_first_three',
         briefing_field: [],
     },
     common_config: defaultCommon

@@ -96,10 +96,10 @@
                             <template v-else>
                                 <div class="flex-col gap-10">
                                     <span class="size-12 cr-6 flex-row gap-10">数据收起时显示的简报<tooltip content="简报不显示图片、视频、上传、富文本、密码、辅助线等"></tooltip></span>
-                                    <el-select v-model="form.mobile.direction_fixed_num" value-key="id" filterable>
+                                    <el-select v-model="form.mobile.direction_fixed" value-key="id" filterable>
                                         <el-option v-for="item in direction_fixed_option" :key="item.value" :label="item.name" :value="item.value" />
                                     </el-select>
-                                    <template v-if="form.mobile.direction_fixed_num == 'custom'">
+                                    <template v-if="form.mobile.direction_fixed == 'custom'">
                                         <el-select v-model="form.mobile.briefing_field" multiple :multiple-limit="3" popper-class="custom-select" placeholder="请选择简报字段，最多3个" @focus="input_value3 = ''">
                                             <template #header>
                                                 <el-input v-model="input_value3" class="search-select-input" placeholder="搜索" :prefix-icon="Search" size="large" />
