@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div v-else class="flex-row iframe-content oh w h">
+            <div v-else class="flex-row iframe-content oh w h z-i">
                 <iframe :key="key" :src="new_link + '&key=' + key" width="100%" height="100%" frameborder="0"></iframe>
             </div>
         </div>
