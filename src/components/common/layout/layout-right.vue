@@ -1,6 +1,6 @@
 <template>
     <div class="setting-content flex-col gap-20">
-        <div class="flex-col gap-10 w h">
+        <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
             <div class="new_title">页面背景</div>
             <div class="flex-col gap-10">
                 <!-- <el-radio-group v-model="form.background_type">

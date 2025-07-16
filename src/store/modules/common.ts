@@ -33,6 +33,7 @@ export const commonStore = defineStore('common', () => {
             site_logo: '',
             site_name: '',
         } as any, // 基础数据配置参数
+        preview_url: '',
     });
     // 左侧菜单显示逻辑
     const mains_siderbar = ref<componentsData[]>([]);

@@ -47,13 +47,16 @@
                     </div>
                 </div>
             </div>
+            <div v-else class="flex-row iframe-content oh w h">
+                <iframe :key="key" :src="new_link + '&key=' + key" width="100%" height="100%" frameborder="0"></iframe>
+            </div>
         </div>
     </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
-import { checkbox_range_handle, get_format_checks, get_format_checks_v2, get_id, get_region_names_by_id, isEmpty, number_range_handle } from "@/utils";
+import { checkbox_range_handle, get_cookie, get_format_checks, get_format_checks_v2, get_id, get_math, get_region_names_by_id, isEmpty, number_range_handle, set_cookie } from "@/utils";
 import formSaveAPI from "@/api/formSave";
 import { cloneDeep } from "lodash";
 const common_store = commonStore();
@@ -397,6 +400,43 @@ const subform_data_check = (is_format: boolean, type: string, index: number, id:
 const config_value = computed(() => type_value.value == 'computer' ? common_store.form_config.style_settings.computer : common_store.form_config.style_settings.mobile);
 
 const content_style = computed(() => `background:${ config_value.value.background_color }`);
+
+// #region iframe 样式
+const new_link = ref('');
+// 如果是本地则使用静态tonken如果是线上则使用cookie的token
+const cookie = get_cookie('admin_info') || '';
+const token = ref('');
+const key = ref(0);
+onMounted(async () => {
+    if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
+        let temp_data = await import(import.meta.env.VITE_APP_BASE_API == '/dev-api' ? '../../../../temp.d.ts' : '../../../../temp_pro.d');
+        token.value = '&token=' + temp_data.default.temp_token;
+    } else {
+        if (cookie && cookie !== null && cookie !== 'null') {
+            token.value = '&token=' + JSON.parse(cookie).token;
+        }
+    }
+});
+// 监听dialog_visible
+watch(
+    () => dialogVisible.value,
+    (newVal) => {
+        key.value = new Date().getTime();
+        if (newVal) {
+            let uuid_val = '';
+            if (get_cookie('uuid_name')) {
+                uuid_val = get_cookie('uuid_name');
+            } else {
+                uuid_val = get_math();
+                set_cookie('uid_name', uuid_val);
+            }
+            let url = common_store.common.preview_url;
+            // 判断是否包含? 如果包含？的话就是添加参数，否则就是添加？后添加参数
+            new_link.value = url + (url.includes('?') ? '&id=' : '?id=') + get_id() + token.value + '&type=' + (type_value.value == 'computer' ? 'web' : 'h5')+ '&uuid=' + uuid_val;
+        }
+    }
+);
+// #endregion
 </script>
 
 <style lang="scss" scoped>
