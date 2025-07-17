@@ -254,7 +254,30 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
         customClass: 'message-box-custom',
     })
     const clone_form = cloneDeep(data);
-    clone_form.diy_data = clone_form.diy_data.map((item: any) => ({ ...item, show_tabs: '0'}));
+    clone_form.diy_data.forEach((item: any) => { 
+        item.show_tabs = '0';
+        // 子表单需要统一规整一下数据
+        if (item.key == 'subform') {
+            const { com_data } = item;
+            item.com_data.data_list = [];
+            let data_list: any[] = [];
+            com_data.form_value.forEach((item1: string) => {
+                const data = JSON.parse(JSON.stringify(com_data?.children || []));
+                if (data.length > 0) {
+                    data.forEach((child: any) => {
+                        if (!isEmpty(item1[child.id])) {
+                            child.com_data.form_value = item1[child.id];
+                        }
+                    });
+                    data_list.push({
+                        is_expand: false,
+                        data_list: data
+                    });
+                }
+            });
+            item.com_data.data_list = data_list;
+        }
+    });
     //数据改造
     const new_data = diy_data_transfor_form_data(clone_form);
     ForminputAPI.save(new_data)
