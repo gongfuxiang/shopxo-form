@@ -3,6 +3,12 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div></div>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
+            </div>
+        </el-form-item>
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">类型<div class="new_desc">{{ form.type == 'rect' ? '矩形' : '圆形'}}</div></div>
             </div>
         </el-form-item>
@@ -35,7 +41,7 @@
 </template>
 <script setup lang="ts">
 import { location_compute } from '@/utils';
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
 import { commonStore } from "@/store";
 const common_store = commonStore();
 const props = defineProps({
@@ -53,6 +59,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

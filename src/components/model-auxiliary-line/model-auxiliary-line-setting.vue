@@ -3,6 +3,12 @@
         <!-- <div class="mb-10 fw">内容设置</div> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
+                <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div></div>
+                <el-input v-model="form.title" placeholder="请输入标题" @change="title_change"></el-input>
+            </div>
+        </el-form-item>
+        <el-form-item label-width="0">
+            <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb">线条设置</div>
                 <div class="flex-col gap-10">
                     <div v-if="isCustom" class="flex-row align-c gap-10">
@@ -52,6 +58,7 @@
 </template>
 <script setup lang="ts">
 import { get_container_location, location_compute } from '@/utils';
+import { isEmpty, cloneDeep } from 'lodash';
 import { commonStore } from "@/store";
 const common_store = commonStore();
 const props = defineProps({
@@ -97,6 +104,15 @@ const size_location_change = (location: { x: number, y: number, record_x: number
 watch(() => diy_data.value, (val) => {
     size_location_change(val.location);
 },{ immediate: true, deep: true });
+
+//#region 标题更新时的修改
+const old_title = ref(cloneDeep(form.value.title));
+const title_change = () => {
+    if (isEmpty(form.value.title)) {
+        form.value.title = old_title.value;
+    }
+};
+//#endregion
 
 const emit = defineEmits(['operation_end']);
 const operation_end = () => {

@@ -1,6 +1,7 @@
 import defaultCommon from './index';
 
 interface DefaultRect {
+    title: string,
     type: string;
     border_size: number;
     border_color: string;
@@ -11,6 +12,7 @@ interface DefaultRect {
 }
 
 const defaultRect: DefaultRect = {
+    title: '圆角',
     type: 'round',
     border_size: 1,
     border_color: '#000',
