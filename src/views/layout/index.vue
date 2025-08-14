@@ -28,7 +28,7 @@ import { style_settings } from '@/utils/common';
 import CommonAPI from '@/api/common';
 import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
 import { commonStore } from '@/store';
-import { get_cookie, get_id, is_obj, set_cookie } from '@/utils';
+import { common_styles_computer, date_style_options, get_cookie, get_id, is_obj, set_cookie, time_stamp } from '@/utils';
 import defaultSettings from './index';
 const common_store = commonStore();
 const app = getCurrentInstance();
@@ -256,6 +256,7 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
     const clone_form = cloneDeep(data);
     clone_form.diy_data.forEach((item: any) => { 
         item.show_tabs = '0';
+        item.common_style = common_styles_computer(item.com_data.common_config);
         // 子表单需要统一规整一下数据
         if (item.key == 'subform') {
             const { com_data } = item;
@@ -265,6 +266,7 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                 const data = JSON.parse(JSON.stringify(com_data?.children || []));
                 if (data.length > 0) {
                     data.forEach((child: any) => {
+                        item.common_style = common_styles_computer(child.com_data.common_config);
                         if (!isEmpty(item1[child.id])) {
                             child.com_data.form_value = item1[child.id];
                         }
@@ -276,6 +278,19 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                 }
             });
             item.com_data.data_list = data_list;
+        } else if (['date', 'date-group'].includes(item.key)) { 
+            const com_data = item.com_data;
+            const data = new Map(date_style_options(item.com_data.date_style).map(item => [item.value, item]));
+            const new_format = data.get(item.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
+            item.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
+            if (item.key == 'date') {
+                item.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
+            } else {
+                item.com_data.new_form_value = [];
+                if (com_data.form_value.length > 0) {
+                    item.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
+                }
+            }
         }
     });
     //数据改造

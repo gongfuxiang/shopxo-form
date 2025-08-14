@@ -37,7 +37,7 @@
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">类型</div>
-                <el-select v-model="form.date_type" value-key="id" filterable placeholder="请选择输入格式" @change="date_type_change">
+                <el-select v-model="form.date_type" value-key="id" filterable placeholder="请选择输入格式">
                     <el-option v-for="option in date_style_options(form.date_style)" :key="option.value" :label="option.label" :value="option.value" />
                 </el-select>
             </div>
@@ -144,16 +144,6 @@ const custom_icon_click = () => {
     }
 };
 //#endregion
-const data_cache_type = ref(cloneDeep(form.value.date_type));
-const date_type_change = (val: any) => {
-    if (!['option1', 'option2'].includes(data_cache_type.value) && ['option1', 'option2'].includes(val)) { // 如果历史选择的不是时间范围，而现在选择的是时间范围，则将值更新为数组
-        form.value.form_value = [];
-    } else if (['option1', 'option2'].includes(data_cache_type.value) && !['option1', 'option2'].includes(val)) {  // 如果历史选择的是时间范围，而现在选择不是时间范围，则将值更新为字符串
-        form.value.form_value = '';
-    }
-    // 每次判断完成之后，更新历史选择的值
-    data_cache_type.value = val;
-};
 const name_change = (val: string) => {
     all_form_value.value.form_name = val;
 }

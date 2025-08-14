@@ -3,10 +3,10 @@
 		<div v-for="(item, index) in Array(props.max)" :key="index" class="rate-item">
 			<template v-if="props.type !== '2'">
 				<template v-if="index < new_selected">
-					<icon :name="props.type == '0' ? 'pointed' : 'heart'" size="16" class="w h" :color="props.selectColor" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
+					<icon :name="props.type == '0' ? 'pointed' : 'the-heart'" size="16" class="w h" :color="props.selectColor" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
 				</template>
 				<template v-else>
-					<icon :name="props.type == '0' ? 'five-pointed' : 'the-heart'" size="16" class="w h" color="#ccc" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
+					<icon :name="props.type == '0' ? 'pointed-o' : 'the-heart-o'" size="16" class="w h" color="#ccc" @mousemove="mousemove(index + 1)" @mouseleave="mouseleave(index + 1)" @click="icon_click(index + 1)"></icon>
 				</template>
 			</template>
 			<template v-else>

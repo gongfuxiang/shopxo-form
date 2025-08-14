@@ -11,7 +11,7 @@
 			<div v-for="(item, index) in success_list" :key="index">
 				<template v-if="acceptType == 'file'">
 					<div v-if="item" class="upload-file-style re" @click="preview_event(item.url, item.name)"> 
-						<div class="upload-file-content  flex-row align-c gap-10">
+						<div class="upload-file-content flex-row align-c gap-10">
 							<div v-if="item" class="flex-row align-c upload-file-title w h">
 								<span class="text-line-1">{{ new_name(item.name)[0] || '' }}</span><span>.{{ new_name(item.name)[1] || '' }}</span>
 							</div>

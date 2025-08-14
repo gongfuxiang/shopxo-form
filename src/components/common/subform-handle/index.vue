@@ -6,7 +6,7 @@
                 <el-button class="custom-button" @click="remove_selected">删除选中</el-button>
             </template>
             <template v-else>
-                <el-button class="custom-button" type="primary" @click="add"><icon name="xzdz-tianjiabiaoq" size="14"></icon>添加</el-button>
+                <el-button class="custom-button" type="primary" @click="add"><icon name="add-wide" size="14"></icon>添加</el-button>
                 <el-button v-if="form.form_value.length > 0" class="custom-button" @click="remove_handle"><icon name="delete" size="14"></icon>删除</el-button>
             </template>
         </div>

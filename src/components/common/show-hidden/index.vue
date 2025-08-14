@@ -2,7 +2,7 @@
     <el-dialog v-model="dialogVisible" title="显隐规则" width="800px" style="height: 600px" align-center :close-on-click-modal="false" :close-on-press-escape="false" append-to-body draggable @close="cancel"> 
         <div class="content flex-col gap-10 mtb-20">
             <el-dropdown trigger="click" max-height="300px" size="large" placement="bottom-start" @visible-change="input_value1 = ''">
-                <el-button class="dialog-add"><icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/><span class="ml-5">显隐规则</span></el-button>
+                <el-button class="dialog-add"><icon name="add-wide" size="14" color="#2a94ff"/><span class="ml-5">显隐规则</span></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-input v-model="input_value1" class="search-input" placeholder="搜索" :prefix-icon="Search" size="large" />

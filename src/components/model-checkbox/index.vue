@@ -21,7 +21,7 @@
                         </div>
                         <template #reference>
                             <div class="add-option flex-row gap-10 align-c" @click="add_option">
-                                <icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/>
+                                <icon name="add-wide" size="14" color="#2a94ff"/>
                                 <span class="size-14 cr-primary">添加选项</span>
                             </div>
                         </template>
@@ -41,7 +41,7 @@
                             </el-checkbox-group>
                             <template v-if="form.is_add_option == '1'" #footer>
                                 <div v-if="!popover_visible" class="add-option flex-row gap-10 align-c pl-20" @click="add_option">
-                                    <icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/>
+                                    <icon name="add-wide" size="14" color="#2a94ff"/>
                                     <span class="size-14 cr-primary">添加选项</span>
                                 </div>
                                 <div v-else class="flex-col gap-10 align-c jc-sb w h">

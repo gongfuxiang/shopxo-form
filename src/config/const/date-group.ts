@@ -15,7 +15,7 @@ interface DefaultInput {
 
 const defaultInput: DefaultInput = {
     title: '日期时间组',
-    form_value: '',
+    form_value: [],
     start_placeholder: '请选择开始时间',
     end_placeholder: '请选择结束时间',
     is_required: '0',

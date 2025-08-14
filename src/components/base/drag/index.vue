@@ -1,9 +1,9 @@
 <template>
-    <VueDraggable v-model="from" :animation="500" target=".sort-target" handle=".icon-drag" :scroll="true" :on-sort="on_sort">
+    <VueDraggable v-model="from" :animation="500" target=".sort-target" handle=".icon-drag-dot" :scroll="true" :on-sort="on_sort">
         <TransitionGroup type="transition" tag="ul" name="fade" class="sort-target flex-col gap-10">
             <li v-for="(item, index) in from" :key="index" class="flex-row alingn-c gap-y-16 re">
                 <slot :row="item" :index="index" />
-                <icon name="drag" size="16" class="cursor-move" />
+                <icon name="drag-dot" size="16" class="cursor-move" />
                 <template v-if="isShowCopy">
                     <el-tooltip effect="dark" :show-after="200" :hide-after="200" content="复制" raw-content placement="top">
                         <icon name="copy" size="16" class="drag-icon" color="3" @click="copy(index)"/>

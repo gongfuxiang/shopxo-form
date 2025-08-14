@@ -1,6 +1,6 @@
 <template>
     <el-tooltip popper-class="custom-tooltip" :effect="props.effect" :show-after="200" :hide-after="200" :content="props.content" :disabled="isEmpty(props.content)" :raw-content="props.rawContent" :placement="placement">
-        <icon name="miaosha-hdgz" :size="props.size + ''" color="#999"></icon>
+        <icon name="help" :size="props.size + ''" color="#999"></icon>
     </el-tooltip>
 </template>
 

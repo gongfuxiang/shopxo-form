@@ -25,7 +25,7 @@
             <el-form-item label-width="0">
                 <div class="flex-col gap-10 w h">
                     <div class="new_title">格式</div>
-                    <el-select v-model="form.format" value-key="id" filterable placeholder="请选择输入格式" class="flex-1" @change="operation_end">
+                    <el-select v-model="form.common_config.format" value-key="id" filterable placeholder="请选择输入格式" class="flex-1" @change="operation_end">
                         <el-option v-for="item in format_option" :key="item.value" :label="item.name" :value="item.value" />
                     </el-select>
                 </div>
@@ -38,7 +38,7 @@
             </el-form-item>
         </template>
         <template v-else>
-            <option-config v-model:multicolour="form.is_multicolour" v-model:radio-value="form.form_value" :list="form.option_list" :multiple="false" @option-change="option_change" @onsort="option_list_change"></option-config>
+            <option-config v-model:multicolour="form.is_multicolour" v-model:radio-value="form.form_value" :list="form.option_list" :multiple="false" :is-other="isSubform ? false : true" @option-change="option_change" @onsort="option_list_change"></option-config>
         </template>
         <el-form-item label-width="0">
             <div class="flex-col w h">

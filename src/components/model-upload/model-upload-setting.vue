@@ -82,4 +82,8 @@ const operation_end = () => {
 </script>
 
 <style scoped lang="scss">
+.new_tips {
+    color: $cr-error;
+    font-size: 1rem;
+}
 </style>

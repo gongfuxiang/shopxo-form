@@ -39,7 +39,7 @@
                     <span class="size-12 cr-6">暂无数据, 请点击下方添加子字段添加数据或者点击表单编辑配置详细数据</span>
                 </template>
                 <el-dropdown trigger="click" max-height="300px" placement="bottom-start" @visible-change="input_value = ''">
-                    <el-button class="dialog-add"><icon name="xzdz-tianjiabiaoq" size="14" color="#2a94ff"/><span class="ml-5">添加子字段</span></el-button>
+                    <el-button class="dialog-add"><icon name="add-wide" size="14" color="#2a94ff"/><span class="ml-5">添加子字段</span></el-button>
                     <template #dropdown>
                         <el-dropdown-menu>
                             <el-input v-model="input_value" class="plr-10 pb-4" placeholder="搜索" :prefix-icon="Search" />

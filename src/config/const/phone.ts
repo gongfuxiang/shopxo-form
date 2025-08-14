@@ -21,7 +21,7 @@ const defaultSelect: DefaultSelect = {
     form_value: '',
     form_value_code: '',
     placeholder: '请输入内容',
-    icon_name: 'phone',
+    icon_name: 'phone-wide',
     is_required: '0',
     is_telephone: '0',
     is_sms_verification: '0',

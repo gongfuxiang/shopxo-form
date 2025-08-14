@@ -759,7 +759,7 @@ export const date_style_options = (date_style: string) => {
 type DateStyle = 'horizontal' | 'slash' | 'chinese';
 
 // 明确声明 styles 类型
-const styles: Record<DateStyle, Record<string, string>> = {
+const date_styles: Record<DateStyle, Record<string, string>> = {
     horizontal: {
         year: '-',
         month: '-',
@@ -801,12 +801,12 @@ const style_handle = (date_style: string, type: string, is_last: boolean = false
     // 将form.value.date_style断言为DateStyle类型，确保类型安全
     const currentStyle = date_style as DateStyle; // 类型断言
     // 检查当前样式是否存在于预定义的样式中，如果不存在，返回空字符串
-    if (!(currentStyle in styles)) {
+    if (!(currentStyle in date_styles)) {
         return '';
     }
 
     // 根据当前样式获取对应的样式映射
-    const mapping = styles[currentStyle];
+    const mapping = date_styles[currentStyle];
     // 根据类型获取对应的样式结果
     const result = mapping[type];
 
@@ -818,6 +818,53 @@ const style_handle = (date_style: string, type: string, is_last: boolean = false
     // 返回找到的样式结果
     return result;
 };
+
+/**
+ * 将时间戳转换为指定格式的日期字符串
+ * @param {number|string} time - 时间
+ * @param {string} [date_style='horizontal'] - 日期格式风格：horizontal/slash/chinese
+ * @returns {string} 格式化后的日期时间字符串
+ */
+export const time_stamp = (time: string, date_style = 'horizontal', date_type: string) => {
+    // 如果时间为空或不是数字，则返回空字符串
+    if (isEmpty(time)) {
+        return '';
+    }
+    let new_time = time;
+    // 检查时间是否符合日期格式, 不符合的话，添加上固定的年月日
+    if (['option1', 'option2'].includes(date_type) && isNaN(new Date(new_time).getTime())) {
+        new_time = '1970/01/01 ' + time.replace(/时|分|秒/g, ':').replace(/:+$/, '');
+    }
+    let date = new Date(new_time.replace(/-/g, '/').replace(/年|月|日/g, '/').replace(/\/+$/, ''));
+    // 如果可以直接解析成功，就使用直接解析好的数据
+    if (!isNaN(new Date(new_time).getTime())) {
+        date = new Date(new_time);
+    }
+    // 获取各时间组件
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    // 获取对应的分隔符配置
+    const style = (date_styles as Record<string, Record<string, string>>)[date_style] || date_styles.horizontal;
+    // 组合成完整日期时间字符串
+    if (date_type == 'option1') {
+        return `${hours}${style.hour}${minutes}${date_style == 'chinese' ? style.minute : ''}`;
+    } else if (date_type == 'option2'){
+        return `${hours}${style.hour}${minutes}${style.minute}${seconds}${date_style == 'chinese' ? style.second : ''}`;
+    } else if (date_type == 'option3'){
+        return `${year}${style.year}${month}${date_style == 'chinese' ? style.month : ''}`;
+    } else if (date_type == 'option4'){
+        return `${year}${style.year}${month}${style.month}${day}${ date_style == 'chinese' ? style.day : ''}`;
+    } else if (date_type == 'option5'){
+        return `${year}${style.year}${month}${style.month}${day}${style.day}${hours}${style.hour}${minutes}${date_style == 'chinese' ? style.minute : ''}`;
+    } else {
+        return `${year}${style.year}${month}${style.month}${day}${style.day}${hours}${style.hour}${minutes}${style.minute}${seconds}${date_style == 'chinese' ? style.second : ''}`;
+    }
+}
 //#endregion
 
 // 工具函数：安全地将字符串转为数字并格式化

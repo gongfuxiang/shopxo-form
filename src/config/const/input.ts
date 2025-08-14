@@ -25,7 +25,6 @@ interface DefaultInput {
     desensitization_value: string[],
     is_multicolour: string;
     show_hidden_list: show_hidden[];
-    format: string;
     arrangement: string;
     com_width: number;
     com_height: number;
@@ -47,7 +46,6 @@ const defaultInput: DefaultInput = {
     is_desensitization: '0',
     desensitization_value: [],
     is_multicolour: '0',
-    format: 'none',
     arrangement: 'horizontal',
     com_width: 150,
     com_height: 66,
