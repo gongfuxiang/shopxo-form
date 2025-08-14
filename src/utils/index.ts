@@ -266,7 +266,7 @@ export function get_math(): string {
     // 如果字符串长度不足6位，通过padStart将其前面填充为0，直到长度达到6位。
     randomString = randomString.length >= 6 ? randomString : randomString.padStart(6, '0');
     // 截取掉随机字符串开头的'0.'部分，获得最终的6位随机字符串。
-    return randomString.substring(2);
+    return 'form' + randomString.substring(2);
 }
 
 /**
