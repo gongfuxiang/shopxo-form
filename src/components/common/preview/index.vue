@@ -6,7 +6,7 @@
                     <icon name="computer" size="14"></icon>
                 </el-radio-button>
                 <el-radio-button value="mobile">
-                    <icon name="phone" size="14"></icon>
+                    <icon name="phone-wide" size="14"></icon>
                 </el-radio-button>
             </el-radio-group>
         </template>
