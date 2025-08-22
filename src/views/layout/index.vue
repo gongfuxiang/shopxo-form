@@ -264,7 +264,6 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
             let data_list: any[] = [];
             com_data.form_value.forEach((item1: string) => {
                 com_data?.children.forEach((item_data: any, index: number) => {
-                    item_data.com_data.left_sticky = left_sticky(index + 1, item.com_data, com_data?.children);
                     item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
                     // 格式化日期
                     if (['date', 'date-group'].includes(item_data.key)) { 
@@ -361,32 +360,6 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
             save_disabled.value = false;
         });
 };
-/**
- * 计算左侧粘性定位样式
- * 
- * @param index - 当前元素的索引位置
- * @returns 返回CSS粘性定位样式字符串，若不符合条件则返回空字符串
- */
- const left_sticky = (index: number, com_data: any, children: any) => {
-    // 从表单数据中获取是否启用固定和固定数量配置
-    const { is_fixed = '0', fixed_num = 1 } = com_data?.computer || {};
-    
-    // 检查是否满足粘性定位条件：启用固定且索引在固定数量范围内
-    if (is_fixed !== '1' || index >= fixed_num || fixed_num <= 0) {
-        return '';
-    }
-    // 初始左侧偏移量：第一个元素为0，其他元素默认78px
-    let left = index === 0 ? 0 : 78;
-    // 计算当前元素之前的兄弟元素宽度总和作为偏移量
-    if (index > 0) {
-        for (let i = 1; i < index; i++) {
-            left += children[i - 1]?.com_data?.com_width || 0;
-        }
-    }
-    
-    // 生成粘性定位CSS样式
-    return `position: sticky;left: ${left}px;z-index: 3;`;
-}
 const diy_data_transfor_form_data = (clone_form: form_data_item) => {
     return {
         id: clone_form.id,
