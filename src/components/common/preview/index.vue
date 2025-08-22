@@ -15,39 +15,41 @@
                 <!-- 背景信息 -->
                 <image-empty v-if="!isEmpty(config_value.background_image[0])" v-model="config_value.background_image[0]" fit="contain" error-style="width:100%;height:100%;"></image-empty>
             </div>
-            <div v-if="type_value == 'computer'" class="flex-1 dialog-main z-i re z-i w h flex-row align-c jc-c">
-                <!-- 表单数据 -->
-                <div class="main-overflow w h">
-                    <template v-if="common_store.form_config.type_value == 'free'">
-                        <div class="main-custom-content oh" :style="`margin:0 auto;width: ${ common_store.form_config.custom_width }px;`">
-                            <layout-top></layout-top>
-                            <div class="re bg-f oh" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
-                                <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ item.location.x }px; top: ${ item.location.y }px; width: ${ item.com_data.com_width }px; height: ${ item.com_data.com_height }px;z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index + 1) : -999};`">
-                                    <component-show :value="item" :is-custom="true" :is-preview="true" :is-show="true"></component-show>
+            <template v-if="false">
+                <div v-if="type_value == 'computer'" class="flex-1 dialog-main z-i re z-i w h flex-row align-c jc-c">
+                    <!-- 表单数据 -->
+                    <div class="main-overflow w h">
+                        <template v-if="common_store.form_config.type_value == 'free'">
+                            <div class="main-custom-content oh" :style="`margin:0 auto;width: ${ common_store.form_config.custom_width }px;`">
+                                <layout-top></layout-top>
+                                <div class="re bg-f oh" :style="`width: ${ common_store.form_config.custom_width }px;height: ${ common_store.form_config.custom_height }px;margin: 0 auto;`">
+                                    <div v-for="(item, index) in filteredDiyData" :key="item.id" :data-id="item.id" :class="['free-main-content flex-row oh', { 'required-error': item.com_data.common_config.is_error == '1' }]" :style="`left: ${ item.location.x }px; top: ${ item.location.y }px; width: ${ item.com_data.com_width }px; height: ${ item.com_data.com_height }px;z-index: ${ item.is_enable == '1' ? ((filteredDiyData.length - 1) - index + 1) : -999};`">
+                                        <component-show :value="item" :is-custom="true" :is-preview="true" :is-show="true"></component-show>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div class="main-content oh" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
-                            <layout-top></layout-top>
-                            <div class="pa-16">
-                                <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
-                                    <component-show :value="item" :is-preview="true" :is-show="true"></component-show>
+                        </template>
+                        <template v-else>
+                            <div class="main-content oh" :style="{ 'min-height': (form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1') ? 'calc(100% - 8rem)' : '100%' }">
+                                <layout-top></layout-top>
+                                <div class="pa-16">
+                                    <div v-for="item in filteredDiyData" :key="item.id" :class="['component-style', { 'required-error': item.com_data.common_config.is_error == '1' }]">
+                                        <component-show :value="item" :is-preview="true" :is-show="true"></component-show>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </template>
-                    <!-- 底部数据 -->
-                    <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
-                        <div class="main-footer flex-row align-c jc-e gap-20 right-0" :style="`width: ${ common_store.form_config.type_value == 'free' ? common_store.form_config.custom_width : 1000}px;`">
-                            <el-button v-if="form_config.is_show_save_draft == '1'" plain @click="save_draft">{{form_config.save_draft_title }}</el-button>
-                            <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color" @click="submit"><span style="color:#fff;">{{ form_config.submit_title }}</span></el-button>
+                        </template>
+                        <!-- 底部数据 -->
+                        <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
+                            <div class="main-footer flex-row align-c jc-e gap-20 right-0" :style="`width: ${ common_store.form_config.type_value == 'free' ? common_store.form_config.custom_width : 1000}px;`">
+                                <el-button v-if="form_config.is_show_save_draft == '1'" plain @click="save_draft">{{form_config.save_draft_title }}</el-button>
+                                <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color" @click="submit"><span style="color:#fff;">{{ form_config.submit_title }}</span></el-button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div v-else class="flex-row iframe-content oh w h z-i">
+            </template>
+            <div class="flex-row iframe-content oh w h z-i">
                 <iframe :key="key" :src="new_link + '&key=' + key" width="100%" height="100%" frameborder="0"></iframe>
             </div>
         </div>
