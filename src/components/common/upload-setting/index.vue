@@ -4,8 +4,8 @@
 		<el-upload v-model:file-list="success_list" multiple action="#" :accept="exts_text" :auto-upload="false" class="flex-row align-c jc-c bg-f" :style="uploadStyle" :show-file-list="false" drag :on-change="upload_change" :limit="is_number(limit) ? Number(limit) : 1000" :on-exceed="handle_exceed">
 			<div class="el-upload__text text-line-1" :style="common_store.frame_size">
 				<span style="color: #2A94FF;">请选择</span>（点击选择{{ props.acceptType == 'img' ? '图片' : props.acceptType == 'video' ? '视频' : '文件' }}，
-				<template v-if="is_number(limit)">最多{{ limit }}{{ props.acceptType == 'img' ? '张' : props.acceptType == 'video' ? '个' : '个' }}、</template>
-				<template v-if="is_number(fileSizeLimit)">单个{{ fileSizeLimit }}MB以内</template>）</div>
+				<template v-if="is_number(limit)">最多{{ limit }}{{ props.acceptType == 'img' ? '张' : props.acceptType == 'video' ? '个' : '个' }}</template>
+				<template v-if="is_number(fileSizeLimit)">、单个{{ fileSizeLimit }}MB以内</template>）</div>
 		</el-upload>
 		<div v-if="success_list.length > 0" class="w h mt-14 flex-row align-c flex-wrap gap-10" :style="common_store.frame_style + 'height: 100%;'">
 			<div v-for="(item, index) in success_list" :key="index">
