@@ -404,7 +404,6 @@ const config_value = computed(() => type_value.value == 'computer' ? common_stor
 const content_style = computed(() => `background:${ config_value.value.background_color }`);
 
 // #region iframe 样式
-const new_link = ref('');
 // 如果是本地则使用静态tonken如果是线上则使用cookie的token
 const cookie = get_cookie('admin_info') || '';
 const token = ref('');
@@ -419,23 +418,23 @@ onMounted(async () => {
         }
     }
 });
+const new_link = computed(() => {
+    let uuid_val = '';
+    if (get_cookie('uuid_name')) {
+        uuid_val = get_cookie('uuid_name');
+    } else {
+        uuid_val = get_math();
+        set_cookie('uid_name', uuid_val);
+    }
+    let url = common_store.common.preview_url;
+    // 判断是否包含? 如果包含？的话就是添加参数，否则就是添加？后添加参数
+    return url + (url.includes('?') ? '&id=' : '?id=') + get_id() + token.value + '&type=' + (type_value.value == 'computer' ? 'web' : 'h5')+ '&uuid=' + uuid_val;
+});
 // 监听dialog_visible
 watch(
     () => dialogVisible.value,
     (newVal) => {
         key.value = new Date().getTime();
-        if (newVal) {
-            let uuid_val = '';
-            if (get_cookie('uuid_name')) {
-                uuid_val = get_cookie('uuid_name');
-            } else {
-                uuid_val = get_math();
-                set_cookie('uid_name', uuid_val);
-            }
-            let url = common_store.common.preview_url;
-            // 判断是否包含? 如果包含？的话就是添加参数，否则就是添加？后添加参数
-            new_link.value = url + (url.includes('?') ? '&id=' : '?id=') + get_id() + token.value + '&type=' + (type_value.value == 'computer' ? 'web' : 'h5')+ '&uuid=' + uuid_val;
-        }
     }
 );
 // #endregion
