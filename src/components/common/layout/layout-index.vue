@@ -32,7 +32,7 @@
                         </template>
                         <!-- 底部数据 -->
                         <div v-if="form_config.is_show_submit == '1' || form_config.is_show_save_draft == '1'" class="main-footer-overflow">
-                            <div class="main-footer flex-row align-c jc-e gap-20 right-0" :style="`width: ${ common_store.form_config.type_value == 'free' ? common_store.form_config.custom_width : 1000}px;`">
+                            <div class="main-footer flex-row align-c gap-20 right-0" :style="`width: ${ common_store.form_config.type_value == 'free' ? common_store.form_config.custom_width : 1000}px;`">
                                 <el-button v-if="form_config.is_show_save_draft == '1'" plain>{{ form_config.save_draft_title }}</el-button>
                                 <el-button v-if="form_config.is_show_submit == '1'" dark :color="form_config.style_settings.computer.submit_color"><span style="color:#fff;">{{ form_config.submit_title }}</span></el-button>
                             </div>
@@ -41,8 +41,13 @@
                 </div>
                 <div v-else class="w h re z-i">
                     <div class="flex-row align-c jc-c w h re" style="height: calc(100% - 7.5rem);">
-                        <div class="iframe-content oh"></div>
-                        <iframe id="preview_iframe" :src="iframe_src" width="400px" height="100%" style="border: 1px solid #ddd; box-sizing: border-box;"></iframe>
+                        <template v-if="!isEmpty(iframe_src)">
+                            <div class="iframe-content oh"></div>
+                            <iframe id="preview_iframe" :src="iframe_src" width="400px" height="100%" style="border: 1px solid #ddd; box-sizing: border-box;"></iframe>
+                        </template>
+                        <template v-else>
+                            <div class="text-center">如需手机端配置预览效果，请在后台[ 手机->基础配置 ]先配置手机端h5地址（h5端需要使用uniapp版本打包）</div>
+                        </template>
                     </div>
                 </div>
             </div>
@@ -93,7 +98,7 @@ const props = defineProps({
     }
 });
 
-const iframe_src = ref(common_store.common.config.preview2_url);
+const iframe_src = ref(common_store.common.config.config_preview_url);
 const diy_data_transfor_form_data = (clone_form: form_data_item) => {
     if (isEmpty(clone_form)) {
         return '';
@@ -292,5 +297,16 @@ const content_style = computed(() => `background:${ config_value.value.backgroun
     top: 0;
     z-index: 3;
     background: transparent;
+}
+.text-center {
+    width: 40rem;
+    height: 100%;
+    border: 1px solid #ddd;
+    font-size: 1.2rem;
+    color: #999;
+    padding: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

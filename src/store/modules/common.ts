@@ -33,7 +33,7 @@ export const commonStore = defineStore('common', () => {
             site_logo: '',
             site_name: '',
             preview_url: '',
-            preview2_url: '',
+            config_preview_url: '',
             forminput_detail_url: '',
             forminput_download_url: '',
             forminput_install_url: '', 
