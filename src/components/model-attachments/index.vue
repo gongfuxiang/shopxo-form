@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area">
         <div class="form-group" :style="common_store.layout_style">
-            <!-- <form-title :value="props.value"></form-title> -->
+            <form-title :value="props.value"></form-title>
             <div class="content w flex-1">
                 <template v-if="form.file.length > 0">
                     <div class="flex-row gap-20 align-c">
