@@ -52,7 +52,7 @@ const form = ref<form_data_item>({
         is_front_end_cache: '1',
         is_show_submit: '1',
         submit_title: '提交',
-        is_show_save_draft: '1',
+        is_show_save_draft: '0',
         save_draft_title: '保存草稿',
     },
     diy_data: [],

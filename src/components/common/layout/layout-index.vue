@@ -110,18 +110,15 @@ const diy_data_transfor_form_data = (clone_form: form_data_item) => {
         },
     };
 };
-
-watch(() => props.allData, (newValue) => {     
-    const organization_data = data_organization(newValue);
-
+const type_value = ref('computer');
+const postMessage = (value: any) => { 
+    const organization_data = data_organization(value);
     //数据改造
     const new_data = diy_data_transfor_form_data(organization_data);
     const checkIframe = () => {
         const iframe = document.getElementById('preview_iframe') as HTMLIFrameElement;
         if (iframe) {
             const data = cloneDeep(new_data);
-            console.log('iframe', new_data);
-            console.log('form', new_data);
             iframe.contentWindow?.postMessage(data, '*');
         } else {
             // 如果没找到元素，500ms 后再次尝试
@@ -129,6 +126,15 @@ watch(() => props.allData, (newValue) => {
         }
     };
     checkIframe();
+};
+watch(() => type_value.value, (newValue) => {
+    if (newValue == 'mobile') {
+        postMessage(props.allData);
+    }
+}, { deep: true, immediate: true });
+
+watch(() => props.allData, (newValue) => {     
+    postMessage(newValue);
 }, { deep: true, immediate: true }); 
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
@@ -169,7 +175,6 @@ const form = ref(props.value);
 watch(() => props.value, () => {
     form.value = props.value;
 });
-const type_value = ref('computer');
 // 弹出框显示逻辑
 const dialogVisible = defineModel('visible', { type: Boolean, default: false })
 /**
