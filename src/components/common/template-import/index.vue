@@ -120,7 +120,7 @@
             <span class="dialog-footer">
                 <div v-if="temp_active == '1'">
                     <el-button class="plr-28 ptb-10" @click="close_event">取消</el-button>
-                    <el-button class="plr-28 ptb-10" type="primary" @click="confirm_event">确定</el-button>
+                    <el-button class="plr-28 ptb-10" :disabled="file_list.length <= 0" type="primary" @click="confirm_event">确定</el-button>
                 </div>
                 <div v-else class="flex-row jc-e">
                     <el-pagination :disabled="is_disabled" :current-page="form.page" background :page-size="form.page_size" :pager-count="5" layout="prev, pager, next" :total="form.data_total" @current-change="current_page_change" />
