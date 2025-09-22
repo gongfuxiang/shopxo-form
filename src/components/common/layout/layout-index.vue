@@ -6,7 +6,6 @@
                     <!-- 背景信息 -->
                     <image-empty v-if="!isEmpty(config_value.background_image[0])" v-model="config_value.background_image[0]" fit="contain" error-style="width:100%;height:100%;"></image-empty>
                 </div>
-
                 <!-- 内容信息 -->
                 <div v-if="type_value == 'computer'" class="dialog-main re z-i w h flex-row align-c jc-c">
                     <!-- 表单数据 -->
@@ -40,6 +39,12 @@
                         </div>
                     </div>
                 </div>
+                <div v-else class="w h re z-i">
+                    <div class="flex-row align-c jc-c w h re" style="height: calc(100% - 7.5rem);">
+                        <div class="iframe-content oh"></div>
+                        <iframe id="preview_iframe" :src="iframe_src" width="400px" height="100%" style="border: 1px solid #ddd; box-sizing: border-box;"></iframe>
+                    </div>
+                </div>
             </div>
             <div class="flex-col bg-f" style="width: 234px;">
                 <div class="flex-row jc-c pa-16 br-b-f8">
@@ -57,8 +62,10 @@
 </template>
 
 <script lang="ts" setup>
+import { form_data_item } from "@/api/form";
 import { commonStore } from "@/store";
-import { isEmpty } from "@/utils";
+import { common_styles_computer, data_organization, date_style_options, isEmpty, time_stamp } from "@/utils";
+import { cloneDeep } from "lodash";
 const common_store = commonStore();
 interface DiyItem {
     id: number | string;
@@ -76,11 +83,53 @@ const props = defineProps({
         type: Object,
         default: () => { },
     },
+    allData: {
+        type: Object,
+        default: () => { },
+    },
     scale: {
         type: Number,
         default: 1
     }
 });
+
+const iframe_src = ref(common_store.common.config.preview2_url);
+const diy_data_transfor_form_data = (clone_form: form_data_item) => {
+    if (isEmpty(clone_form)) {
+        return '';
+    }
+    return {
+        id: clone_form.id,
+        logo: clone_form.model.logo,
+        name: clone_form.model.name,
+        is_enable: clone_form.model.is_enable,
+        describe: clone_form.model.describe,
+        config: {
+            diy_data: clone_form.diy_data,
+            overall_config: clone_form.overall_config
+        },
+    };
+};
+
+watch(() => props.allData, (newValue) => {     
+    const organization_data = data_organization(newValue);
+
+    //数据改造
+    const new_data = diy_data_transfor_form_data(organization_data);
+    const checkIframe = () => {
+        const iframe = document.getElementById('preview_iframe') as HTMLIFrameElement;
+        if (iframe) {
+            const data = cloneDeep(new_data);
+            console.log('iframe', new_data);
+            console.log('form', new_data);
+            iframe.contentWindow?.postMessage(data, '*');
+        } else {
+            // 如果没找到元素，500ms 后再次尝试
+            setTimeout(checkIframe, 500);
+        }
+    };
+    checkIframe();
+}, { deep: true, immediate: true }); 
 // 从组件的顶层获取数据，避免多层组件传值导致数据遗漏和多余代码
 const diy_data: any = toRef(inject('diy_data', []));
 // 计算属性：根据显隐规则过滤出需要显示的组件
@@ -228,5 +277,15 @@ const content_style = computed(() => `background:${ config_value.value.backgroun
 .layout-index {
     height: calc(100% - 13rem);
     overflow-y: auto;
+}
+
+.iframe-content {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    background: transparent;
 }
 </style>

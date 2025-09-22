@@ -10,7 +10,7 @@
                     <view v-else class="flex-1 main-style">
                         <main-free :diy-data="form.diy_data" @update-setting="update_setting"></main-free>
                     </view>
-                    <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :is-custom="selected_is_custom" :value="form.overall_config" :diy-data="form.diy_data" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
+                    <settings :key="key" v-model="diy_data_item" :is-show-form-model="is_show_form_model" :is-custom="selected_is_custom" :value="form.overall_config" :diy-data="form.diy_data" :all-data="form" @type="form.overall_config.type_value = $event" @type_change="type_change"></settings>
                 </div>
             </template>
             <template v-else>
@@ -24,11 +24,11 @@
 
 <script setup lang="ts">
 import { cloneDeep, isEmpty } from 'lodash';
-import { style_settings } from '@/utils/common';
+import { get_type, style_settings } from '@/utils/common';
 import CommonAPI from '@/api/common';
 import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
 import { commonStore } from '@/store';
-import { common_styles_computer, date_style_options, get_cookie, get_id, is_obj, set_cookie, time_stamp } from '@/utils';
+import { common_styles_computer, data_organization, date_style_options, get_cookie, get_id, get_math, is_obj, set_cookie, time_stamp } from '@/utils';
 import defaultSettings from './index';
 const common_store = commonStore();
 const app = getCurrentInstance();
@@ -79,7 +79,9 @@ onMounted(() => {
     fullscreen_loading.value = true;
     common_init();
 });
-const common_init = () => {
+// 初始化公共配置
+const token = ref('');
+const common_init = async () => {
     if (get_cookie('attachment_host') || get_cookie('attachment_host') !== 'null' || get_cookie('attachment_host') !== null) {
         CommonAPI.getInit().then((res: any) => {
             common_store.set_common(res.data);
@@ -97,13 +99,24 @@ const common_init = () => {
             init();
         }
     }
+    // 获取用户id
+    if (import.meta.env.VITE_APP_BASE_API == '/dev-admin') {
+        let temp_data = await import(import.meta.env.VITE_APP_BASE_API == '/dev-admin' ? '../../../temp.d.ts' : '../../../temp_pro.d.ts');
+        token.value = '&token=' + temp_data.default.temp_token;
+    } else {
+        // 如果是shop认为是多商户插件使用user_info的cookie
+        const cookie = get_type() == 'shop' ? get_cookie('user_info') : get_cookie('admin_info');
+        if (cookie && cookie !== null && cookie !== 'null') {
+            token.value = '&token=' + JSON.parse(cookie).token;
+        }
+    }
     common_store.get_address();
 };
 
 const is_empty = ref(false);
 const init = () => {
     if (get_id()) {
-        ForminputAPI.getInit({ id: get_id() }).then((res: any) => {
+        CommonAPI.getDynamicApi(common_store.common.config.forminput_detail_url, { id: get_id() }).then((res: any) => {
             const new_data = res.data?.data || undefined;
             if (new_data) {
                 let data = form_data_transfor_diy_data(new_data);
@@ -253,69 +266,10 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
         icon: 'Loading',
         customClass: 'message-box-custom',
     })
-    const clone_form = cloneDeep(data);
-    clone_form.diy_data.forEach((item: any) => { 
-        item.show_tabs = '0';
-        item.common_style = common_styles_computer(item.com_data.common_config);
-        // 子表单需要统一规整一下数据
-        if (item.key == 'subform') {
-            const { com_data } = item;
-            item.com_data.data_list = [];
-            let data_list: any[] = [];
-            com_data.form_value.forEach((item1: string) => {
-                com_data?.children.forEach((item_data: any, index: number) => {
-                    item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
-                    // 格式化日期
-                    if (['date', 'date-group'].includes(item_data.key)) { 
-                        const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
-                        const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
-                        item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
-                    }
-                })
-                const data = JSON.parse(JSON.stringify(com_data?.children || []));
-                if (data.length > 0) {
-                    data.forEach((child: any) => {
-                        child.common_style = common_styles_computer(child.com_data.common_config);
-                        if (!isEmpty(item1[child.id])) {
-                            child.com_data.form_value = item1[child.id];
-                        }
-                        if (['date', 'date-group'].includes(child.key)) { 
-                            const com_data = child.com_data;
-                            if (child.key == 'date') {
-                                child.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
-                            } else {
-                                child.com_data.new_form_value = [];
-                                if (com_data.form_value.length > 0) {
-                                    child.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
-                                }
-                            }
-                        }
-                    });
-                    data_list.push({
-                        is_expand: false,
-                        data_list: data
-                    });
-                }
-            });
-            item.com_data.data_list = data_list;
-        } else if (['date', 'date-group'].includes(item.key)) { 
-            const com_data = item.com_data;
-            const data = new Map(date_style_options(item.com_data.date_style).map(item => [item.value, item]));
-            const new_format = data.get(item.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
-            item.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
-            if (item.key == 'date') {
-                item.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
-            } else {
-                item.com_data.new_form_value = [];
-                if (com_data.form_value.length > 0) {
-                    item.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
-                }
-            }
-        }
-    });
+    const organization_data = data_organization(data);
     //数据改造
-    const new_data = diy_data_transfor_form_data(clone_form);
-    ForminputAPI.save(new_data)
+    const new_data = diy_data_transfor_form_data(organization_data);
+    CommonAPI.getDynamicApi(common_store.common.config.forminput_save_url, new_data)
         .then((res) => {
             setTimeout(() => {
                 save_disabled.value = false;
@@ -337,10 +291,21 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
             } else {
                  // 判断是否需要导出
                  if (is_export) {
-                    const index = window.location.href.lastIndexOf('?s=');
-                    const pro_url = window.location.href.substring(0, index);
-                    const new_url = import.meta.env.VITE_APP_BASE_API == '/dev-api' ? import.meta.env.VITE_APP_BASE_API_URL : pro_url;
-                    window.open(new_url + '?s=forminputapi/forminputdownload/id/' + res.data + '.html', '_blank');
+                    const download = common_store.common.config.forminput_download_url;
+                    if (download == '') {
+                        ElMessage.error('请先配置导出地址');
+                        return;
+                    } else {
+                        let uuid_val = '';
+                        if (get_cookie('uuid_name')) {
+                            uuid_val = get_cookie('uuid_name');
+                        } else {
+                            uuid_val = get_math();
+                            set_cookie('uuid_name', uuid_val);
+                        }   
+                        const symbol = download?.includes('?') ? '&' : '?';
+                        window.open(`${download}${ symbol }id=${ res.data }&token=${ token.value }&uuid=${uuid_val}`);
+                    }
                 }
                 if (is_preview) {
                     previewVisible.value = true;
@@ -420,6 +385,12 @@ const diy_data_transfor_form_data = (clone_form: form_data_item) => {
     height: 100%;
     .el-dialog__header {
         padding: 1.3rem 2rem;
+    }
+}
+:deep(.el-dialog.preview-dialog) {
+    .el-dialog__header {
+        height: 0;
+        padding: 0 !important;
     }
 }
 .main-style {

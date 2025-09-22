@@ -12,8 +12,8 @@
         </template>
         <div class="url-value-content ptb-16 flex-col gap-16">
             <div v-if="temp_active == '1'" class="h flex-row jc-c align-c">
-                <div class="import-content">
-                    <el-upload v-model:file-list="file_list" action="#" :accept="exts_text" :show-file-list="false" :auto-upload="false" :on-change="upload_change">
+                <div class="import-content flex-col align-c jc-c">
+                    <el-upload v-model:file-list="file_list" action="#" class="import-btn-box" :accept="exts_text" drag :show-file-list="false" :auto-upload="false" :on-change="upload_change">
                         <template #trigger>
                             <div class="import-btn">
                                 <icon name="upload-file" color="primary"></icon>
@@ -132,7 +132,7 @@
 <script lang="ts" setup>
 import type { UploadFile } from 'element-plus';
 import { annex_size_to_unit } from '@/utils';
-import FormInputAPI from '@/api/form';
+import CommonAPI from '@/api/common';
 import { commonStore } from '@/store';
 const common_store = commonStore();
 const app = getCurrentInstance();
@@ -207,7 +207,7 @@ const get_import_list = (type?: string) => {
         ...form.value,
         is_already_buy: form.value.status ? '1' : '0',
     };
-    FormInputAPI.getImportList(new_data)
+    CommonAPI.getDynamicApi(common_store.common.config.forminput_market_url, new_data)
         .then((res: any) => {
             const data = res.data;
             form.value.data_total = data.data_total;
@@ -264,7 +264,7 @@ interface install_data {
 }
 const install = async (item: install_data) => {
     let new_data = item;
-    FormInputAPI.install(item)
+    CommonAPI.getDynamicApi(common_store.common.config.forminput_install_url ,item)
         .then((res: any) => {
             switch (item.opt) {
                 case 'url':
@@ -281,7 +281,7 @@ const install = async (item: install_data) => {
                     break;
                 case 'install':
                     ElMessage.success(res.msg);
-                    history.pushState({}, '', '?s=diy/saveinfo/id/' + res.data + '.html');
+                    history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
                     Loading_text.value = '';
                     loading.value = false;
                     // 解除禁用效果
@@ -317,10 +317,10 @@ const confirm_event = () => {
         if (file_list.value && file_list.value[0].raw) {
             form_data.append('file', file_list.value[0]?.raw);
         }
-        FormInputAPI.import(form_data)
+       CommonAPI.getDynamicApi(common_store.common.config.forminput_upload_url, form_data, true)
             .then((res: any) => {
                 ElMessage.success(res.msg);
-                history.pushState({}, '', '?s=diy/saveinfo/id/' + res.data + '.html');
+                history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
                 close_event();
                 emit('confirm');
             })
@@ -350,6 +350,17 @@ const get_id = () => {
 }
 .import-content {
     text-align: center;
+    .import-btn-box {
+        width: 14.2rem;
+        height: 14.2rem;
+        :deep(.el-upload-dragger) {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 !important;
+            border: 0;
+        }
+    }
     .import-btn {
         width: 14rem;
         height: 14rem;

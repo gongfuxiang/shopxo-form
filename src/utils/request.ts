@@ -1,6 +1,7 @@
 import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { ElMessage, ElMessageBox, type MessageHandler } from 'element-plus';
 import { get_cookie } from './index';
+import { get_type } from './common';
 
 // 提示拦截
 
@@ -32,8 +33,8 @@ const service = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
     async (config: InternalAxiosRequestConfig) => {
-        // 如果是本地则使用静态tonken如果是线上则使用cookie的token
-        const cookie = get_cookie('admin_info') || '';
+        // 如果是shop认为是多商户插件使用user_info的cookie
+        const cookie = get_type() == 'shop' ? get_cookie('user_info') : get_cookie('admin_info');
         const symbol = config.url?.includes('?') ? '&' : '?';
         if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
             let temp_data = await import(import.meta.env.VITE_APP_BASE_API == '/dev-api' ? '../../temp.d' : '../../temp_pro.d');

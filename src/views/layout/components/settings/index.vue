@@ -48,10 +48,10 @@
                             <el-input v-model="form.submit_title"></el-input>
                             <el-switch v-model="form.is_show_submit" active-value="1" inactive-value="0"></el-switch>
                         </div>
-                        <div class="flex-row gap-5 jc-sb w h">
+                        <!-- <div class="flex-row gap-5 jc-sb w h">
                             <el-input v-model="form.save_draft_title"></el-input>
                             <el-switch v-model="form.is_show_save_draft" active-value="1" inactive-value="0"></el-switch>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -59,12 +59,13 @@
                 <right-side-parameter-config v-model="model_value" :is-custom="isCustom"></right-side-parameter-config>
             </div>
         </el-scrollbar>
-        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="form.style_settings" @handle-close="handleClose"></layout-index>
+        <layout-index v-model:visible="dialog_visible" :config-type="dialog_type" :value="form.style_settings" :all-data="allData" @handle-close="handleClose"></layout-index>
     </div>
 </template>
 
 <script setup lang="ts">
 import { style_settings } from '@/utils/common';
+import { all } from 'axios';
 import { isEqual, cloneDeep } from "lodash";
 const app = getCurrentInstance();
 const props = defineProps({
@@ -79,6 +80,10 @@ const props = defineProps({
     isCustom: {
         type: Boolean,
         default: false
+    },
+    allData: {
+        type: Object,
+        default: () => {},
     },
     diyData: {
         type: Array<any>,

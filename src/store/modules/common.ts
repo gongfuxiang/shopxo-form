@@ -32,8 +32,16 @@ export const commonStore = defineStore('common', () => {
             site_logo_wap: '',
             site_logo: '',
             site_name: '',
+            preview_url: '',
+            preview2_url: '',
+            forminput_detail_url: '',
+            forminput_download_url: '',
+            forminput_install_url: '', 
+            forminput_list_url: '', 
+            forminput_market_url: '',
+            forminput_save_url: '',
+            forminput_upload_url: '',
         } as any, // 基础数据配置参数
-        preview_url: '',
     });
     // 左侧菜单显示逻辑
     const mains_siderbar = ref<componentsData[]>([]);
