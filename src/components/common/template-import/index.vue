@@ -152,6 +152,13 @@ const props = defineProps({
 });
 const dialogVisible = defineModel({ type: Boolean, default: false });
 const temp_active = ref('1');
+watchEffect(() => {
+    if (common_store.common.config.forminput_upload_url === '') {
+        temp_active.value = '2';
+    } else {
+        temp_active.value = '1';
+    }
+});
 const temp_change = (val: any) => {
     temp_active.value = val;
 };
