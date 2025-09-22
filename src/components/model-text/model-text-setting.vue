@@ -1,12 +1,12 @@
 <template>
     <el-form :model="form" label-width="40" label-position="left" @submit.prevent>
         <!-- <div class="mb-10 fw">内容设置</div> -->
-        <el-form-item label-width="0">
+        <!-- <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb"><div class="flex-row">FROM名称<span class="required">*</span></div><div class="new_desc">文本</div></div>
                 <form-name :value="all_form_value.form_name" :model-id="all_form_value.id" :is-subform="isSubform" :subform-list="subformList" @name_change="name_change"></form-name>
             </div>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label-width="0">
             <div class="flex-col gap-10 w h">
                 <div class="new_title flex-row align-c jc-sb"><div class="flex-row">标题<span class="required">*</span></div></div>

@@ -3,10 +3,12 @@
     <el-dialog v-model="dialogVisible" class="radius-lg" width="1168" draggable append-to-body :close-on-click-modal="false" @close="close_event">
         <template #header>
             <div class="title re">
-                <el-radio-group v-model="temp_active" is-button :disabled="is_disabled" @change="temp_change">
-                    <el-radio-button value="1">本地导入</el-radio-button>
-                    <el-radio-button value="2">模版市场</el-radio-button>
-                </el-radio-group>
+                <template v-if="common_store.common.config.forminput_upload_url !== '' && common_store.common.config.forminput_market_url !== ''">
+                    <el-radio-group v-model="temp_active" is-button :disabled="is_disabled" @change="temp_change">
+                        <el-radio-button value="1">本地导入</el-radio-button>
+                        <el-radio-button value="2">模版市场</el-radio-button>
+                    </el-radio-group>
+                </template>
                 <div class="middle size-16 fw-b">模版导入</div>
             </div>
         </template>
@@ -25,8 +27,7 @@
                         <span class="cr-9">({{ annex_size_to_unit(upload_file.size) }})</span>
                     </div>
                     <div class="cr-c size-12 flex-col gap-10 mt-10 align-s">
-                        <p>1. 选择已下载的form表单设计zip包</p>
-                        <p>2. 导入将自动新增一条数据</p>
+                        <p>1. 导入将自动新增一条数据</p>
                     </div>
                 </div>
             </div>

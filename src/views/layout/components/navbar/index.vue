@@ -22,8 +22,8 @@
                 <el-button plain type="primary" class="nav-right-dropdown-button mr-12"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item @click="import_click">导入</el-dropdown-item>
-                        <el-dropdown-item @click="export_click">导出</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store.common.config.forminput_download_url !== ''" @click="import_click">导入</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store.common.config.forminput_market_url !== '' || common_store.common.config.forminput_upload_url !== ''" @click="export_click">导出</el-dropdown-item>
                         <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
@@ -66,6 +66,9 @@
 </template>
 <script setup lang="ts">
 import { FormInstance, FormRules } from 'element-plus';
+import { commonStore } from "@/store";
+const common_store = commonStore();
+
 const props = defineProps({
     saveDisabled: {
         type: Boolean,

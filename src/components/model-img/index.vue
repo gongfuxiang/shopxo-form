@@ -1,7 +1,7 @@
 <template>
     <div class="rendering-area w h">
         <div class="form-group w h" :style="common_store.layout_style + layout_style">
-            <form-title v-if="!isCustom" :value="props.value" :style="title_style"></form-title>
+            <!-- <form-title v-if="!isCustom" :value="props.value" :style="title_style"></form-title> -->
             <div class="content w h flex-1">
                 <image-empty v-model="form.img_src[0]" :style="img_style"></image-empty>
             </div>

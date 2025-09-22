@@ -21,7 +21,7 @@
                     <el-radio-group v-model="form.score_type" class="flex-col gap-10 align-s">
                         <el-radio value="0"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="0" /></el-radio>
                         <el-radio value="1"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="1" /></el-radio>
-                        <el-radio value="2"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" type="2" /></el-radio>
+                        <el-radio value="2"><custom-rate v-model="form.form_value" :max="5" disaled :select-color="form.select_color" size="12" type="2" /></el-radio>
                     </el-radio-group>
                 </div>
                 <div class="flex-row align-c gap-10">

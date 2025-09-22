@@ -41,6 +41,8 @@ export const commonStore = defineStore('common', () => {
             forminput_market_url: '',
             forminput_save_url: '',
             forminput_upload_url: '',
+            attachment_category_operate: {} as any, // 附件分类权限
+            attachment_operate: {} as any, // 附件权限
         } as any, // 基础数据配置参数
     });
     // 左侧菜单显示逻辑
