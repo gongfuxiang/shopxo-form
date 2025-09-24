@@ -14,7 +14,7 @@
                 </div>
             </template>
             <template v-else>
-                <no-data height="100vh" img-width="260px" size="16px" text="编辑数据有误"></no-data>
+                <no-data height="100vh" img-width="260px" size="16px" :text="empty_data"></no-data>
             </template>
         </template>
         <preview :key="previewKey" v-model:visible="previewVisible" :value="form.diy_data"></preview>
@@ -114,6 +114,7 @@ const common_init = async () => {
 };
 
 const is_empty = ref(false);
+const empty_data = ref('编辑数据有误');
 const init = () => {
     if (get_id()) {
         CommonAPI.getDynamicApi(common_store.common.config.forminput_detail_url, { id: get_id() }).then((res: any) => {
@@ -136,11 +137,18 @@ const init = () => {
             loading_event();
         });
     } else {
-        // 公共配置信息
-        common_store.set_form_layout(form.value.overall_config.style_settings);
-        common_store.set_config(form.value.overall_config);
-        common_store.set_model_config(form.value.model);
-        loading_event();
+        if (import.meta.env.VITE_APP_BASE_API == '/dev-admin') {
+            // 公共配置信息
+            common_store.set_form_layout(form.value.overall_config.style_settings);
+            common_store.set_config(form.value.overall_config);
+            common_store.set_model_config(form.value.model);
+            loading_event();
+        } else { 
+            is_empty.value = true;
+            empty_data.value = '没有数据ID';
+            loading_event();
+        }
+        
     }
 };
 const data_merge = (list: string[]) => {
