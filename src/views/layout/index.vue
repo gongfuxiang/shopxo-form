@@ -133,7 +133,12 @@ const init = () => {
                 common_store.set_model_config(form.value.model);
             } else {
                 is_empty.value = true;
+                empty_data.value = '编辑数据有误';
             }
+            loading_event();
+        }).catch((err) => {
+            is_empty.value = true;
+            empty_data.value = err;
             loading_event();
         });
     } else {
