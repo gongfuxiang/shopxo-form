@@ -174,7 +174,13 @@ const custom_edit = () => {
 };
 // 点击完成之后将值赋值回来
 const accomplish = (children: any[], value: any[]) => {
-    form.value.children = children;
+    // 将选中的数据改为0，下次进来重新选择
+    form.value.children = children.map((item: any) => {
+        return {
+            ...item,
+            show_tabs: 0,
+        }
+    });
     form.value.form_value = value;
     subform_visible.value = false;
 };
