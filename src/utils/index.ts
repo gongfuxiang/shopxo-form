@@ -1043,44 +1043,47 @@ export const data_organization = (data: any) => {
         // 子表单需要统一规整一下数据
         if (item.key == 'subform') {
             const { com_data } = item;
-            item.com_data.data_list = [];
-            let data_list: any[] = [];
-            com_data.form_value.forEach((item1: string) => {
-                com_data?.children.forEach((item_data: any, index: number) => {
-                    item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
-                    // 格式化日期
-                    if (['date', 'date-group'].includes(item_data.key)) { 
-                        const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
-                        const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
-                        item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
-                    }
-                })
-                const data = JSON.parse(JSON.stringify(com_data?.children || []));
-                if (data.length > 0) {
-                    data.forEach((child: any) => {
-                        child.common_style = common_styles_computer(child.com_data.common_config);
-                        if (!isEmpty(item1[child.id])) {
-                            child.com_data.form_value = item1[child.id];
-                        }
-                        if (['date', 'date-group'].includes(child.key)) { 
-                            const com_data = child.com_data;
-                            if (child.key == 'date') {
-                                child.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
-                            } else {
-                                child.com_data.new_form_value = [];
-                                if (com_data.form_value.length > 0) {
-                                    child.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
-                                }
-                            }
-                        }
-                    });
-                    data_list.push({
-                        is_expand: false,
-                        data_list: data
-                    });
-                }
-            });
-            item.com_data.data_list = data_list;
+            // item.com_data.data_list = [];
+            // let data_list: any[] = [];
+            com_data?.children.forEach((item_data: any, index: number) => {
+                item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
+            })
+            // com_data.form_value.forEach((item1: string) => {
+            //     com_data?.children.forEach((item_data: any, index: number) => {
+            //         item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
+            //         // 格式化日期
+            //         if (['date', 'date-group'].includes(item_data.key)) { 
+            //             const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
+            //             const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
+            //             item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
+            //         }
+            //     })
+            //     const data = JSON.parse(JSON.stringify(com_data?.children || []));
+            //     if (data.length > 0) {
+            //         data.forEach((child: any) => {
+            //             child.common_style = common_styles_computer(child.com_data.common_config);
+            //             if (!isEmpty(item1[child.id])) {
+            //                 child.com_data.form_value = item1[child.id];
+            //             }
+            //             if (['date', 'date-group'].includes(child.key)) { 
+            //                 const com_data = child.com_data;
+            //                 if (child.key == 'date') {
+            //                     child.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
+            //                 } else {
+            //                     child.com_data.new_form_value = [];
+            //                     if (com_data.form_value.length > 0) {
+            //                         child.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
+            //                     }
+            //                 }
+            //             }
+            //         });
+            //         data_list.push({
+            //             is_expand: false,
+            //             data_list: data
+            //         });
+            //     }
+            // });
+            // item.com_data.data_list = data_list;
         } else if (['date', 'date-group'].includes(item.key)) { 
             const com_data = item.com_data;
             const data = new Map(date_style_options(item.com_data.date_style).map(item => [item.value, item]));
