@@ -14,7 +14,8 @@
     </el-dialog>
 </template>
 <script setup lang="ts">
-import subformMain from './subform-main.vue'
+import subformMain from './subform-main.vue';
+import { cloneDeep } from 'lodash';
 const props = defineProps({
     title: {
         type: String,
@@ -26,13 +27,14 @@ const props = defineProps({
     },
 });
 const form = ref(props.value);
-watch(() => props.value, (val) => {
-    form.value = val;
-}, { deep: true});
-
 const diy_data_item = ref({});
 const subform_data = ref<any[]>([]);
 const key = ref('');
+
+watch(() => props.value, (val) => {
+    form.value = cloneDeep(val);
+    diy_data_item.value = {};
+}, { deep: true});
 // 更新设置
 const update_setting = (data: any, diy: any[], is_custom: boolean = false) => {
     diy_data_item.value = data;

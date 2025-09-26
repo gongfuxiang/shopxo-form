@@ -170,6 +170,12 @@ const operation_end = () => {
 };
 const subform_visible = ref(false);
 const custom_edit = () => {
+    form.value.children = cloneDeep(form.value.children).map((item: any) => {
+        return {
+            ...item,
+            show_tabs: 0,
+        }
+    });
     subform_visible.value = true;
 };
 // 点击完成之后将值赋值回来
