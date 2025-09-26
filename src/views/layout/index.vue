@@ -142,7 +142,7 @@ const init = () => {
             loading_event();
         });
     } else {
-        if (import.meta.env.VITE_APP_BASE_API == '/dev-admin') {
+        if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
             // 公共配置信息
             common_store.set_form_layout(form.value.overall_config.style_settings);
             common_store.set_config(form.value.overall_config);
