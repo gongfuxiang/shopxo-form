@@ -1,5 +1,65 @@
-# Vue 3 + TypeScript + Vite
+<p align="center">
+<img src="https://shopxoserver.oss-cn-beijing.aliyuncs.com/demo/system/logo.jpg" width="360" />
+</p>
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+<h3 align="center">ShopXO企业级免费开源电商系统 - Form表单</h3>
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+<div align="center">
+
+```shell
+如果对您有帮助，您可以点右上角 “Star” 收藏一下 ，获取第一时间更新，谢谢！
+```
+
+</div>
+
+------------------------------------------------------------------------
+。
+### 项目介绍
+* 后端支持依托于ShopXO免费开源电商系统开发的表单自定义源码
+* 内置几十种标准组件，如（单行文本、多行文本、数字、单选按钮、复选按钮、下拉框、下拉复选框、日期时间、日期时间组、定位、地址、密码、手机、评分、富文本、子表单、上传图片、上传视频等等...），支持拖拽可视化自由设计、满足各大行业需求
+* 支持web端，（微信、QQ、百度、支付宝、头条&抖音、快手）+ H5 + APP
+
+#### 官方QQ群、答案`shopxo.net`
+* 官方Form表单群：456323045
+
+### 当前项目源代码平台
+* Gitee：[https://gitee.com/zongzhige/shopxo-form](https://gitee.com/zongzhige/shopxo-form)
+* GitHub：[https://github.com/gongfuxiang/shopxo-form](https://github.com/gongfuxiang/shopxo-form)
+* GitCode：[https://gitcode.net/zongzhige/shopxo-form](https://gitcode.net/zongzhige/shopxo-form)
+
+### ShopXO后端源代码平台
+* Gitee：[https://gitee.com/zongzhige/shopxo](https://gitee.com/zongzhige/shopxo)
+* GitHub：[https://github.com/gongfuxiang/shopxo](https://github.com/gongfuxiang/shopxo)
+* Coding：[https://zongzhige.coding.net/public/shopxo/shopxo/git](https://zongzhige.coding.net/public/shopxo/shopxo/git)
+* GitCode：[https://gitcode.net/zongzhige/shopxo](https://gitcode.net/zongzhige/shopxo)
+
+### Form表单图片展示
+![Form表单图片](https://shopxoserver.oss-cn-beijing.aliyuncs.com/demo/form/form.jpg "Form表单图片")
+
+### 当前Form表单端对应ShopXO后端版本
+| Form表单端 | 后端 |
+|----|----|
+| v1.0.0 | v6.7.0 |
+
+
+## 安装依赖包
+```sh
+npm install
+```
+
+### 本地开发调试
+```sh
+npm run dev
+```
+
+### 开发环境
+* 想要运行项目，根目录需要存在temp.d.ts文件，否则运行和打包都会报错
+```sh
+npm run build
+```
+
+### 生产环境
+* 想要运行项目，根目录需要存在temp_pro.d.ts文件，否则运行和打包都会报错
+```sh
+npm run build-pro
+```
