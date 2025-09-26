@@ -25,13 +25,13 @@
 ### 当前项目源代码平台
 * Gitee：[https://gitee.com/zongzhige/shopxo-form](https://gitee.com/zongzhige/shopxo-form)
 * GitHub：[https://github.com/gongfuxiang/shopxo-form](https://github.com/gongfuxiang/shopxo-form)
-* GitCode：[https://gitcode.net/zongzhige/shopxo-form](https://gitcode.net/zongzhige/shopxo-form)
+* GitCode：[https://gitcode.com/zongzhige/shopxo-form](https://gitcode.com/zongzhige/shopxo-form)
 
 ### ShopXO后端源代码平台
 * Gitee：[https://gitee.com/zongzhige/shopxo](https://gitee.com/zongzhige/shopxo)
 * GitHub：[https://github.com/gongfuxiang/shopxo](https://github.com/gongfuxiang/shopxo)
 * Coding：[https://zongzhige.coding.net/public/shopxo/shopxo/git](https://zongzhige.coding.net/public/shopxo/shopxo/git)
-* GitCode：[https://gitcode.net/zongzhige/shopxo](https://gitcode.net/zongzhige/shopxo)
+* GitCode：[https://gitcode.com/zongzhige/shopxo](https://gitcode.com/zongzhige/shopxo)
 
 ### Form表单图片展示
 ![Form表单图片](https://shopxoserver.oss-cn-beijing.aliyuncs.com/demo/form/form.jpg "Form表单图片")
