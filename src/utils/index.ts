@@ -1044,6 +1044,12 @@ export const data_organization = (data: any) => {
         if (item.key == 'subform') {
             item.com_data?.children.forEach((item_data: any, index: number) => {
                 item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
+                // 格式化日期
+                if (['date', 'date-group'].includes(item_data.key)) { 
+                    const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
+                    const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
+                    item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
+                }
             })
         } else if (['date', 'date-group'].includes(item.key)) { 
             const com_data = item.com_data;
