@@ -106,7 +106,7 @@ export const desensitization_options = [
 export const get_id = () => {
     let new_id = '';
     // 去除origin的数据
-    const url = 'hopxo.com/admin.php?s=ordergoodsform-goodsform-saveinfo-1.html#/';
+    const url = document.location.href;
     if (url.indexOf('id/') != -1) {
         new_id = url.substring(url.indexOf('id/') + 3);
         // 去除字符串的.html
