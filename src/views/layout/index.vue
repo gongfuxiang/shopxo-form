@@ -26,9 +26,9 @@
 import { cloneDeep, isEmpty } from 'lodash';
 import { get_type, style_settings, get_id } from '@/utils/common';
 import CommonAPI from '@/api/common';
-import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
+import { formConfig, formData, form_data_item } from '@/api/form';
 import { commonStore } from '@/store';
-import { common_styles_computer, data_organization, date_style_options, get_cookie, get_math, is_obj, set_cookie, time_stamp } from '@/utils';
+import { data_organization, get_cookie, get_math, is_obj, set_cookie } from '@/utils';
 import defaultSettings from './index';
 const common_store = commonStore();
 const app = getCurrentInstance();
@@ -42,6 +42,7 @@ const form = ref<form_data_item>({
     },
     overall_config: {
         type_value: 'default',
+        is_switch_type: '0',
         // is_layout_settings: '0',
         custom_size_type: 'A3',
         custom_width: 842,
@@ -115,8 +116,10 @@ const common_init = async () => {
 
 const is_empty = ref(false);
 const empty_data = ref('编辑数据有误');
+
+// 公共配置项
+const common_store_config = computed(() => common_store.common.config);
 const init = () => {
-    console.log(get_id());
     if (get_id()) {
         CommonAPI.getDynamicApi(common_store.common.config.forminput_detail_url, { id: get_id() }).then((res: any) => {
             const new_data = res.data?.data || undefined;
@@ -127,7 +130,7 @@ const init = () => {
                 data.overall_config.style_settings = overall_config_merge(data.overall_config.style_settings);
                 // 详细数据新增字段添加
                 data.diy_data = data_merge(data.diy_data);
-                form.value = data;
+                form.value = data_handle(data);
                 // 公共配置信息
                 common_store.set_form_layout(form.value.overall_config.style_settings);
                 common_store.set_config(form.value.overall_config);
@@ -144,6 +147,7 @@ const init = () => {
         });
     } else {
         if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
+            form.value = data_handle(form.value);
             // 公共配置信息
             common_store.set_form_layout(form.value.overall_config.style_settings);
             common_store.set_config(form.value.overall_config);
@@ -156,6 +160,24 @@ const init = () => {
         }
         
     }
+};
+// 权限数据处理
+const data_handle = (val: form_data_item) => {
+    const data = cloneDeep(val);
+    const { type_value = 'default', is_switch_type = '0' } = data.overall_config;
+    const { is_mode_switch = 1, mode_default = 'default' } = common_store_config.value.forminput_config_operate;
+    // 如果不能切换，并且默认模式跟当前模式不一致，需要设置为权限模式， 并将数据清空
+    if (is_mode_switch != 1) {
+        if (!isEmpty(type_value) && type_value != mode_default) {
+            data.overall_config.type_value = mode_default || 'default';
+            data.diy_data = [];
+        }
+    } else if (is_switch_type == '0') {
+        // 如果是使用的默认数据，则需要设置为权限模式，否则的话不做处理
+        data.overall_config.type_value = mode_default || 'default';
+        data.diy_data = [];
+    }
+    return data;
 };
 const data_merge = (list: string[]) => {
     list.forEach((item: any) => {
@@ -239,6 +261,8 @@ const preview_event = () => {
 }
 // 模式切换的时候清空缓存数据
 const type_change = () => {
+    // 如果切换过模式，就证明使用的不是默认数据，就取自身选中的数据
+    form.value.overall_config.is_switch_type = '1';
     form.value.diy_data = [];
 }
 //#region 保存逻辑

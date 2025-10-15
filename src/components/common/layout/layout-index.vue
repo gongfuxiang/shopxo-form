@@ -69,7 +69,7 @@
 <script lang="ts" setup>
 import { form_data_item } from "@/api/form";
 import { commonStore } from "@/store";
-import { common_styles_computer, data_organization, date_style_options, isEmpty, time_stamp } from "@/utils";
+import { data_organization, isEmpty } from "@/utils";
 import { cloneDeep } from "lodash";
 const common_store = commonStore();
 interface DiyItem {

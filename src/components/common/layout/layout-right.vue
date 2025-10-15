@@ -1,137 +1,144 @@
 <template>
     <div class="setting-content flex-col gap-20">
-        <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
-            <div class="new_title">页面背景</div>
-            <div class="flex-col gap-10">
-                <!-- <el-radio-group v-model="form.background_type">
-                    <el-radio value="color">颜色</el-radio>
-                    <el-radio value="img">图片</el-radio>
-                </el-radio-group> -->
-                <el-form-item label="颜色" class="form-item-child-label">
-                    <color-picker v-model="form.background_color" default-color="#f8f8f8" ></color-picker>
-                </el-form-item>
-                <el-form-item label="图片" class="form-item-child-label">
-                    <upload v-model="form.background_image" :limit="1" size="50"></upload>
-                </el-form-item>
-            </div>
-        </div>
-        <div class="flex-col gap-10 w h">
-            <div class="new_title">表头样式</div>
-            <div class="flex-col gap-10">
-                <!-- <el-radio-group v-model="form.heading_type">
-                    <el-radio value="color">颜色</el-radio>
-                    <el-radio value="img">图片</el-radio>
-                </el-radio-group> -->
-                <el-form-item label="颜色" class="form-item-child-label">
-                    <color-picker v-model="form.heading_color"></color-picker>
-                </el-form-item>
-                <el-form-item label="图片" class="form-item-child-label">
-                    <upload v-model="form.heading_image" :limit="1" size="50"></upload>
-                </el-form-item>
-            </div>
-        </div>
-        <div class="flex-col gap-10 w h">
-            <div class="new_title">标题样式</div>
-            <div class="flex-row gap-10 align-c form-title mb-10">
-                展示方式
-                <div class="flex-1">
-                    <el-radio-group v-model="form.is_show_heading_title">
-                        <el-radio value="1">显示</el-radio>
-                        <el-radio value="0">隐藏</el-radio>
-                    </el-radio-group>
+        <template v-if="common_store_config.forminput_config_operate.is_common_config == 1">
+            <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
+                <div class="new_title">页面背景</div>
+                <div class="flex-col gap-10">
+                    <!-- <el-radio-group v-model="form.background_type">
+                        <el-radio value="color">颜色</el-radio>
+                        <el-radio value="img">图片</el-radio>
+                    </el-radio-group> -->
+                    <el-form-item label="颜色" class="form-item-child-label">
+                        <color-picker v-model="form.background_color" default-color="#f8f8f8" ></color-picker>
+                    </el-form-item>
+                    <el-form-item label="图片" class="form-item-child-label">
+                        <upload v-model="form.background_image" :limit="1" size="50"></upload>
+                    </el-form-item>
                 </div>
             </div>
-            <template v-if="form.is_show_heading_title === '1'">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">表头样式</div>
+                <div class="flex-col gap-10">
+                    <!-- <el-radio-group v-model="form.heading_type">
+                        <el-radio value="color">颜色</el-radio>
+                        <el-radio value="img">图片</el-radio>
+                    </el-radio-group> -->
+                    <el-form-item label="颜色" class="form-item-child-label">
+                        <color-picker v-model="form.heading_color"></color-picker>
+                    </el-form-item>
+                    <el-form-item label="图片" class="form-item-child-label">
+                        <upload v-model="form.heading_image" :limit="1" size="50"></upload>
+                    </el-form-item>
+                </div>
+            </div>
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">标题样式</div>
                 <div class="flex-row gap-10 align-c form-title mb-10">
+                    展示方式
+                    <div class="flex-1">
+                        <el-radio-group v-model="form.is_show_heading_title">
+                            <el-radio value="1">显示</el-radio>
+                            <el-radio value="0">隐藏</el-radio>
+                        </el-radio-group>
+                    </div>
+                </div>
+                <template v-if="form.is_show_heading_title === '1'">
+                    <div class="flex-row gap-10 align-c form-title mb-10">
+                        对齐方式
+                        <div class="flex-1">
+                            <el-radio-group v-model="form.heading_title_location" is-button class="two-copies-group three-copies-group w h">
+                                <el-tooltip content="左对齐" placement="top" effect="dark">
+                                    <el-radio-button value="flex-start"><icon name="iconfont icon-left"></icon></el-radio-button>
+                                </el-tooltip>
+                                <el-tooltip content="居中" placement="top" effect="dark">
+                                    <el-radio-button value="center"><icon name="iconfont icon-center"></icon></el-radio-button>
+                                </el-tooltip>
+                                <el-tooltip content="右对齐" placement="top" effect="dark">
+                                    <el-radio-button value="flex-end"><icon name="iconfont icon-right"></icon></el-radio-button>
+                                </el-tooltip>
+                            </el-radio-group>
+                        </div>
+                    </div>
+                    <div class="flex-row gap-10 align-b form-title mb-10">
+                        <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
+                    </div>
+                </template>
+            </div>
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">提交按钮</div>
+                <color-picker v-model="form.submit_color" default-color="#2A94FF" ></color-picker>
+            </div>
+        </template>
+        <template v-if="common_store_config.forminput_config_operate.is_forminput_config == 1">
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">字段标题位置</div>
+                <div class="flex-row gap-10">
+                    <div :class="`title-location-icon flex-col gap-5 w h ${ form.flex_direction == 'column' ? 'active' : '' }`" @click="type_change('column')">
+                        <div class="location-icon location-icon-1"></div>
+                        <div class="location-icon"></div>
+                        <div class="title">上下</div>
+                    </div>
+                    <div :class="`title-location-icon flex-col gap-5 jc-sb w h ${ form.flex_direction == 'column' ? '' : 'active' }`" @click="type_change('row')">
+                        <div class="flex-row gap-5 align-c location-height">
+                            <div class="location-icon location-icon-1"></div>
+                            <div class="location-icon"></div>
+                        </div>
+                        <div class="title">左右</div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="form.flex_direction == 'row'" class="flex-col gap-10 w h">
+                <div class="new_title">字段标题样式</div>
+                <div class="flex-row gap-10 align-c form-title mb-10">
+                    宽度
+                    <div class="flex-1">
+                        <slider v-model="form.filed_title_width" :max="500"></slider>
+                    </div>
+                </div>
+                <div class="flex-row gap-10 align-c form-title">
                     对齐方式
                     <div class="flex-1">
-                        <el-radio-group v-model="form.heading_title_location" is-button class="two-copies-group three-copies-group w h">
+                        <el-radio-group v-model="form.filed_title_justification" class="two-copies-group w h" is-button>
                             <el-tooltip content="左对齐" placement="top" effect="dark">
-                                <el-radio-button value="flex-start"><icon name="iconfont icon-left"></icon></el-radio-button>
-                            </el-tooltip>
-                            <el-tooltip content="居中" placement="top" effect="dark">
-                                <el-radio-button value="center"><icon name="iconfont icon-center"></icon></el-radio-button>
+                                <el-radio-button value="flex-start"><icon name="iconfont icon-left" size="16"></icon></el-radio-button>
                             </el-tooltip>
                             <el-tooltip content="右对齐" placement="top" effect="dark">
-                                <el-radio-button value="flex-end"><icon name="iconfont icon-right"></icon></el-radio-button>
+                                <el-radio-button value="flex-end"><icon name="iconfont icon-right" size="16"></icon></el-radio-button>
                             </el-tooltip>
                         </el-radio-group>
                     </div>
                 </div>
-                <div class="flex-row gap-10 align-b form-title mb-10">
-                    <color-text-size-group v-model:color="form.heading_title_color" v-model:typeface="form.heading_title_font_weight" v-model:size="form.heading_title_size" default-color="#000000"></color-text-size-group>
-                </div>
-            </template>
-        </div>
-        <div class="flex-col gap-10 w h">
-            <div class="new_title">提交按钮</div>
-            <color-picker v-model="form.submit_color" default-color="#2A94FF" ></color-picker>
-        </div>
-        <div class="flex-col gap-10 w h">
-            <div class="new_title">字段标题位置</div>
-            <div class="flex-row gap-10">
-                <div :class="`title-location-icon flex-col gap-5 w h ${ form.flex_direction == 'column' ? 'active' : '' }`" @click="type_change('column')">
-                    <div class="location-icon location-icon-1"></div>
-                    <div class="location-icon"></div>
-                    <div class="title">上下</div>
-                </div>
-                <div :class="`title-location-icon flex-col gap-5 jc-sb w h ${ form.flex_direction == 'column' ? '' : 'active' }`" @click="type_change('row')">
-                    <div class="flex-row gap-5 align-c location-height">
-                        <div class="location-icon location-icon-1"></div>
-                        <div class="location-icon"></div>
-                    </div>
-                    <div class="title">左右</div>
-                </div>
             </div>
-        </div>
-        <div v-if="form.flex_direction == 'row'" class="flex-col gap-10 w h">
-            <div class="new_title">字段标题样式</div>
-            <div class="flex-row gap-10 align-c form-title mb-10">
-                宽度
-                <div class="flex-1">
-                    <slider v-model="form.filed_title_width" :max="500"></slider>
+            <div v-if="portType == 'computer' && common_store.form_config.type_value !== 'free'" class="flex-col gap-10 w h">
+                <div class="new_title flex-row align-c gap-10">输入框宽度<tooltip content="控制字段输入框的宽度，标准模式下宽度固定，自动模式下宽度占满整列" placement="top" /></div>
+                <el-radio-group v-model="form.input_width_type" class="two-copies-group w h" is-button>
+                    <el-radio-button value="default">标准</el-radio-button>
+                    <el-radio-button value="auto">自动</el-radio-button>
+                </el-radio-group>
+                <template v-if="form.input_width_type == 'default'">
+                    <div class="flex-row align-c gap-10">
+                    <input-number v-model="form.input_width" class="w h" :min="1" :max="600" placeholder="请输入输入框宽度" @change="handle_input_width_change"></input-number>px
                 </div>
+                </template>
             </div>
-            <div class="flex-row gap-10 align-c form-title">
-                对齐方式
-                <div class="flex-1">
-                    <el-radio-group v-model="form.filed_title_justification" class="two-copies-group w h" is-button>
-                        <el-tooltip content="左对齐" placement="top" effect="dark">
-                            <el-radio-button value="flex-start"><icon name="iconfont icon-left" size="16"></icon></el-radio-button>
-                        </el-tooltip>
-                        <el-tooltip content="右对齐" placement="top" effect="dark">
-                            <el-radio-button value="flex-end"><icon name="iconfont icon-right" size="16"></icon></el-radio-button>
-                        </el-tooltip>
-                    </el-radio-group>
-                </div>
+            <div class="flex-col gap-10 w h">
+                <div class="new_title">大小</div>
+                <el-radio-group v-model="form.filed_title_size_type" class="two-copies-group three-copies-group w h" is-button>
+                    <el-radio-button value="big">大</el-radio-button>
+                    <el-radio-button value="middle">中</el-radio-button>
+                    <el-radio-button value="small">小</el-radio-button>
+                </el-radio-group>
             </div>
-        </div>
-        <div v-if="portType == 'computer' && common_store.form_config.type_value !== 'free'" class="flex-col gap-10 w h">
-            <div class="new_title flex-row align-c gap-10">输入框宽度<tooltip content="控制字段输入框的宽度，标准模式下宽度固定，自动模式下宽度占满整列" placement="top" /></div>
-            <el-radio-group v-model="form.input_width_type" class="two-copies-group w h" is-button>
-                <el-radio-button value="default">标准</el-radio-button>
-                <el-radio-button value="auto">自动</el-radio-button>
-            </el-radio-group>
-            <template v-if="form.input_width_type == 'default'">
-                <div class="flex-row align-c gap-10">
-                   <input-number v-model="form.input_width" class="w h" :min="1" :max="600" placeholder="请输入输入框宽度" @change="handle_input_width_change"></input-number>px
-               </div>
-            </template>
-        </div>
-        <div class="flex-col gap-10 w h">
-            <div class="new_title">大小</div>
-            <el-radio-group v-model="form.filed_title_size_type" class="two-copies-group three-copies-group w h" is-button>
-                <el-radio-button value="big">大</el-radio-button>
-                <el-radio-button value="middle">中</el-radio-button>
-                <el-radio-button value="small">小</el-radio-button>
-            </el-radio-group>
-        </div>
+        </template>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
 const common_store = commonStore();
+// 公共配置项
+const common_store_config = computed(() => common_store.common.config);
+
 const props = defineProps({
     // 配置类型，layout：表单布局，style：表单样式
     configType: {

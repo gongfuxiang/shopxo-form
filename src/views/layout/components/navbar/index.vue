@@ -5,10 +5,10 @@
             <!-- <icon name="arrow-left" color="f">返回</icon> -->
             <div class="flex-row align-c">
                 <div class="name">
-                    <div class="flex-row align-c gap-10 c-pointer" @click="dialog_visible = true">
+                    <div :class="[{'c-pointer': common_store_config?.forminput_config_operate?.is_base_data == 1}, 'flex-row align-c gap-10']" @click="common_store_config?.forminput_config_operate?.is_base_data == 1 ? dialog_visible = true : ''">
                         <image-empty v-if="modelValue.logo" :src="modelValue.logo" class="round img" error-img-style="width: 2.2rem;height: 2.2rem;" />
                         <div>{{ modelValue.name }}</div>
-                        <icon name="edit" color="#7DBEFF"></icon>
+                        <icon v-if="common_store_config?.forminput_config_operate?.is_base_data == 1" name="edit" color="#7DBEFF"></icon>
                     </div>
                 </div>
             </div>
@@ -22,14 +22,14 @@
                 <el-button plain type="primary" class="nav-right-dropdown-button mr-12"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item v-if="common_store.common.config.forminput_market_url !== '' || common_store.common.config.forminput_upload_url !== ''" @click="import_click">导入</el-dropdown-item>
-                        <el-dropdown-item v-if="common_store.common.config.forminput_download_url !== ''" @click="export_click">导出</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store_config.forminput_market_url !== '' || common_store_config.forminput_upload_url !== ''" @click="import_click">导入</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store_config.forminput_download_url !== ''" @click="export_click">导出</el-dropdown-item>
                         <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
-            <el-button plain type="primary" @click="form_config_event">表单配置</el-button>
-            <el-button plain type="primary" @click="preview_event">预览</el-button>
+            <el-button v-if="is_show_form_config" plain type="primary" @click="form_config_event">表单配置</el-button>
+            <el-button v-if="common_store_config.preview_url !== ''" plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="preview_event">预览</el-button>
             <el-button plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">仅保存</el-button>
             <el-button type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_close_event">保存关闭</el-button>
         </div>
@@ -76,6 +76,14 @@ const props = defineProps({
     },
 });
 const modelValue = defineModel({ type: Object, default: {} });
+
+// 公共配置项
+const common_store_config = computed(() => common_store.common.config);
+// 是否显示表单配置
+const is_show_form_config = computed(() => {
+    const { is_mode_switch = 1, is_common_config = 1, is_forminput_config = 1, is_submit_button = 1 } = common_store_config.value.forminput_config_operate;
+    return is_mode_switch == 1 || is_common_config == 1 || is_forminput_config == 1 || is_submit_button == 1;
+});
 // #region 变量 --------------------start
 const dialog_visible = ref(false);
 watch(dialog_visible, (val) => {
