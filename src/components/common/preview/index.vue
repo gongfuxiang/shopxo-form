@@ -11,7 +11,8 @@
 
 <script lang="ts" setup>
 import { commonStore } from "@/store";
-import {get_cookie, get_id, get_math, set_cookie } from "@/utils";
+import { get_id } from '@/utils/common';
+import {get_cookie, get_math, set_cookie } from "@/utils";
 const common_store = commonStore();
 interface DiyItem {
     id: number | string;

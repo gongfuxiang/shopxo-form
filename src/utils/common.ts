@@ -106,7 +106,7 @@ export const desensitization_options = [
 export const get_id = () => {
     let new_id = '';
     // 去除origin的数据
-    const url = document.location.href;
+    const url = 'hopxo.com/admin.php?s=ordergoodsform-goodsform-saveinfo-1.html#/';
     if (url.indexOf('id/') != -1) {
         new_id = url.substring(url.indexOf('id/') + 3);
         // 去除字符串的.html
@@ -128,19 +128,32 @@ export const get_id = () => {
     }
 };
 
+// 获取当前业务类型
 export const get_type = () => {
-    let new_type = '';
+    return data_handle('type/', '');
+}
+// 获取类型
+export const get_business = () => {
+    return data_handle('business/', '');
+}
+// 数据处理
+export const data_handle = (val: string, default_val: string): string => {
+    let new_data = default_val;
     // 去除origin的数据
     const url = document.location.href;
-    if (url.indexOf('type/') != -1) {
-        new_type = url.substring(url.indexOf('type/') + 5);
+    if (url.indexOf(val) != -1) {
+        new_data = url.substring(url.indexOf(val) + val.length);
         // 去除字符串的.html
-        const dot_data = new_type.split('.')[0];
-        if (dot_data != '') {
-            new_type = dot_data.split('/')[0];
+        // 去除并且数据
+        if (new_data.indexOf('&') != -1) {
+            new_data = new_data.split('&')[0];
         }
-        return new_type;
+        const dot_data = new_data.split('.')[0];
+        if (dot_data != '') {
+            new_data = dot_data.split('/')[0];
+        }
+        return new_data;
     } else {
-        return new_type;
+        return new_data;
     }
 }

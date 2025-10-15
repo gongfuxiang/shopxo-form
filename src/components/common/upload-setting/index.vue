@@ -81,7 +81,8 @@ import UploadAPI, { Tree } from '@/api/upload';
 import { ElMessage, ElMessageBox } from 'element-plus'
 import type { UploadFile, UploadFiles, UploadUserFile } from 'element-plus'
 import { ext_img_name_list, ext_video_name_list, ext_file_name_list, ext_file_name_list_map } from '@/components/common/upload/index'
-import { annex_size_to_unit, ext_name, get_id, get_math, isEmpty, is_number } from '@/utils';
+import { get_id } from '@/utils/common';
+import { annex_size_to_unit, ext_name, get_math, isEmpty, is_number } from '@/utils';
 import { cloneDeep } from "lodash";
 import { commonStore } from "@/store";
 const common_store = commonStore();

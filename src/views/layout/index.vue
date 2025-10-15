@@ -24,11 +24,11 @@
 
 <script setup lang="ts">
 import { cloneDeep, isEmpty } from 'lodash';
-import { get_type, style_settings } from '@/utils/common';
+import { get_type, style_settings, get_id } from '@/utils/common';
 import CommonAPI from '@/api/common';
 import ForminputAPI, { formConfig, formData, form_data_item } from '@/api/form'; 
 import { commonStore } from '@/store';
-import { common_styles_computer, data_organization, date_style_options, get_cookie, get_id, get_math, is_obj, set_cookie, time_stamp } from '@/utils';
+import { common_styles_computer, data_organization, date_style_options, get_cookie, get_math, is_obj, set_cookie, time_stamp } from '@/utils';
 import defaultSettings from './index';
 const common_store = commonStore();
 const app = getCurrentInstance();
@@ -116,6 +116,7 @@ const common_init = async () => {
 const is_empty = ref(false);
 const empty_data = ref('编辑数据有误');
 const init = () => {
+    console.log(get_id());
     if (get_id()) {
         CommonAPI.getDynamicApi(common_store.common.config.forminput_detail_url, { id: get_id() }).then((res: any) => {
             const new_data = res.data?.data || undefined;
