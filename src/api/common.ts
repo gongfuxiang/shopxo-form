@@ -15,7 +15,7 @@ class CommonAPI {
             });
         } else {
             return request({
-                url: `?s=plugins/index/pluginsname/${ new_type }/pluginscontrol/forminputapi/pluginsaction/init.html`,
+                url: `plugins/index/pluginsname/${ new_type }/pluginscontrol/forminputapi/pluginsaction/init.html`,
                 method: 'post',
             });
         }
