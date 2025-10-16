@@ -8,7 +8,7 @@
                         <div v-for="(com, i) in common_store.main_free_siderbar" :key="i" class="plr-12">
                             <el-collapse-item v-if="com.data.length > 0" :key="i" :title="com.name" :name="com.key">
                                 <div class="component flex-row flex-wrap gap-10">
-                                    <div v-for="item in com.data" :key="item.key" class="item" draggable="true" @dragstart="dragStart(item, $event)" @dragend="dragEnd" @click.stop="draggable_click(item)">
+                                    <div v-for="item in com.data" :key="item.key" class="item" draggable="true" @dragstart="dragStart(item, $event)" @dragend="dragEnd">
                                         <div class="tc drag-seat">释放鼠标将组件添加到此处</div>
                                         <div class="flex-row align-c gap-2 drag-hide">
                                             <img class="img radius-xs" :src="url_computer(item.key)" />

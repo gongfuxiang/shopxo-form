@@ -30,7 +30,7 @@
             </el-dropdown>
             <el-button v-if="is_show_form_config" plain type="primary" @click="form_config_event">表单配置</el-button>
             <el-button v-if="common_store_config.preview_url !== ''" plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="preview_event">预览</el-button>
-            <el-button v-if="common_store_config.forminput_config_operate.is_save_button == 1" plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">保存</el-button>
+            <el-button v-if="common_store_config.forminput_config_operate.is_save_button == 1" :plain="common_store_config.forminput_config_operate.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">保存</el-button>
             <el-button v-if="common_store_config.forminput_config_operate.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_close_event">保存关闭</el-button>
         </div>
     </div>

@@ -8,7 +8,7 @@
                         <div v-for="(com, i) in common_store.mains_siderbar" :key="i" class="plr-12">
                             <el-collapse-item v-if="com.data.length > 0" :key="i" :title="com.name" :name="com.key">
                                 <VueDraggable v-model="com.data" :animation="500" ghost-class="ghost" handle=".item" :group="{ name: 'people', pull: 'clone', put: false }" class="component flex-row flex-wrap gap-10" :clone="clone_item_com_data" :sort="false" :force-fallback="true">
-                                    <div v-for="item in com.data" :key="item.key" class="item drag-item" @click.stop="draggable_click(item)">
+                                    <div v-for="item in com.data" :key="item.key" class="item drag-item">
                                         <div class="tc drag-seat">释放鼠标将组件添加到此处</div>
                                         <div class="flex-row align-c gap-2 drag-hide">
                                             <img class="img radius-xs" :src="url_computer(item.key)" />
@@ -87,24 +87,6 @@ const clone_item_com_data = (item: commonComponentData) => {
 //#region 拖拽组件的公共方法
 // 是否显示提示用户拖拽位置
 const show_model_border = ref(true);
-// 点击添加tabs组件
-const draggable_click = (item: componentsData) => {
-    const new_id = get_math();
-    const new_item = {
-        name: item.name,
-        id: new_id,
-        form_name: new_id,
-        mark_name: '',
-        location: { x: 0, y: 0, record_x: 0, record_y: 0, staging_y: 0 },
-        show_tabs: '1',
-        is_enable: '1',
-        key: item.key,
-        com_data: cloneDeep((defaultSettings as any)[item.key.replace(/-/g, '_')]),
-    };
-    diy_data.value.push(new_item);
-    // 设置当前选中的是那个
-    set_show_tabs(diy_data.value.length - 1);
-};
 // 拖拽开始
 const on_start = () => {
     show_model_border.value = false;
