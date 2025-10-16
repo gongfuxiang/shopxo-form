@@ -101,8 +101,8 @@ const common_init = async () => {
         }
     }
     // 获取用户id
-    if (import.meta.env.VITE_APP_BASE_API == '/dev-admin') {
-        let temp_data = await import(import.meta.env.VITE_APP_BASE_API == '/dev-admin' ? '../../../temp.d.ts' : '../../../temp_pro.d.ts');
+    if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
+        let temp_data = await import(import.meta.env.VITE_APP_BASE_API == '/dev-api' ? '../../../temp.d.ts' : '../../../temp_pro.d.ts');
         token.value = '&token=' + temp_data.default.temp_token;
     } else {
         // 如果是shop认为是多商户插件使用user_info的cookie
@@ -349,7 +349,10 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                     previewVisible.value = true;
                 }
                 form.value.id = String(res.data);
-                history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
+                // 本地的时候会补id参数
+                if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
+                   history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
+                }
             }
         })
         .catch((err: string) => {
