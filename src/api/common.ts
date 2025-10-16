@@ -14,7 +14,7 @@ class CommonAPI {
                 method: 'post',
             });
         } else {
-            return index_request({
+            return request({
                 url: `?s=plugins/index/pluginsname/${ new_type }/pluginscontrol/forminputapi/pluginsaction/init.html`,
                 method: 'post',
             });
