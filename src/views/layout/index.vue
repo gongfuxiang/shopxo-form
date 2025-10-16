@@ -275,7 +275,7 @@ const save_event = () => {
 // 保存并关闭
 const save_close_event = () => {
     save_disabled.value = true;
-    save_formmat_form_data(form.value);
+    save_formmat_form_data(form.value, true);
 }
 const export_data_event = () => {
     save_formmat_form_data(form.value, false, true);
@@ -348,7 +348,9 @@ const save_formmat_form_data = (data: form_data_item, close: boolean = false, is
                 if (is_preview) {
                     previewVisible.value = true;
                 }
-                form.value.id = String(res.data);
+                if (res.data != null && res.data != '') {
+                    form.value.id = String(res.data);
+                }
                 // 本地的时候会补id参数
                 if (import.meta.env.VITE_APP_BASE_API == '/dev-api') {
                    history.pushState({}, '', '?s=forminput/saveinfo/id/' + res.data + '.html');
