@@ -166,6 +166,7 @@ const data_handle = (val: form_data_item) => {
     const data = cloneDeep(val);
     const { type_value = 'default', is_switch_type = '0' } = data.overall_config;
     const { is_mode_switch = 1, mode_default = 'default' } = common_store_config.value.forminput_config_operate;
+    debugger
     // 如果不能切换，并且默认模式跟当前模式不一致，需要设置为权限模式， 并将数据清空
     if (is_mode_switch != 1) {
         if (!isEmpty(type_value) && type_value != mode_default) {
@@ -175,7 +176,6 @@ const data_handle = (val: form_data_item) => {
     } else if (is_switch_type == '0') {
         // 如果是使用的默认数据，则需要设置为权限模式，否则的话不做处理
         data.overall_config.type_value = mode_default || 'default';
-        data.diy_data = [];
     }
     return data;
 };
