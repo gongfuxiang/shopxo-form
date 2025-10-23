@@ -32,7 +32,7 @@
                 <div class="new_title">默认值</div>
                 <el-cascader v-model="form.form_value" :options="common_store.address_list" :props="{ 'value': 'id', 'label': 'name', 'children': 'items' }" filterable @change="cascader_change" />
                 <template v-if="form.address_type == 'detailed'">
-                    <el-input v-model="form.detailed_value" type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入详细地址"></el-input>
+                    <el-input v-model="form.address" type="textarea" :autosize="{ minRows: 4, maxRows: 8 }" placeholder="请输入详细地址"></el-input>
                 </template>
             </div>
         </el-form-item>
@@ -91,7 +91,7 @@ const format_option = [
 ];
 // 切换类型的时候情况详细地址
 const address_type_change = (val: any) => {
-    form.value.detailed_value = '';
+    form.value.address = '';
 };
 const name_change = (val: string) => {
     all_form_value.value.form_name = val;
