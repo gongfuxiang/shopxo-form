@@ -64,11 +64,6 @@ const title_change = () => {
 //#endregion
 
 // 校验类型选项
-// 切换类型的时候情况详细地址
-const address_type_change = (val: any) => {
-    form.value.detailed_value = '';
-};
-
 const name_change = (val: string) => {
     all_form_value.value.form_name = val;
 }

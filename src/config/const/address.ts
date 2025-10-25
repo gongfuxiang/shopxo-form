@@ -6,7 +6,7 @@ interface DefaultSelect {
     province_name: string,
     city_name: string,
     county_name: string,
-    detailed_value: string;
+    address: string;
     address_type: string;
     placeholder: string;
     is_required: string;
@@ -22,7 +22,7 @@ const defaultSelect: DefaultSelect = {
     province_name: '',
     city_name: '',
     county_name: '',
-    detailed_value: '',
+    address: '',
     placeholder: '请选择内容',
     is_required: '0',
     com_width: 150,

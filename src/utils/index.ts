@@ -986,22 +986,6 @@ export const get_container_location = (list: Item[], id: string, type: 'left' | 
     return { x, y };
 }
 
-// 截取document.location.search字符串内id/后面的所有字段
-export const get_id = () => {
-    let new_id = '';
-    if (document.location.search.indexOf('id/') != -1) {
-        new_id = document.location.search.substring(document.location.search.indexOf('id/') + 3);
-        // 去除字符串的.html
-        let html_index = new_id.indexOf('.html');
-        if (html_index != -1) {
-            new_id = new_id.substring(0, html_index);
-        }
-        return new_id;
-    } else {
-        return new_id;
-    }
-};
-
 interface RegionItem {
   id: string | number;
   name: string;
@@ -1042,59 +1026,26 @@ export const data_organization = (data: any) => {
         item.common_style = common_styles_computer(item.com_data.common_config);
         // 子表单需要统一规整一下数据
         if (item.key == 'subform') {
-            const { com_data } = item;
-            // item.com_data.data_list = [];
-            // let data_list: any[] = [];
-            com_data?.children.forEach((item_data: any, index: number) => {
+            item.com_data?.children.forEach((item_data: any, index: number) => {
                 item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
+                // 格式化日期
+                if (['date', 'date-group'].includes(item_data.key)) { 
+                    const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
+                    const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
+                    item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
+                }
             })
-            // com_data.form_value.forEach((item1: string) => {
-            //     com_data?.children.forEach((item_data: any, index: number) => {
-            //         item_data.common_style =  common_styles_computer(item_data.com_data.common_config);
-            //         // 格式化日期
-            //         if (['date', 'date-group'].includes(item_data.key)) { 
-            //             const data = new Map(date_style_options(item_data.com_data.date_style).map(item => [item.value, item]));
-            //             const new_format = data.get(item_data.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
-            //             item_data.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
-            //         }
-            //     })
-            //     const data = JSON.parse(JSON.stringify(com_data?.children || []));
-            //     if (data.length > 0) {
-            //         data.forEach((child: any) => {
-            //             child.common_style = common_styles_computer(child.com_data.common_config);
-            //             if (!isEmpty(item1[child.id])) {
-            //                 child.com_data.form_value = item1[child.id];
-            //             }
-            //             if (['date', 'date-group'].includes(child.key)) { 
-            //                 const com_data = child.com_data;
-            //                 if (child.key == 'date') {
-            //                     child.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
-            //                 } else {
-            //                     child.com_data.new_form_value = [];
-            //                     if (com_data.form_value.length > 0) {
-            //                         child.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
-            //                     }
-            //                 }
-            //             }
-            //         });
-            //         data_list.push({
-            //             is_expand: false,
-            //             data_list: data
-            //         });
-            //     }
-            // });
-            // item.com_data.data_list = data_list;
         } else if (['date', 'date-group'].includes(item.key)) { 
             const com_data = item.com_data;
-            const data = new Map(date_style_options(item.com_data.date_style).map(item => [item.value, item]));
-            const new_format = data.get(item.com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
-            item.com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
+            const data = new Map(date_style_options(com_data.date_style).map(item => [item.value, item]));
+            const new_format = data.get(com_data.date_type)?.label || 'yyyy-MM-DD HH:mm:ss';
+            com_data.format = new_format.replaceAll('Y', 'y').replaceAll('D', 'd').replaceAll('S', 's');
             if (item.key == 'date') {
-                item.com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
+                com_data.new_form_value = time_stamp(com_data.form_value, com_data.date_style, com_data.data_type);
             } else {
-                item.com_data.new_form_value = [];
+                com_data.new_form_value = [];
                 if (com_data.form_value.length > 0) {
-                    item.com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
+                    com_data.new_form_value = com_data.form_value.map((item: any) => time_stamp(item, com_data.date_style, com_data.data_type));
                 }
             }
         }

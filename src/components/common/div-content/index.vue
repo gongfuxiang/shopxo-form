@@ -22,7 +22,7 @@
         </div>
     </template>
     <template v-else>
-        <div class="w h flex-col align-c jc-c gap-15">
+        <div class="w h flex-col align-c jc-c gap-15 no-data-position">
             <img class="img radius-xs" :width="140" :height="131" :src="no_data_image" />
             <span class="no-data-tips">从左侧拖拽或点击来创建表单</span>
         </div>
@@ -145,5 +145,11 @@ const get_diy_index_data = (index: number) => {
     color: #999999;
     line-height: 1.7rem;
     font-style: normal;
+}
+.no-data-position {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 5;
 }
 </style>

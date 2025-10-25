@@ -102,6 +102,7 @@ export interface form_data_item {
     };
     overall_config: {
         type_value: string;
+        is_switch_type: string;
         // is_layout_settings: string;
         // layout_settings: object,
         custom_size_type: string,
