@@ -3,7 +3,7 @@ import api_request from '@/utils/api-request';
 class CommonAPI {
     static dataSave(data: any) {
         return api_request({
-            url: `?s=forminputdata/save`,
+            url: `forminputdata/save`,
             method: 'post',
             data,
         });

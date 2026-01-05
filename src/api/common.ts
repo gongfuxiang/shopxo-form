@@ -37,7 +37,7 @@ class CommonAPI {
     /**  获取地区接口 */
     static getAddress() {
         return api_request({
-            url: `?s=region/all`,
+            url: `region/all`,
             method: 'post',
         });
     }

@@ -4,13 +4,13 @@ import api_request from '@/utils/api-request';
 class CommonAPI {
     static getImageVerification () {
         return api_request({
-            url: `?s=user/userverifyentry&t=` + Math.random(),
+            url: `user/userverifyentry&t=` + Math.random(),
             method: 'Get',
         });
     }
     static getVerification(data: any) {
         return api_request({
-            url: `?s=user/regverifysend`,
+            url: `user/regverifysend`,
             method: 'post',
             data
         });
