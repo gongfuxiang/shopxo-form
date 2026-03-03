@@ -3,7 +3,7 @@
         <el-scrollbar>
             <div v-if="isShowFormModel" class="ptb-20 plr-12">
                 <div class="flex-col gap-20">
-                    <div v-if="common_store_config.forminput_config_operate.is_mode_switch == 1" class="flex-col gap-5">
+                    <div v-if="common_store_config?.forminput_config_operate?.is_mode_switch == 1" class="flex-col gap-5">
                         <div class="new_title">模式</div>
                         <el-radio-group v-model="type_value" @change="type_change">
                             <el-radio value="default">标准模式</el-radio>
@@ -31,7 +31,7 @@
                             <icon class="layout-style-setting" name="setup" size="18" @click="open_dialog('layout')"/>
                         </div>
                     </div> -->
-                    <div v-if="common_store_config.forminput_config_operate.is_common_config == 1 || common_store_config.forminput_config_operate.is_forminput_config == 1" class="flex-col gap-10 w h">
+                    <div v-if="common_store_config?.forminput_config_operate?.is_common_config == 1 || common_store_config?.forminput_config_operate?.is_forminput_config == 1" class="flex-col gap-10 w h">
                         <div class="new_title">表单样式</div>
                         <div class="flex-row jc-sb align-c gap-10 layout-style" @click="open_dialog('style')">
                             <div class="title">{{ form.is_style_settings == '0' ? '未设置' : '已设置' }}</div>
@@ -42,7 +42,7 @@
                         <div class="new_title">表单前台缓存</div>
                         <el-switch v-model="form.is_front_end_cache" active-value="1" inactive-value="0"></el-switch>
                     </div> -->
-                    <div v-if="common_store_config.forminput_config_operate.is_submit_button == 1" class="flex-col gap-10 w h">
+                    <div v-if="common_store_config?.forminput_config_operate?.is_submit_button == 1" class="flex-col gap-10 w h">
                         <div class="new_title">操作按钮</div>
                         <div class="flex-row gap-5 jc-sb w h">
                             <el-input v-model="form.submit_title"></el-input>

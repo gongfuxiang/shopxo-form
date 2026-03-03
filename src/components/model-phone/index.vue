@@ -57,14 +57,14 @@ const frame_style = computed(() => common_store.frame_style + `${ props.isCustom
 const dialogVisible = ref(false);
 const dialog_value  = ref('');
 const img_verification = ref<any>('');
-onBeforeMount(()=> {
-    get_img_verification();
-})
-// 图片验证码的图片数据
+// onBeforeMount(()=> {
+//     get_img_verification();
+// })
+// // 图片验证码的图片数据
 const get_img_verification = () => {
-    PhoneAPI.getImageVerification().then((res) => {
-        img_verification.value = res;
-    })
+//     PhoneAPI.getImageVerification().then((res) => {
+//         img_verification.value = res;
+//     })
 }
 // 图片验证码的取消按钮
 const cancel = () => {

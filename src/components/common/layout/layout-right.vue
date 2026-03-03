@@ -1,6 +1,6 @@
 <template>
     <div class="setting-content flex-col gap-20">
-        <template v-if="common_store_config.forminput_config_operate.is_common_config == 1">
+        <template v-if="common_store_config?.forminput_config_operate?.is_common_config == 1">
             <div v-if="portType == 'computer'" class="flex-col gap-10 w h">
                 <div class="new_title">页面背景</div>
                 <div class="flex-col gap-10">
@@ -69,7 +69,7 @@
                 <color-picker v-model="form.submit_color" default-color="#2A94FF" ></color-picker>
             </div>
         </template>
-        <template v-if="common_store_config.forminput_config_operate.is_forminput_config == 1">
+        <template v-if="common_store_config?.forminput_config_operate?.is_forminput_config == 1">
             <div class="flex-col gap-10 w h">
                 <div class="new_title">字段标题位置</div>
                 <div class="flex-row gap-10">

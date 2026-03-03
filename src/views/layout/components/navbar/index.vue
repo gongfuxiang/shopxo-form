@@ -22,16 +22,16 @@
                 <el-button plain type="primary" class="nav-right-dropdown-button mr-12"><span class="mr-4">更多</span><icon :name="is_dropdown_show ? 'arrow-top' : 'arrow-bottom'" size="8" color="primary" /></el-button>
                 <template #dropdown>
                     <el-dropdown-menu>
-                        <el-dropdown-item v-if="common_store_config.forminput_market_url !== '' || common_store_config.forminput_upload_url !== ''" @click="import_click">导入</el-dropdown-item>
-                        <el-dropdown-item v-if="common_store_config.forminput_download_url !== ''" @click="export_click">导出</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store_config?.forminput_market_url !== '' || common_store_config?.forminput_upload_url !== ''" @click="import_click">导入</el-dropdown-item>
+                        <el-dropdown-item v-if="common_store_config?.forminput_download_url !== ''" @click="export_click">导出</el-dropdown-item>
                         <el-dropdown-item @click="clear_click">清空</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
             <el-button v-if="is_show_form_config" plain type="primary" @click="form_config_event">表单配置</el-button>
-            <el-button v-if="common_store_config.preview_url !== ''" plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="preview_event">预览</el-button>
-            <el-button v-if="common_store_config.forminput_config_operate.is_save_button == 1" :plain="common_store_config.forminput_config_operate.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">保存</el-button>
-            <el-button v-if="common_store_config.forminput_config_operate.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_close_event">保存关闭</el-button>
+            <el-button v-if="common_store_config?.preview_url !== ''" plain type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="preview_event">预览</el-button>
+            <el-button v-if="common_store_config?.forminput_config_operate?.is_save_button == 1" :plain="common_store_config?.forminput_config_operate?.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_event">保存</el-button>
+            <el-button v-if="common_store_config?.forminput_config_operate?.is_save_close_button == 1" type="primary" :class="saveDisabled ? 'disabled' : ''" :disabled="saveDisabled" @click="save_close_event">保存关闭</el-button>
         </div>
     </div>
     <el-dialog v-model="dialog_visible" class="radius-lg" width="650" draggable :close-on-click-modal="false" append-to-body>
